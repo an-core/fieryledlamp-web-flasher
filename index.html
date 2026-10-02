@@ -1103,11 +1103,11 @@ flashBtn.onclick = async () => {
             compress: FLASH_OPTIONS.compress,
             calculateMD5Hash: () => '',
             reportProgress: (fileIndex, written, total) => {
-                const percent = Math.round(written / total * 100);
-                setProgress(percent, percent + '%');
-                const currentName = fileNames[fileIndex] || 'файл';
-                showStatus('Запись ' + currentName + '... ' + percent + '%', 'info');
-            },
+            const percent = Math.round(written / total * 100);
+            setProgress(percent, percent + '%');
+            const currentName = fileNames[fileIndex] || 'файл';
+            showStatus('Запись ' + currentName + '...', 'info');
+           },
         });
 
         log('Прошивка завершена, перезагрузка...');
