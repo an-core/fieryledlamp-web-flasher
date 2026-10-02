@@ -41,11 +41,12 @@
             padding: 20px;
             margin: 20px 0;
             text-align: left;
-            transition: transform 0.3s;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
             border: 1px solid #f1f5f32b;
         }
         .method-card:hover {
-            transform: translateY(-5px);
+            border-color: #667eea;
+            box-shadow: 0 0 12px rgba(102, 126, 234, 0.4);
         }
         .method-title {
             font-size: 24px;
@@ -803,7 +804,7 @@ async function downloadVariantZip(variant) {
             showStatus('Внимание: прошивается ТОЛЬКО файловая система. Прошивка останется прежней.', 'warning');
         }
 
-        for (const part of variant.parts) {
+        for (const part of partsToFlash) {
             const file = findFileInZip(zip, part.keywords);
             if (!file) {
                 if (part.required) {
