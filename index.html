@@ -413,7 +413,7 @@
             <span class="step-num">1</span>
             <div class="step-content">
                 <b>Подключите плату</b>
-                <small>USB-кабелем к компьютеру. Для ESP32 может потребоваться драйвер CH340/CP2102.</small>
+                <small>USB-кабелем к компьютеру. Проверьте, чтобы были установлен драйвер CH340/CP2102.</small>
             </div>
         </div>
 
@@ -467,7 +467,7 @@
                     text-align: left;
                     border: 1px solid #1a1e26;
                 ">
-                <div>[--:--:--] Конфигурация сайта загружена.</div>
+                <div id="log"></div>
             </div>
         </div>
     </div>
@@ -503,14 +503,10 @@
 
         <div class="section">Выбор варианта для ESP32</div>
         <ul>
-            <li><strong>Вариант 1</strong> - No OTA (2MB APP / 2MB SPIFFS)</li>
-            <li><strong>Вариант 2</strong> - No OTA (2MB APP / 2MB SPIFFS)</li>
-            <li><strong>Вариант 3</strong> - No OTA (2MB APP / 2MB SPIFFS)</li>
+            <li><strong>Вариант 1</strong> - USE_DAWN, USE_SUNSET, USE_SCHEDULE, USE_WEATHER, USE_MQTT, USE_MULTILAMP, LED_PANEL, BACKUP_CFG_FILES, STATUS_DEVICE, SOFT_INFO</li>
+            <li><strong>Вариант 2</strong> - USE_SD, USE_DAWN, USE_SUNSET, USE_SCHEDULE, USE_WEATHER, USE_MQTT, USE_MULTILAMP, LED_PANEL, BACKUP_CFG_FILES, STATUS_DEVICE, SOFT_INFO</li>
+            <li><strong>Вариант 3</strong> - USE_SD, MULTI_MATRIX, USE_DAWN, USE_SUNSET, USE_SCHEDULE, USE_WEATHER, LED_PANEL, STATUS_DEVICE, SOFT_INFO</li>
         </ul>
-
-        <div class="note">
-            <strong>Примечание:</strong> если не знаете, какой вариант выбрать - уточните у автора прошивки или посмотрите в Arduino IDE: <strong>Инструменты - Partition Scheme</strong>.
-        </div>
 
         <div class="section">Что происходит дальше</div>
         <ul>
@@ -522,9 +518,8 @@
 
         <div class="section">Во время прошивки</div>
         <ul>
-            <li><strong>Не отключайте</strong> USB-кабель.</li>
-            <li><strong>Не закрывайте</strong> вкладку браузера.</li>
-            <li><strong>Не выключайте</strong> компьютер.</li>
+            <li><strong>Не отключайте</strong> USB-кабель!</li>
+            <li><strong>Не закрывайте</strong> вкладку браузера!</li>
         </ul>
 
         <button class="close-modal" id="closeModalBtn2">Понятно, закрыть</button>
@@ -676,6 +671,7 @@ const FLASH_OPTIONS = {
 };
 
 const logEl = document.getElementById('log');
+log('Web Flasher загружен');
 const statusEl = document.getElementById('status');
 const connectBtn = document.getElementById('connectBtn');
 const flashBtn = document.getElementById('flashBtn');
@@ -699,6 +695,8 @@ function log(msg) {
     div.textContent = `[${time}] ${msg}`;
     logEl.appendChild(div);
     logEl.scrollTop = logEl.scrollHeight;
+	log('Web Flasher загружен');
+    log('Требуется браузер на движке Chromium');
 }
 
 function showStatus(msg, type) {
