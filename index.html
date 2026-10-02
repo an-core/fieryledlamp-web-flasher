@@ -467,7 +467,6 @@
                     text-align: left;
                     border: 1px solid #1a1e26;
                 ">
-                <div id="log"></div>
             </div>
         </div>
     </div>
@@ -476,9 +475,6 @@
 
     <button onclick="location.href='/'" class="btn-danger">На главную</button>
 
-    <div class="footer">
-        Web Serial работает только в Chrome/Edge и по HTTPS или localhost
-    </div>
 </div>
 
 <div class="modal-overlay" id="instructionsModal">
@@ -671,7 +667,6 @@ const FLASH_OPTIONS = {
 };
 
 const logEl = document.getElementById('log');
-log('Web Flasher загружен');
 const statusEl = document.getElementById('status');
 const connectBtn = document.getElementById('connectBtn');
 const flashBtn = document.getElementById('flashBtn');
@@ -695,8 +690,6 @@ function log(msg) {
     div.textContent = `[${time}] ${msg}`;
     logEl.appendChild(div);
     logEl.scrollTop = logEl.scrollHeight;
-	log('Web Flasher загружен');
-    log('Требуется браузер на движке Chromium');
 }
 
 function showStatus(msg, type) {
@@ -867,6 +860,9 @@ connectBtn.onclick = async () => {
         transport = null;
     }
 };
+
+log('Web Flasher загружен');
+log('Требуется браузер на движке Chromium');
 
 variantSelect.onchange = async (e) => {
     const value = e.target.value;
