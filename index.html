@@ -1035,10 +1035,18 @@ flashBtn.onclick = async () => {
         log('Режим: ' + flashMode + ', файлов: ' + partsToFlash.length);
 
         if (flashMode === 'firmware') {
-            showStatus('Внимание: прошивается ТОЛЬКО firmware. Partition table должна совпадать.', 'warning');
+            if (!confirm('Внимание: будет прошит ТОЛЬКО firmware.bin.\nPartition table должна совпадать.\n\nПродолжить?')) {
+                flashBtn.disabled = false;
+                connectBtn.disabled = false;
+                return;
+            }
         }
         if (flashMode === 'littlefs') {
-            showStatus('Внимание: прошивается ТОЛЬКО файловая система. Прошивка останется прежней.', 'warning');
+            if (!confirm('Внимание: будет прошита ТОЛЬКО файловая система.\nПрошивка останется прежней.\n\nПродолжить?')) {
+                flashBtn.disabled = false;
+                connectBtn.disabled = false;
+                return;
+            }
         }
 
         const fileArray = [];
@@ -1128,6 +1136,10 @@ flashBtn.onclick = async () => {
         loader = null;
         transport = null;
         port = null;
+        const flashModeSelect = document.getElementById('flashMode');
+        if (flashModeSelect) {
+            flashModeSelect.value = 'all';
+        }
     } catch (e) {
         log('Ошибка прошивки: ' + e.message);
         showStatus('Ошибка прошивки: ' + e.message, 'error');
@@ -1142,7 +1154,7 @@ flashBtn.onclick = async () => {
         transport = null;
         port = null;
     }
-};   
+};
     </script>
 </body>
 </html>
