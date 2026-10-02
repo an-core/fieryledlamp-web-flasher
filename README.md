@@ -2,8 +2,7 @@
 
 Web Flasher для FieryLedLamp (ESP32 / ESP32-S3).
 
-Прошивка устройства прямо из браузера через Web Serial API — без установки
-Arduino IDE, esptool и драйверов.
+Прошивка устройства прямо из браузера через Web Serial API.
 
 ## Возможности
 
