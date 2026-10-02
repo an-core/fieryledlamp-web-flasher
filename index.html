@@ -721,6 +721,8 @@ function findFileInZip(zip, keywords) {
     return null;
 }
 
+const VERBOSE = false;
+
 const FIRMWARE_VARIANTS = {
     'ESP32-S3': {
         zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_ESP32S3.zip',
@@ -798,6 +800,16 @@ let loader = null;
 let zipData = null;
 let selectedVariant = null;
 let detectedChip = null;
+
+function log(msg, force = false) {
+    if (!VERBOSE && !force) return;
+    const now = new Date();
+    const time = now.toTimeString().substr(0, 8);
+    const div = document.createElement('div');
+    div.textContent = `[${time}] ${msg}`;
+    logEl.appendChild(div);
+    logEl.scrollTop = logEl.scrollHeight;
+}
 
 function log(msg) {
     const now = new Date();
