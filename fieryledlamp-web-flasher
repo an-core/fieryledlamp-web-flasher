@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Web Flasher - Fiery Led Lamp</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #12151a 0%, #000000 100%);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 700px;
+            margin: 10px auto;
+            background: rgb(129 121 121 / 10%);
+            border-radius: 20px;
+            padding: 10px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            margin-bottom: 30px;
+        }
+        .info {
+            background: rgb(93 99 114 / 30%);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .method-card {
+            background: rgb(18 32 82 / 15%);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+            transition: transform 0.3s;
+            border: 1px solid #f1f5f32b;
+        }
+        .method-card:hover {
+            transform: translateY(-5px);
+        }
+        .method-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .method-desc {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 15px;
+        }
+
+        .info-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid #667eea;
+            color: #c8d6ff;
+            border-radius: 30px;
+            padding: 4px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            backdrop-filter: blur(4px);
+            box-shadow: 0 0 6px rgba(102, 126, 234, 0.2);
+            margin-left: 8px;
+            white-space: nowrap;
+        }
+        .info-btn:hover {
+            background: #667eea;
+            color: #fff;
+            transform: scale(1.03);
+            box-shadow: 0 0 16px #667eea88;
+        }
+        .info-btn::before {
+            content: "ⓘ";
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        .modal-overlay.open {
+            display: flex;
+        }
+        .modal-box {
+            max-width: 560px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: #1a1e26;
+            border-radius: 24px;
+            padding: 30px 28px;
+            border: 1px solid #667eea55;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+            text-align: left;
+            position: relative;
+            animation: modalFade 0.3s ease;
+        }
+        .modal-box::-webkit-scrollbar { width: 6px; }
+        .modal-box::-webkit-scrollbar-track { background: #2a2e3a; border-radius: 10px; }
+        .modal-box::-webkit-scrollbar-thumb { background: #667eea; border-radius: 10px; }
+        @keyframes modalFade {
+            0% { opacity: 0; transform: scale(0.96) translateY(10px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .modal-box h2 {
+            margin-top: 0;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #b8caff;
+            border-bottom: 1px solid #334;
+            padding-bottom: 12px;
+        }
+        .modal-box .section {
+            margin: 18px 0 12px 0;
+            font-weight: 700;
+            color: #b8caff;
+            font-size: 16px;
+            border-left: 3px solid #667eea;
+            padding-left: 12px;
+        }
+        .modal-box ul {
+            margin: 0 0 12px 0;
+            padding-left: 22px;
+        }
+        .modal-box ul li {
+            margin-bottom: 6px;
+            line-height: 1.6;
+            color: #d0d8e8;
+            font-size: 14px;
+        }
+        .modal-box ul li strong { color: #b8caff; }
+        .modal-box ul li code {
+            background: #2a2e3a;
+            padding: 1px 8px;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #b8caff;
+            font-family: 'Courier New', monospace;
+        }
+        .modal-box .note {
+            background: rgba(102, 126, 234, 0.12);
+            border-left: 3px solid #667eea;
+            padding: 10px 14px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-size: 13px;
+            color: #c8d6ff;
+        }
+        .modal-box .close-modal {
+            background: #667eea;
+            border: none;
+            color: white;
+            padding: 10px 28px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 18px;
+            transition: 0.2s;
+            width: 100%;
+            text-align: center;
+        }
+        .modal-box .close-modal:hover {
+            background: #7b92ff;
+            transform: scale(1.01);
+        }
+        .modal-box .close-icon {
+            position: absolute;
+            top: 14px;
+            right: 18px;
+            font-size: 26px;
+            line-height: 1;
+            color: #8899bb;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .modal-box .close-icon:hover {
+            color: #fff;
+            transform: rotate(90deg);
+        }
+        .modal-box .link {
+            color: #7b92ff;
+            text-decoration: underline;
+            word-break: break-all;
+        }
+        .modal-box .link:hover { color: #a8bbff; }
+
+        .warning-text {
+            display: block;
+            margin-top: 10px;
+            padding: 12px 16px;
+            background: rgba(255, 60, 60, 0.18);
+            border-left: 5px solid #ff4444;
+            border-radius: 8px;
+            color: #ff9999;
+            font-weight: 700;
+            font-size: 15px;
+            line-height: 1.5;
+            text-shadow: 0 0 8px rgba(255, 60, 60, 0.3);
+        }
+        .warning-text strong { color: #ff6666; }
+
+        button,
+        .file-label,
+        select {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            font-size: 14px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 5px;
+            transition: transform 0.2s;
+            display: inline-block;
+        }
+        select {
+            background: rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: 12px;
+        }
+        button:hover,
+        .file-label:hover,
+        select:hover {
+            transform: scale(1.02);
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        .btn-danger {
+            background: linear-gradient(135deg, #a32525 0%, #f5576c 100%);
+        }
+
+        .step-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .step-row:last-child {
+            border-bottom: none;
+        }
+        .step-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+        .step-content {
+            flex: 1;
+            text-align: left;
+        }
+        .step-content b {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 15px;
+        }
+        .step-content small {
+            font-size: 13px;
+            opacity: 0.7;
+            line-height: 1.4;
+            display: block;
+        }
+
+        .progress-bar-outer {
+            width: 100%;
+            height: 22px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 11px;
+            margin: 12px 0;
+            overflow: hidden;
+            position: relative;
+            display: none;
+        }
+        .progress-bar-outer.active {
+            display: block;
+        }
+        .progress-bar-inner {
+            height: 100%;
+            background: linear-gradient(90deg, #00cc66, #00ff88);
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: #003322;
+        }
+
+        .status {
+            margin-top: 15px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            display: none;
+            font-size: 14px;
+            text-align: left;
+            line-height: 1.5;
+        }
+        .status.active { display: block; }
+        .status.success {
+            background: rgba(0, 255, 0, 0.15);
+            border: 1px solid #00cc66;
+            color: #88ffaa;
+        }
+        .status.error {
+            background: rgba(255, 0, 0, 0.15);
+            border: 1px solid #ff4444;
+            color: #ff9999;
+        }
+        .status.info {
+            background: rgba(102, 126, 234, 0.15);
+            border: 1px solid #667eea;
+            color: #c8d6ff;
+        }
+        .status.warning {
+            background: rgba(255, 170, 0, 0.15);
+            border: 1px solid #ffaa00;
+            color: #ffcc88;
+        }
+
+        .detected-info {
+            background: rgba(102, 126, 234, 0.15);
+            border: 1px solid #667eea;
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin: 12px 0;
+            text-align: left;
+            font-size: 14px;
+            display: none;
+            line-height: 1.6;
+        }
+        .detected-info.active { display: block; }
+        .detected-info b { color: #b8caff; }
+
+        hr {
+            margin: 20px 0;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        .footer {
+            font-size: 12px;
+            opacity: 0.6;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔥 WEB FLASHER</h1>
+
+        <div class="info">
+            <p><strong>Устройство:</strong> Fiery Led Lamp</p>
+            <p><strong>Прошивка:</strong> Web Serial Flasher</p>
+            <p><strong>Поддержка:</strong> ESP32-S3 и ESP32</p>
+        </div>
+
+        <div class="method-card">
+            <div class="method-title">
+                <span>Прошивка через браузер</span>
+                <button class="info-btn" id="showInstructions">Инструкция</button>
+            </div>
+            <div class="method-desc">
+                Прошейте лампу прямо из браузера - без установки Arduino IDE и драйверов.
+                <span class="warning-text">
+                    <strong>Важное предупреждение!</strong><br>
+                    Требуется браузер <strong>Chrome</strong> или <strong>Edge</strong>.
+                    Перед прошивкой закройте другие вкладки, использующие COM-порт.
+                </span>
+            </div>
+
+            <div class="step-row">
+                <span class="step-num">1</span>
+                <div class="step-content">
+                    <b>Подключите плату</b>
+                    <small>USB-кабелем к компьютеру. Для ESP32 может потребоваться драйвер CH340/CP2102.</small>
+                </div>
+            </div>
+
+            <div class="step-row">
+                <span class="step-num">2</span>
+                <div class="step-content">
+                    <b>Подключитесь к ESP</b>
+                    <small>Браузер покажет список COM-портов. Выберите нужный.</small>
+                    <button id="connectBtn" style="margin-top:8px;">Подключиться к ESP</button>
+                </div>
+            </div>
+
+            <div class="step-row">
+                <span class="step-num">3</span>
+                <div class="step-content">
+                    <b>Выберите прошивку</b>
+                    <small>Для ESP32-S3 - автоматически. Для ESP32 - выберите вариант.</small>
+                    <div id="detectedInfo" class="detected-info"></div>
+                    <div id="variantSelector" style="display:none; margin-top:10px;">
+                        <select id="variantSelect">
+                            <option value="">— выберите вариант прошивки —</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-row">
+                <span class="step-num">4</span>
+                <div class="step-content">
+                    <b>Прошейте лампу</b>
+                    <small>Остальное выполняется автоматически.</small>
+                    <div id="status" class="status"></div>
+                    <div class="progress-bar-outer" id="progressBarOuter">
+                        <div class="progress-bar-inner" id="progressBarInner" style="width: 0%;">0%</div>
+                    </div>
+                    <button id="flashBtn" disabled style="margin-top:8px;">Прошить</button>
+                </div>
+            </div>
+
+            <div style="margin-top:20px;">
+                <b style="display:block; margin-bottom:8px; color:#b8caff;">Журнал прошивки:</b>
+                <div id="log" style="
+                    background: #0a0a0a;
+                    color: #00ff00;
+                    font-family: 'Courier New', monospace;
+                    font-size: 12px;
+                    padding: 12px;
+                    border-radius: 10px;
+                    height: 200px;
+                    overflow-y: auto;
+                    text-align: left;
+                    border: 1px solid #1a1e26;
+                ">
+                    <div>[--:--:--] Конфигурация сайта загружена.</div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <button onclick="location.href='/'" class="btn-danger">На главную</button>
+
+        <div class="footer">
+            Web Serial работает только в Chrome/Edge и по HTTPS или localhost
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="instructionsModal">
+        <div class="modal-box">
+            <span class="close-icon" id="closeModalBtn1">&times;</span>
+            <h2>Инструкция по прошивке</h2>
+
+            <div class="section">Подготовка</div>
+            <ul>
+                <li>Используйте браузер <strong>Chrome</strong> (версия 89+) или <strong>Edge</strong>.</li>
+                <li>Подключите ESP к компьютеру USB-кабелем.</li>
+                <li>Если плата не определяется - установите драйвер <strong>CH340</strong> или <strong>CP2102</strong>.</li>
+            </ul>
+
+            <div class="section">Если плата не определяется</div>
+            <ul>
+                <li>Зажмите кнопку <strong>BOOT</strong> на плате.</li>
+                <li>Кратно нажмите <strong>RESET</strong>.</li>
+                <li>Отпустите <strong>BOOT</strong>.</li>
+                <li>Повторите подключение.</li>
+            </ul>
+
+            <div class="section">Выбор варианта для ESP32</div>
+            <ul>
+                <li><strong>Вариант 1</strong> - Default 4MB with spiffs</li>
+                <li><strong>Вариант 2</strong> - Minimal SPIFFS</li>
+                <li><strong>Вариант 3</strong> - No OTA (2MB APP / 2MB SPIFFS)</li>
+            </ul>
+
+            <div class="note">
+                <strong>Примечание:</strong> если не знаете, какой вариант выбрать - уточните у автора прошивки или посмотрите в Arduino IDE: <strong>Инструменты - Partition Scheme</strong>.
+            </div>
+
+            <div class="section">Что происходит дальше</div>
+            <ul>
+                <li>Браузер скачает <code>.zip</code> с прошивкой с GitHub.</li>
+                <li>Распакует его в памяти.</li>
+                <li>Отправит данные на ESP через USB.</li>
+                <li>ESP перезагрузится с новой прошивкой.</li>
+            </ul>
+
+            <div class="section">Во время прошивки</div>
+            <ul>
+                <li><strong>Не отключайте</strong> USB-кабель.</li>
+                <li><strong>Не закрывайте</strong> вкладку браузера.</li>
+                <li><strong>Не выключайте</strong> компьютер.</li>
+            </ul>
+
+            <button class="close-modal" id="closeModalBtn2">Понятно, закрыть</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { ESPLoader, Transport } from 'https://unpkg.com/esptool-js@0.4.5/bundle.js';
+        import JSZip from 'https://cdn.jsdelivr.net/npm/jszip@3.10.1/+esm';
+
+        const FIRMWARE_VARIANTS = {
+            'ESP32-S3': {
+                zipUrl: 'https://github.com/an-core/FieryLedLamp_mod/raw/main/update/bin_ESP32S3.zip',
+                chipFamily: 'ESP32-S3',
+                description: 'ESP32-S3 (16MB)',
+                parts: [
+                    { name: 'bootloader.bin', address: 0x00000000 },
+                    { name: 'partitions.bin', address: 0x00008000 },
+                    { name: 'boot_app0.bin', address: 0x0000E000 },
+                    { name: 'firmware.bin', address: 0x00010000 },
+                    { name: 'littlefs.bin', address: 0x00C90000 },
+                ],
+            },
+            'ESP32_V1': {
+                zipUrl: 'https://github.com/an-core/FieryLedLamp_mod/raw/main/update/bin_ESP32_VARIANT_1.zip',
+                chipFamily: 'ESP32',
+                description: 'ESP32 - Вариант 1 (Default 4MB)',
+                parts: [
+                    { name: 'bootloader.bin', address: 0x00001000 },
+                    { name: 'partitions.bin', address: 0x00008000 },
+                    { name: 'boot_app0.bin', address: 0x0000E000 },
+                    { name: 'firmware.bin', address: 0x00010000 },
+                ],
+            },
+            'ESP32_V2': {
+                zipUrl: 'https://github.com/an-core/FieryLedLamp_mod/raw/main/update/bin_ESP32_VARIANT_2.zip',
+                chipFamily: 'ESP32',
+                description: 'ESP32 0 Вариант 2 (Minimal SPIFFS)',
+                parts: [
+                    { name: 'bootloader.bin', address: 0x00001000 },
+                    { name: 'partitions.bin', address: 0x00008000 },
+                    { name: 'boot_app0.bin', address: 0x0000E000 },
+                    { name: 'firmware.bin', address: 0x00010000 },
+                ],
+            },
+            'ESP32_V3': {
+                zipUrl: 'https://github.com/an-core/FieryLedLamp_mod/raw/main/update/bin_ESP32_VARIANT_3.zip',
+                chipFamily: 'ESP32',
+                description: 'ESP32 0 Вариант 3 (No OTA)',
+                parts: [
+                    { name: 'bootloader.bin', address: 0x00001000 },
+                    { name: 'partitions.bin', address: 0x00008000 },
+                    { name: 'boot_app0.bin', address: 0x0000E000 },
+                    { name: 'firmware.bin', address: 0x00010000 },
+                ],
+            },
+        };
+
+        const FLASH_OPTIONS = {
+            baudrate: 921600,
+            romBaudrate: 115200,
+            flashSize: 'keep',
+            flashMode: 'keep',
+            flashFreq: 'keep',
+            eraseAll: false,
+            compress: true,
+        };
+
+        const logEl = document.getElementById('log');
+        const statusEl = document.getElementById('status');
+        const connectBtn = document.getElementById('connectBtn');
+        const flashBtn = document.getElementById('flashBtn');
+        const variantSelector = document.getElementById('variantSelector');
+        const variantSelect = document.getElementById('variantSelect');
+        const detectedInfo = document.getElementById('detectedInfo');
+        const progressBarOuter = document.getElementById('progressBarOuter');
+        const progressBarInner = document.getElementById('progressBarInner');
+
+        let port = null;
+        let transport = null;
+        let loader = null;
+        let zipData = null;
+        let selectedVariant = null;
+        let detectedChip = null;
+
+        function log(msg) {
+            const now = new Date();
+            const time = now.toTimeString().substr(0, 8);
+            const div = document.createElement('div');
+            div.textContent = `[${time}] ${msg}`;
+            logEl.appendChild(div);
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+
+        function showStatus(msg, type) {
+            statusEl.textContent = msg;
+            statusEl.className = 'status active ' + type;
+        }
+
+        function setProgress(percent, text) {
+            progressBarOuter.classList.add('active');
+            progressBarInner.style.width = percent + '%';
+            progressBarInner.textContent = text || (percent + '%');
+        }
+
+        function hideProgress() {
+            progressBarOuter.classList.remove('active');
+        }
+
+        const modal = document.getElementById('instructionsModal');
+        const openBtn = document.getElementById('showInstructions');
+        const closeBtns = document.querySelectorAll('#closeModalBtn1, #closeModalBtn2');
+
+        function openModal() { modal.classList.add('open'); }
+        function closeModal() { modal.classList.remove('open'); }
+
+        openBtn.addEventListener('click', openModal);
+        closeBtns.forEach(btn => btn.addEventListener('click', closeModal));
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+        });
+
+        if (!('serial' in navigator)) {
+            showStatus('Web Serial не поддерживается. Используйте Chrome или Edge.', 'error');
+            connectBtn.disabled = true;
+            log('Web Serial не поддерживается браузером');
+        } else {
+            log('Web Serial поддерживается');
+        }
+
+        async function downloadVariantZip(variant) {
+            log('Загрузка архива: ' + variant.description);
+            showStatus('Загрузка архива...', 'info');
+            try {
+                const response = await fetch(variant.zipUrl);
+                if (!response.ok) throw new Error('HTTP ' + response.status);
+                const blob = await response.blob();
+                log('Загружено ' + (blob.size / 1024).toFixed(1) + ' KB');
+
+                const zip = await JSZip.loadAsync(blob);
+
+                const missing = [];
+                for (const part of variant.parts) {
+                    if (!zip.file(part.name)) missing.push(part.name);
+                }
+                if (missing.length > 0) {
+                    throw new Error('В архиве нет файлов: ' + missing.join(', '));
+                }
+
+                log('Архив распакован, все файлы на месте');
+                return zip;
+            } catch (e) {
+                log('Ошибка загрузки: ' + e.message);
+                showStatus('Ошибка загрузки архива: ' + e.message, 'error');
+                return null;
+            }
+        }
+
+        connectBtn.onclick = async () => {
+            if (loader) {
+                log('Уже подключено');
+                return;
+            }
+
+            try {
+                log('Запрос USB-порта...');
+                showStatus('Запрос USB-порта...', 'info');
+
+                port = await navigator.serial.requestPort();
+                const info = port.getInfo();
+                log('Порт выбран: USB ' + (info.usbVendorId ? '0x' + info.usbVendorId.toString(16) : '?'));
+
+                transport = new Transport(port, true);
+                loader = new ESPLoader({
+                    transport,
+                    baudrate: FLASH_OPTIONS.baudrate,
+                    romBaudrate: FLASH_OPTIONS.romBaudrate,
+                });
+
+                log('Подключение к ESP...');
+                showStatus('Подключение к ESP...', 'info');
+                const chip = await loader.main();
+                detectedChip = chip;
+                log('Чип: ' + chip);
+
+                if (chip.includes('ESP32-S3') || chip.includes('ESP32S3')) {
+                    selectedVariant = 'ESP32-S3';
+                    variantSelector.style.display = 'none';
+
+                    const variant = FIRMWARE_VARIANTS[selectedVariant];
+                    detectedInfo.classList.add('active');
+                    detectedInfo.innerHTML = `
+                        <b>Определено:</b><br>
+                        Чип: <b>${chip}</b><br>
+                        Вариант: <b>${variant.description}</b>
+                    `;
+
+                    log('Определён ESP32-S3, загрузка архива...');
+                    zipData = await downloadVariantZip(variant);
+                    if (!zipData) return;
+
+                    flashBtn.disabled = false;
+                    showStatus('Подключено: ' + chip + ' - готово к прошивке', 'success');
+                } else if (chip.includes('ESP32')) {
+                    variantSelector.style.display = 'block';
+                    variantSelect.innerHTML = '<option value="">— выберите вариант —</option>';
+                    for (const [key, variant] of Object.entries(FIRMWARE_VARIANTS)) {
+                        if (variant.chipFamily === 'ESP32') {
+                            const opt = document.createElement('option');
+                            opt.value = key;
+                            opt.textContent = variant.description;
+                            variantSelect.appendChild(opt);
+                        }
+                    }
+                    showStatus('Подключено: ' + chip + ' - выберите вариант прошивки', 'info');
+                } else {
+                    log('Неизвестный чип: ' + chip);
+                    showStatus('Неизвестный чип: ' + chip, 'error');
+                }
+            } catch (e) {
+                log('Ошибка подключения: ' + e.message);
+                showStatus('Ошибка подключения: ' + e.message, 'error');
+                loader = null;
+                transport = null;
+            }
+        };
+
+        variantSelect.onchange = async (e) => {
+            const value = e.target.value;
+            if (!value) {
+                flashBtn.disabled = true;
+                showStatus('Выберите вариант прошивки', 'warning');
+                return;
+            }
+
+            selectedVariant = value;
+            const variant = FIRMWARE_VARIANTS[value];
+            log('Выбран вариант: ' + variant.description);
+
+            detectedInfo.classList.add('active');
+            detectedInfo.innerHTML = `
+                <b>Определено:</b><br>
+                Чип: <b>${detectedChip}</b><br>
+                Вариант: <b>${variant.description}</b>
+            `;
+
+            zipData = await downloadVariantZip(variant);
+            if (!zipData) {
+                flashBtn.disabled = true;
+                return;
+            }
+
+            flashBtn.disabled = false;
+            showStatus('Готово к прошивке: ' + variant.description, 'success');
+        };
+
+        flashBtn.onclick = async () => {
+            if (!loader || !zipData || !selectedVariant) {
+                log('Не всё готово для прошивки');
+                return;
+            }
+
+            const variant = FIRMWARE_VARIANTS[selectedVariant];
+
+            flashBtn.disabled = true;
+            connectBtn.disabled = true;
+            setProgress(0, '0%');
+
+            try {
+                log('Подготовка файлов...');
+                showStatus('Подготовка файлов...', 'info');
+
+                const fileArray = [];
+                for (const part of variant.parts) {
+                    const file = zipData.file(part.name);
+                    const arrayBuffer = await file.async('arraybuffer');
+                    const binaryString = Array.from(new Uint8Array(arrayBuffer)) .map(b => String.fromCharCode(b)).join('');
+
+                    fileArray.push({ data: binaryString, address: part.address });
+                    log('  ' + part.name + ' @ 0x' + part.address.toString(16).padStart(8, '0') + ' (' + (arrayBuffer.byteLength / 1024).toFixed(1) + ' KB)');
+                }
+
+                log('Начало прошивки...');
+                showStatus('Прошивка... Не отключайте USB!', 'warning');
+
+                await loader.writeFlash({
+                    fileArray: fileArray,
+                    flashSize: FLASH_OPTIONS.flashSize,
+                    flashMode: FLASH_OPTIONS.flashMode,
+                    flashFreq: FLASH_OPTIONS.flashFreq,
+                    eraseAll: FLASH_OPTIONS.eraseAll,
+                    compress: FLASH_OPTIONS.compress,
+                    calculateMD5Hash: () => '',
+                    reportProgress: (fileIndex, written, total) => {
+                        const percent = Math.round(written / total * 100);
+                        setProgress(percent, percent + '%');
+                        if (fileIndex < variant.parts.length) {
+                            showStatus('Запись ' + variant.parts[fileIndex].name + '... ' + percent + '%', 'info');
+                        }
+                    },
+                });
+
+                log('Прошивка завершена, перезагрузка...');
+                await loader.after();
+
+                setProgress(100, '100%');
+                showStatus('Прошивка успешно завершена!', 'success');
+                log('ESP перезагружается');
+
+                try {
+                    await transport.disconnect();
+                    await port.close();
+                } catch (e) {}
+                loader = null;
+                transport = null;
+                port = null;
+            } catch (e) {
+                log('Ошибка прошивки: ' + e.message);
+                showStatus('Ошибка прошивки: ' + e.message, 'error');
+                flashBtn.disabled = false;
+                connectBtn.disabled = false;
+            }
+        };
+    </script>
+</body>
+</html>
