@@ -538,7 +538,7 @@
 
         const FIRMWARE_VARIANTS = {
             'ESP32-S3': {
-                zipUrl: 'https://github.com/an-core/FieryLedLamp_mod/raw/main/update/bin_ESP32S3.zip',
+                zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_ESP32S3.zip',
                 chipFamily: 'ESP32-S3',
                 description: 'ESP32-S3 (16MB)',
                 parts: [
@@ -550,9 +550,9 @@
                 ],
             },
             'ESP32_V1': {
-                zipUrl: 'https://github.com/an-core/FieryLedLamp_mod/raw/main/update/bin_ESP32_VARIANT_1.zip',
+                zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_ESP32_VARIANT_1.zip',
                 chipFamily: 'ESP32',
-                description: 'ESP32 - Вариант 1 (Default 4MB)',
+                description: 'ESP32 - Вариант 1 (No OTA)',
                 parts: [
                     { name: 'bootloader.bin', address: 0x00001000 },
                     { name: 'partitions.bin', address: 0x00008000 },
@@ -561,9 +561,9 @@
                 ],
             },
             'ESP32_V2': {
-                zipUrl: 'https://github.com/an-core/FieryLedLamp_mod/raw/main/update/bin_ESP32_VARIANT_2.zip',
+                zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_ESP32_VARIANT_2.zip',
                 chipFamily: 'ESP32',
-                description: 'ESP32 0 Вариант 2 (Minimal SPIFFS)',
+                description: 'ESP32 - Вариант 2 (No OTA)',
                 parts: [
                     { name: 'bootloader.bin', address: 0x00001000 },
                     { name: 'partitions.bin', address: 0x00008000 },
@@ -572,9 +572,9 @@
                 ],
             },
             'ESP32_V3': {
-                zipUrl: 'https://github.com/an-core/FieryLedLamp_mod/raw/main/update/bin_ESP32_VARIANT_3.zip',
+                zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_ESP32_VARIANT_3.zip',
                 chipFamily: 'ESP32',
-                description: 'ESP32 0 Вариант 3 (No OTA)',
+                description: 'ESP32 - Вариант 3 (No OTA)',
                 parts: [
                     { name: 'bootloader.bin', address: 0x00001000 },
                     { name: 'partitions.bin', address: 0x00008000 },
