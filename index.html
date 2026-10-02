@@ -341,6 +341,31 @@ button:disabled {
     background: linear-gradient(135deg, #a32525 0%, #f5576c 100%);
 }
 
+.notice {
+    background: rgba(0, 204, 102, 0.12);
+    border-left: 4px solid #00cc66;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin: 0 0 20px 0;
+    text-align: left;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #b8ffd0;
+}
+
+.notice strong {
+    color: #88ffaa;
+}
+
+.notice code {
+    background: #2a2e3a;
+    padding: 1px 8px;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #b8caff;
+    font-family: 'Courier New', monospace;
+}
+
 .step-row {
     display: flex;
     align-items: center;
@@ -492,6 +517,13 @@ hr {
         <p><strong>Устройство:</strong> Fiery Led Lamp</p>
         <p><strong>Прошивка:</strong> Web Serial Flasher</p>
         <p><strong>Поддержка:</strong> ESP32 и ESP32-S3</p>
+    </div>
+	
+	<div class="notice">
+    <strong>ⓘ Актуальные версии прошивки</strong><br>
+    Бинарники загружаются напрямую с GitHub-репозитория
+    <code>an-core/FieryLedLamp_mod</code> в момент прошивки.
+    Никаких «зашитых» версий - вы всегда получаете последний релиз.
     </div>
 
     <div class="method-card">
