@@ -484,7 +484,7 @@ hr {
     </style>
 </head>
 <body>
-<div class="container">
+	<div class="container">
     <h1>WEB FLASHER FIERYLEDLAMP</h1>
 
     <div class="info">
@@ -581,47 +581,144 @@ hr {
         <span class="close-icon" id="closeModalBtn1">&times;</span>
         <h2>Инструкция по прошивке</h2>
 
-        <div class="section">Подготовка</div>
+        <div class="section">1. Подготовка</div>
         <ul>
-            <li>Используйте браузер <strong>Chrome</strong> (версия 89+) или <strong>Edge</strong>.</li>
-            <li>Подключите ESP к компьютеру USB-кабелем.</li>
-            <li>Если плата не определяется - установите драйвер <strong>CH340</strong> или <strong>CP2102</strong>.</li>
+            <li>
+                <strong>Браузер.</strong> Требуется браузер на движке <strong>Chromium</strong>:
+                Chrome 89+, Edge 89+, Opera, Vivaldi, Brave, Cent Browser, Яндекс.Браузер.
+            </li>
+            <li>
+                <strong>Firefox и Safari не поддерживают Web Serial API</strong> - в них прошивка
+                невозможна. Откройте страницу в другом браузере.
+            </li>
+            <li>
+                <strong>HTTPS.</strong> Страница должна быть открыта по <code>https://</code>
+                или <code>localhost</code>. GitHub Pages даёт HTTPS автоматически.
+            </li>
+            <li>
+                <strong>Драйвер USB-UART.</strong> Если плата не определяется в Диспетчере
+                устройств — установите драйвер:
+                <ul>
+                    <li><strong>CH340</strong> - для плат с CH340 (обычно дешёвые ESP32).</li>
+                    <li><strong>CP2102</strong> - для плат с CP2102 (NodeMCU, DevKit).</li>
+                    <li>Для <strong>ESP32-S3</strong> с нативным USB драйвер не нужен.</li>
+                </ul>
+            </li>
         </ul>
 
-        <div class="section">Если плата не определяется</div>
+        <div class="section">2. Подключение платы</div>
+        <ul>
+            <li>Подключите ESP к компьютеру <strong>USB-кабелем</strong> (не зарядным - нужен data-кабель).</li>
+            <li>Нажмите <strong>«Подключиться к ESP»</strong> - браузер покажет список COM-портов.</li>
+            <li>Выберите нужный порт. Обычно он называется <code>USB-SERIAL CH340</code> или <code>CP210x</code>.</li>
+        </ul>
+
+        <div class="section">3. Если плата не определяется</div>
         <ul>
             <li>Зажмите кнопку <strong>BOOT</strong> на плате.</li>
-            <li>Кратно нажмите <strong>RESET</strong>.</li>
+            <li>Кратно нажмите <strong>RESET</strong> (или <strong>EN</strong>).</li>
             <li>Отпустите <strong>BOOT</strong>.</li>
-            <li>Повторите подключение.</li>
+            <li>Снова нажмите <strong>«Подключиться к ESP»</strong>.</li>
         </ul>
+        <div class="note">
+            <strong>Важно:</strong> некоторые ESP32-S3 не переходят в режим загрузки автоматически.
+            Зажатие BOOT + RESET помогает.
+        </div>
 
-        <div class="section">Выбор варианта для ESP32</div>
+        <div class="section">4. Определение чипа и выбор варианта</div>
         <ul>
-            <li><strong>Вариант 1</strong> - USE_DAWN, USE_SUNSET, USE_SCHEDULE, USE_WEATHER, USE_MQTT, USE_MULTILAMP, LED_PANEL, BACKUP_CFG_FILES, STATUS_DEVICE, SOFT_INFO</li>
-            <li><strong>Вариант 2</strong> - USE_SD, USE_DAWN, USE_SUNSET, USE_SCHEDULE, USE_WEATHER, USE_MQTT, USE_MULTILAMP, LED_PANEL, BACKUP_CFG_FILES, STATUS_DEVICE, SOFT_INFO</li>
-            <li><strong>Вариант 3</strong> - USE_SD, MULTI_MATRIX, USE_DAWN, USE_SUNSET, USE_SCHEDULE, USE_WEATHER, LED_PANEL, STATUS_DEVICE, SOFT_INFO</li>
+            <li>
+                <strong>ESP32-S3</strong> определяется <strong>автоматически</strong> - вариант
+                выбирается сам, ничего нажимать не нужно.
+            </li>
+            <li>
+                <strong>ESP32</strong> (классический) — флешер покажет <strong>список вариантов</strong>.
+                Выберите нужный:
+                <ul>
+                    <li>
+                        <strong>Вариант 1</strong> - базовый: будильник «Рассвет», «Закат», расписание,
+                        погода, MQTT, мультилампа, LED-панель, бэкап настроек, статусы устройств.
+                    </li>
+                    <li>
+                        <strong>Вариант 2</strong> - как Вариант 1, плюс поддержка <strong>SD-карты</strong>.
+                    </li>
+                    <li>
+                        <strong>Вариант 3</strong> - как Вариант 2, плюс <strong>несколько матриц</strong> (MULTI_MATRIX).
+                    </li>
+                </ul>
+            </li>
         </ul>
 
-        <div class="section">Что происходит дальше</div>
+        <div class="section">5. Режим прошивки</div>
         <ul>
-            <li>Браузер скачает <code>.zip</code> с прошивкой с GitHub.</li>
-            <li>Распакует его в памяти.</li>
-            <li>Отправит данные на ESP через USB.</li>
-            <li>ESP перезагрузится с новой прошивкой.</li>
+            <li>
+                <strong>Полная прошивка (все файлы)</strong> - используется <strong>по умолчанию</strong>
+                и <strong>рекомендуется</strong> для первого запуска и обновлений. Прошивает
+                bootloader, partition table, firmware и файловую систему.
+            </li>
+            <li>
+                <strong>Только firmware.bin</strong> - обновление <strong>только прошивки</strong>
+                (код лампы). Настройки и файловая система <strong>сохраняются</strong>. Используйте,
+                если вышло обновление кода, но partition table не менялась.
+            </li>
+            <li>
+                <strong>Только littlefs.bin</strong> - обновление <strong>только файловой системы</strong>
+                (веб-страницы, настройки). Прошивка <strong>остаётся прежней</strong>. Используйте,
+                если обновились только HTML/CSS/JS-файлы.
+            </li>
+        </ul>
+        <div class="note">
+            <strong>Внимание:</strong> при выборе «Только firmware» partition table должна совпадать
+            с той, что уже залита в ESP. Если не уверены - выбирайте «Полная прошивка».
+        </div>
+
+        <div class="section">6. Прошивка</div>
+        <ul>
+            <li>Нажмите <strong>«Прошить»</strong>.</li>
+            <li>Дождитесь завершения - прогресс-бар покажет 100%.</li>
+            <li>ESP автоматически перезагрузится с новой прошивкой.</li>
         </ul>
 
-        <div class="section">Во время прошивки</div>
+        <div class="section">7. Во время прошивки</div>
         <ul>
             <li><strong>Не отключайте</strong> USB-кабель!</li>
             <li><strong>Не закрывайте</strong> вкладку браузера!</li>
         </ul>
 
+        <div class="section">8. После прошивки</div>
+        <ul>
+            <li>
+                Лампа создаст <strong>точку доступа</strong> с именем <code>FieryLedLamp</code>
+                (по умолчанию) - пароль может быть установлен в настройках.
+            </li>
+            <li>Подключитесь к ней и откройте <code>http://192.168.4.1</code> для настройки.</li>
+            <li>Или лампа подключится к вашей WiFi-сети, если настройки уже заданы.</li>
+        </ul>
+
+        <div class="section">9. Частые проблемы</div>
+        <ul>
+            <li>
+                <strong>«Web Serial не поддерживается»</strong> - вы используете Firefox/Safari.
+                Откройте в Chrome или Edge.
+            </li>
+            <li>
+                <strong>«Failed to fetch»</strong> - не удалось скачать архив с GitHub.
+                Проверьте интернет. Или архив удалён с GitHub.
+            </li>
+            <li>
+                <strong>«Порт занят»</strong> - закройте Arduino IDE, монитор порта и другие
+                программы, использующие COM-порт.
+            </li>
+            <li>
+                <strong>Лампа не запускается после прошивки</strong> - возможно, вы выбрали
+                «Только firmware» без совместимой partition table. Прошейте «Полная прошивка».
+            </li>
+        </ul>
+
         <button class="close-modal" id="closeModalBtn2">Понятно, закрыть</button>
     </div>
 </div>
-
-    <script type="module">
+  <script type="module">
 	import {
     ESPLoader,
     Transport
@@ -648,32 +745,13 @@ const FIRMWARE_VARIANTS = {
         zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_ESP32S3.zip',
         chipFamily: 'ESP32-S3',
         description: 'ESP32-S3 (16MB)',
-        parts: [{
-                keywords: ['bootloader'],
-                address: 0x00000000,
-                required: true
-            },
-            {
-                keywords: ['partitions'],
-                address: 0x00008000,
-                required: true
-            },
-            {
-                keywords: ['boot_app0'],
-                address: 0x0000E000,
-                required: false
-            },
-            {
-                keywords: ['firmware'],
-                address: 0x00010000,
-                required: true
-            },
-            {
-                keywords: ['littlefs'],
-                address: 0x00C90000,
-                required: true
-            },
-        ],
+        parts: [
+		{keywords: ['bootloader'], address: 0x00000000, required: true },
+        {keywords: ['partitions'], address: 0x00008000, required: true},
+        {keywords: ['boot_app0'], address: 0x0000E000, required: false},
+        {keywords: ['firmware'], address: 0x00010000, required: true},
+        {keywords: ['littlefs'], address: 0x00C90000, required: true},
+      ],
     },
     'ESP32_V1': {
         zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_ESP32_VARIANT_1.zip',
@@ -682,9 +760,9 @@ const FIRMWARE_VARIANTS = {
         parts: [
         { keywords: ['bootloader'], address: 0x00001000, required: true },
         { keywords: ['partitions'], address: 0x00008000, required: true },
-        { keywords: ['boot_app0'],  address: 0x0000E000, required: false },
-        { keywords: ['firmware'],   address: 0x00010000, required: true },
-        { keywords: ['littlefs'],   address: 0x00210000, required: true },
+        { keywords: ['boot_app0'], address: 0x0000E000, required: false },
+        { keywords: ['firmware'], address: 0x00010000, required: true },
+        { keywords: ['littlefs'], address: 0x00210000, required: true },
       ],
     },
     'ESP32_V2': {
@@ -694,9 +772,9 @@ const FIRMWARE_VARIANTS = {
         parts: [
         { keywords: ['bootloader'], address: 0x00001000, required: true },
         { keywords: ['partitions'], address: 0x00008000, required: true },
-        { keywords: ['boot_app0'],  address: 0x0000E000, required: false },
-        { keywords: ['firmware'],   address: 0x00010000, required: true },
-        { keywords: ['littlefs'],   address: 0x00210000, required: true },
+        { keywords: ['boot_app0'], address: 0x0000E000, required: false },
+        { keywords: ['firmware'], address: 0x00010000, required: true },
+        { keywords: ['littlefs'], address: 0x00210000, required: true },
 	  ],
     },
     'ESP32_V3': {
@@ -706,9 +784,9 @@ const FIRMWARE_VARIANTS = {
         parts: [
         { keywords: ['bootloader'], address: 0x00001000, required: true },
         { keywords: ['partitions'], address: 0x00008000, required: true },
-        { keywords: ['boot_app0'],  address: 0x0000E000, required: false },
-        { keywords: ['firmware'],   address: 0x00010000, required: true },
-        { keywords: ['littlefs'],   address: 0x00210000, required: true },
+        { keywords: ['boot_app0'], address: 0x0000E000, required: false },
+        { keywords: ['firmware'], address: 0x00010000, required: true },
+        { keywords: ['littlefs'], address: 0x00210000, required: true },
 	  ],
     },
 };
