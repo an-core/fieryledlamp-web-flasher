@@ -504,8 +504,8 @@
 
             <div class="section">Выбор варианта для ESP32</div>
             <ul>
-                <li><strong>Вариант 1</strong> - Default 4MB with spiffs</li>
-                <li><strong>Вариант 2</strong> - Minimal SPIFFS</li>
+                <li><strong>Вариант 1</strong> - No OTA (2MB APP / 2MB SPIFFS)</li>
+                <li><strong>Вариант 2</strong> - No OTA (2MB APP / 2MB SPIFFS)</li>
                 <li><strong>Вариант 3</strong> - No OTA (2MB APP / 2MB SPIFFS)</li>
             </ul>
 
