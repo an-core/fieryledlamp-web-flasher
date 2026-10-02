@@ -811,15 +811,6 @@ function log(msg, force = false) {
     logEl.scrollTop = logEl.scrollHeight;
 }
 
-function log(msg) {
-    const now = new Date();
-    const time = now.toTimeString().substr(0, 8);
-    const div = document.createElement('div');
-    div.textContent = `[${time}] ${msg}`;
-    logEl.appendChild(div);
-    logEl.scrollTop = logEl.scrollHeight;
-}
-
 function showStatus(msg, type) {
     statusEl.textContent = msg;
     statusEl.className = 'status active ' + type;
