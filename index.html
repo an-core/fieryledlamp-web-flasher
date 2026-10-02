@@ -876,33 +876,9 @@ async function downloadVariantZip(variant) {
         log('Загружено ' + (blob.size / 1024).toFixed(1) + ' KB');
 
         const zip = await JSZip.loadAsync(blob);
+
         const missing = [];
-        const flashMode = document.getElementById('flashMode')?.value || 'all';
-
-        const partsToFlash = variant.parts.filter(part => {
-            if (flashMode === 'all') return true;
-            if (flashMode === 'firmware') return part.keywords.includes('firmware');
-            if (flashMode === 'littlefs') return part.keywords.includes('littlefs');
-            return true;
-        });
-
-        if (partsToFlash.length === 0) {
-            log('ОШИБКА: не выбрано ни одного файла для прошивки');
-            flashBtn.disabled = false;
-            connectBtn.disabled = false;
-            return;
-        }
-
-        log('Режим: ' + flashMode + ', файлов: ' + partsToFlash.length);
-
-        if (flashMode === 'firmware') {
-            showStatus('Внимание: прошивается ТОЛЬКО firmware. Partition table должна совпадать.', 'warning');
-        }
-        if (flashMode === 'littlefs') {
-            showStatus('Внимание: прошивается ТОЛЬКО файловая система. Прошивка останется прежней.', 'warning');
-        }
-
-        for (const part of partsToFlash) {
+        for (const part of variant.parts) {
             const file = findFileInZip(zip, part.keywords);
             if (!file) {
                 if (part.required) {
@@ -1044,10 +1020,35 @@ flashBtn.onclick = async () => {
         log('Подготовка файлов...');
         showStatus('Подготовка файлов...', 'info');
 
+        const flashMode = document.getElementById('flashMode')?.value || 'all';
+
+        const partsToFlash = variant.parts.filter(part => {
+            if (flashMode === 'all') return true;
+            if (flashMode === 'firmware') return part.keywords.includes('firmware');
+            if (flashMode === 'littlefs') return part.keywords.includes('littlefs');
+            return true;
+        });
+
+        if (partsToFlash.length === 0) {
+            log('ОШИБКА: не выбрано ни одного файла для прошивки');
+            flashBtn.disabled = false;
+            connectBtn.disabled = false;
+            return;
+        }
+
+        log('Режим: ' + flashMode + ', файлов: ' + partsToFlash.length);
+
+        if (flashMode === 'firmware') {
+            showStatus('Внимание: прошивается ТОЛЬКО firmware. Partition table должна совпадать.', 'warning');
+        }
+        if (flashMode === 'littlefs') {
+            showStatus('Внимание: прошивается ТОЛЬКО файловая система. Прошивка останется прежней.', 'warning');
+        }
+
         const fileArray = [];
         const fileNames = [];
 
-        for (const part of variant.parts) {
+        for (const part of partsToFlash) {
             const file = findFileInZip(zipData, part.keywords);
             if (!file) {
                 if (part.required) {
@@ -1069,7 +1070,8 @@ flashBtn.onclick = async () => {
             });
             fileNames.push(file.name);
 
-            log('  ' + file.name + ' @ 0x' + part.address.toString(16).padStart(8, '0') + ' (' + (arrayBuffer.byteLength / 1024).toFixed(1) + ' KB)');
+            log('  ' + file.name + ' @ 0x' + part.address.toString(16).padStart(8, '0') +
+                ' (' + (arrayBuffer.byteLength / 1024).toFixed(1) + ' KB)');
         }
 
         if (fileArray.length === 0) {
