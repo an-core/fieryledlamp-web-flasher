@@ -816,11 +816,6 @@ function log(msg, level = 'log') {
     }
 }
 
-function consoleDebug(msg, level = 'log') {
-    if (!DEBUG_CONSOLE) return;
-    console[level]('[FieryFlasher] ' + msg);
-}
-
 function showStatus(msg, type) {
     statusEl.textContent = msg;
     statusEl.className = 'status active ' + type;
