@@ -542,11 +542,11 @@ hr {
             <span class="step-num">3.5</span>
             <div class="step-content">
                 <b>Режим прошивки</b>
-                <small>Что именно прошить. По умолчанию - всё.</small>
+                <small>Что именно прошить.</small>
                 <select id="flashMode" style="margin-top:8px;">
                     <option value="all">Полная прошивка (все файлы)</option>
-                    <option value="firmware">Только прошивка (firmware.bin)</option>
-                    <option value="littlefs">Только файловая система (littlefs.bin)</option>
+                    <option value="firmware">Только firmware.bin</option>
+                    <option value="littlefs">Только littlefs.bin</option>
                 </select>
             </div>
         </div>
@@ -566,19 +566,7 @@ hr {
 
         <div style="margin-top:20px;">
             <b style="display:block; margin-bottom:8px; color:#b8caff;">Журнал прошивки:</b>
-            <div id="log" style="
-                    background: #0a0a0a;
-                    color: #00ff00;
-                    font-family: 'Courier New', monospace;
-                    font-size: 12px;
-                    padding: 12px;
-                    border-radius: 10px;
-                    height: 200px;
-                    overflow-y: auto;
-                    text-align: left;
-                    border: 1px solid #1a1e26;
-                ">
-            </div>
+            <div id="log" style=" background: #0a0a0a; color: #44ff07; font-family: 'Courier New', monospace; font-size: 12px; padding: 12px; border-radius: 10px; height: 200px; overflow-y: auto; text-align: left; border: 1px solid #1a1e26"></div>
         </div>
     </div>
 
@@ -634,7 +622,7 @@ hr {
 </div>
 
     <script type="module">
-import {
+	import {
     ESPLoader,
     Transport
 } from 'https://unpkg.com/esptool-js@0.4.5/bundle.js';
@@ -876,9 +864,17 @@ async function downloadVariantZip(variant) {
         log('Загружено ' + (blob.size / 1024).toFixed(1) + ' KB');
 
         const zip = await JSZip.loadAsync(blob);
+        const flashMode = document.getElementById('flashMode')?.value || 'all';
+
+        const partsToFlash = variant.parts.filter(part => {
+            if (flashMode === 'all') return true;
+            if (flashMode === 'firmware') return part.keywords.includes('firmware');
+            if (flashMode === 'littlefs') return part.keywords.includes('littlefs');
+            return true;
+        });
 
         const missing = [];
-        for (const part of variant.parts) {
+        for (const part of partsToFlash) {
             const file = findFileInZip(zip, part.keywords);
             if (!file) {
                 if (part.required) {
@@ -1146,7 +1142,7 @@ flashBtn.onclick = async () => {
         transport = null;
         port = null;
     }
-};
+};   
     </script>
 </body>
 </html>
