@@ -533,7 +533,7 @@
     </div>
 
     <script type="module">
-        import {
+import {
     ESPLoader,
     Transport
 } from 'https://unpkg.com/esptool-js@0.4.5/bundle.js';
@@ -922,8 +922,7 @@ flashBtn.onclick = async () => {
             });
             fileNames.push(file.name);
 
-            log('  ' + file.name + ' @ 0x' + part.address.toString(16).padStart(8, '0') +
-                ' (' + (arrayBuffer.byteLength / 1024).toFixed(1) + ' KB)');
+            log('  ' + file.name + ' @ 0x' + part.address.toString(16).padStart(8, '0') + ' (' + (arrayBuffer.byteLength / 1024).toFixed(1) + ' KB)');
         }
 
         if (fileArray.length === 0) {
@@ -953,7 +952,23 @@ flashBtn.onclick = async () => {
         });
 
         log('Прошивка завершена, перезагрузка...');
-        await loader.after();
+        try {
+            if (typeof loader.hardReset === 'function') {
+                await loader.hardReset();
+                log('Hard reset выполнен');
+            } else {
+                log('Метод hardReset недоступен, пробуем через DTR/RTS');
+                await transport.setDTR(false);
+                await transport.setRTS(true);
+                await new Promise(r => setTimeout(r, 100));
+                await transport.setDTR(true);
+                await transport.setRTS(false);
+                await new Promise(r => setTimeout(r, 100));
+                await transport.setDTR(false);
+            }
+        } catch (e) {
+            log('Ошибка сброса: ' + e.message);
+        }
 
         setProgress(100, '100%');
         showStatus('Прошивка успешно завершена!', 'success');
