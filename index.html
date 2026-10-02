@@ -774,8 +774,6 @@ const FIRMWARE_VARIANTS = {
     },
 };
 
-const DEBUG_CONSOLE = false;
-
 const FLASH_OPTIONS = {
     baudrate: 921600,
     romBaudrate: 115200,
@@ -803,17 +801,13 @@ let zipData = null;
 let selectedVariant = null;
 let detectedChip = null;
 
-function log(msg, level = 'log') {
+function log(msg) {
     const now = new Date();
     const time = now.toTimeString().substr(0, 8);
     const div = document.createElement('div');
     div.textContent = `[${time}] ${msg}`;
     logEl.appendChild(div);
     logEl.scrollTop = logEl.scrollHeight;
-
-    if (DEBUG_CONSOLE) {
-        console[level]('[FieryFlasher] ' + msg);
-    }
 }
 
 function showStatus(msg, type) {
@@ -878,13 +872,13 @@ if (!('serial' in navigator)) {
 }
 
 async function downloadVariantZip(variant) {
-    consoleDebug('Загрузка архива: ' + variant.description);
+    log('Загрузка архива: ' + variant.description);
     showStatus('Загрузка архива...', 'info');
     try {
         const response = await fetch(variant.zipUrl);
         if (!response.ok) throw new Error('HTTP ' + response.status);
         const blob = await response.blob();
-        consoleDebug('Загружено ' + (blob.size / 1024).toFixed(1) + ' KB');
+        log('Загружено ' + (blob.size / 1024).toFixed(1) + ' KB');
 
         const zip = await JSZip.loadAsync(blob);
         const flashMode = document.getElementById('flashMode')?.value || 'all';
@@ -903,7 +897,7 @@ async function downloadVariantZip(variant) {
                 if (part.required) {
                     missing.push(part.keywords.join('+'));
                 } else {
-                    consoleDebug('  ⚠ Не найден (необязательный): ' + part.keywords.join('+'));
+                    log('  ⚠ Не найден (необязательный): ' + part.keywords.join('+'));
                 }
             } else {
                 log('  Найден: ' + file.name);
@@ -913,10 +907,10 @@ async function downloadVariantZip(variant) {
             throw new Error('В архиве нет файлов: ' + missing.join(', '));
         }
 
-        consoleDebug('Архив распакован, все файлы на месте');
+        log('Архив распакован, все файлы на месте');
         return zip;
     } catch (e) {
-        consoleDebug('Ошибка загрузки: ' + e.message);
+        log('Ошибка загрузки: ' + e.message);
         showStatus('Ошибка загрузки архива: ' + e.message, 'error');
         return null;
     }
