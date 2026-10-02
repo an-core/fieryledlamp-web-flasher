@@ -862,9 +862,7 @@ function detectBrowser() {
 
 if (!('serial' in navigator)) {
     const browserName = detectBrowser();
-    showStatus(
-        browserName + ' не поддерживает Web Serial. Используйте Chrome, Edge, Opera, Vivaldi, Brave или Cent Browser.', 'error'
-    );
+    showStatus(browserName + ' не поддерживает Web Serial. Используйте Chrome, Edge, Opera, Vivaldi, Brave или Cent Browser.', 'error');
     connectBtn.disabled = true;
     log('Web Serial не поддерживается браузером: ' + browserName);
 } else {
@@ -949,11 +947,7 @@ connectBtn.onclick = async () => {
 
             const variant = FIRMWARE_VARIANTS[selectedVariant];
             detectedInfo.classList.add('active');
-            detectedInfo.innerHTML = `
-                        <b>Определено:</b><br>
-                        Чип: <b>${chip}</b><br>
-                        Вариант: <b>${variant.description}</b>
-                    `;
+            detectedInfo.innerHTML = ` <b>Определено:</b><br> Чип: <b>${chip}</b><br> Вариант: <b>${variant.description}</b> `;
 
             log('Определён ESP32-S3, загрузка архива...');
             zipData = await downloadVariantZip(variant);
@@ -1001,11 +995,7 @@ variantSelect.onchange = async (e) => {
     log('Выбран вариант: ' + variant.description);
 
     detectedInfo.classList.add('active');
-    detectedInfo.innerHTML = `
-                <b>Определено:</b><br>
-                Чип: <b>${detectedChip}</b><br>
-                Вариант: <b>${variant.description}</b>
-            `;
+    detectedInfo.innerHTML = ` <b>Определено:</b><br> Чип: <b>${detectedChip}</b><br> Вариант: <b>${variant.description}</b> `;
 
     zipData = await downloadVariantZip(variant);
     if (!zipData) {
@@ -1091,8 +1081,7 @@ flashBtn.onclick = async () => {
             });
             fileNames.push(file.name);
 
-            log('  ' + file.name + ' @ 0x' + part.address.toString(16).padStart(8, '0') +
-                ' (' + (arrayBuffer.byteLength / 1024).toFixed(1) + ' KB)');
+            log('  ' + file.name + ' @ 0x' + part.address.toString(16).padStart(8, '0') + ' (' + (arrayBuffer.byteLength / 1024).toFixed(1) + ' KB)');
         }
 
         if (fileArray.length === 0) {
