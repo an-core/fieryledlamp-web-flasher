@@ -386,76 +386,76 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🔥 WEB FLASHER</h1>
+<div class="container">
+    <h1>WEB FLASHER FIERYLEDLAMP</h1>
 
-        <div class="info">
-            <p><strong>Устройство:</strong> Fiery Led Lamp</p>
-            <p><strong>Прошивка:</strong> Web Serial Flasher</p>
-            <p><strong>Поддержка:</strong> ESP32-S3 и ESP32</p>
+    <div class="info">
+        <p><strong>Устройство:</strong> Fiery Led Lamp</p>
+        <p><strong>Прошивка:</strong> Web Serial Flasher</p>
+        <p><strong>Поддержка:</strong> ESP32-S3 и ESP32</p>
+    </div>
+
+    <div class="method-card">
+        <div class="method-title">
+            <span>Прошивка через браузер</span>
+            <button class="info-btn" id="showInstructions">Инструкция</button>
+        </div>
+        <div class="method-desc">
+            <span class="warning-text">
+                <strong>Важное предупреждение!</strong><br>
+                Требуется браузер на движке <strong>Chromium</strong>: Chrome, Edge, Opera, Vivaldi, Brave, Cent Browser, Яндекс.Браузер.<br>
+                <strong>Firefox и Safari не поддерживают Web Serial.</strong><br>
+                Перед прошивкой закройте другие вкладки, использующие COM-порт.
+            </span>
         </div>
 
-        <div class="method-card">
-            <div class="method-title">
-                <span>Прошивка через браузер</span>
-                <button class="info-btn" id="showInstructions">Инструкция</button>
+        <div class="step-row">
+            <span class="step-num">1</span>
+            <div class="step-content">
+                <b>Подключите плату</b>
+                <small>USB-кабелем к компьютеру. Для ESP32 может потребоваться драйвер CH340/CP2102.</small>
             </div>
-            <div class="method-desc">
-                Прошейте лампу прямо из браузера - без установки Arduino IDE и драйверов.
-                <span class="warning-text">
-                    <strong>Важное предупреждение!</strong><br>
-                    Требуется браузер <strong>Chrome</strong> или <strong>Edge</strong>.
-                    Перед прошивкой закройте другие вкладки, использующие COM-порт.
-                </span>
-            </div>
+        </div>
 
-            <div class="step-row">
-                <span class="step-num">1</span>
-                <div class="step-content">
-                    <b>Подключите плату</b>
-                    <small>USB-кабелем к компьютеру. Для ESP32 может потребоваться драйвер CH340/CP2102.</small>
+        <div class="step-row">
+            <span class="step-num">2</span>
+            <div class="step-content">
+                <b>Подключитесь к ESP</b>
+                <small>Браузер покажет список COM-портов. Выберите нужный.</small>
+                <button id="connectBtn" style="margin-top:8px;">Подключиться к ESP</button>
+            </div>
+        </div>
+
+        <div class="step-row">
+            <span class="step-num">3</span>
+            <div class="step-content">
+                <b>Выберите прошивку</b>
+                <small>Для ESP32-S3 - автоматически. Для ESP32 - выберите вариант.</small>
+                <div id="detectedInfo" class="detected-info"></div>
+                <div id="variantSelector" style="display:none; margin-top:10px;">
+                    <select id="variantSelect">
+                        <option value="">— выберите вариант прошивки —</option>
+                    </select>
                 </div>
             </div>
+        </div>
 
-            <div class="step-row">
-                <span class="step-num">2</span>
-                <div class="step-content">
-                    <b>Подключитесь к ESP</b>
-                    <small>Браузер покажет список COM-портов. Выберите нужный.</small>
-                    <button id="connectBtn" style="margin-top:8px;">Подключиться к ESP</button>
+        <div class="step-row">
+            <span class="step-num">4</span>
+            <div class="step-content">
+                <b>Прошейте лампу</b>
+                <small>Остальное выполняется автоматически.</small>
+                <div id="status" class="status"></div>
+                <div class="progress-bar-outer" id="progressBarOuter">
+                    <div class="progress-bar-inner" id="progressBarInner" style="width: 0%;">0%</div>
                 </div>
+                <button id="flashBtn" disabled style="margin-top:8px;">Прошить</button>
             </div>
+        </div>
 
-            <div class="step-row">
-                <span class="step-num">3</span>
-                <div class="step-content">
-                    <b>Выберите прошивку</b>
-                    <small>Для ESP32-S3 - автоматически. Для ESP32 - выберите вариант.</small>
-                    <div id="detectedInfo" class="detected-info"></div>
-                    <div id="variantSelector" style="display:none; margin-top:10px;">
-                        <select id="variantSelect">
-                            <option value="">— выберите вариант прошивки —</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="step-row">
-                <span class="step-num">4</span>
-                <div class="step-content">
-                    <b>Прошейте лампу</b>
-                    <small>Остальное выполняется автоматически.</small>
-                    <div id="status" class="status"></div>
-                    <div class="progress-bar-outer" id="progressBarOuter">
-                        <div class="progress-bar-inner" id="progressBarInner" style="width: 0%;">0%</div>
-                    </div>
-                    <button id="flashBtn" disabled style="margin-top:8px;">Прошить</button>
-                </div>
-            </div>
-
-            <div style="margin-top:20px;">
-                <b style="display:block; margin-bottom:8px; color:#b8caff;">Журнал прошивки:</b>
-                <div id="log" style="
+        <div style="margin-top:20px;">
+            <b style="display:block; margin-bottom:8px; color:#b8caff;">Журнал прошивки:</b>
+            <div id="log" style="
                     background: #0a0a0a;
                     color: #00ff00;
                     font-family: 'Courier New', monospace;
@@ -467,69 +467,69 @@
                     text-align: left;
                     border: 1px solid #1a1e26;
                 ">
-                    <div>[--:--:--] Конфигурация сайта загружена.</div>
-                </div>
+                <div>[--:--:--] Конфигурация сайта загружена.</div>
             </div>
-        </div>
-
-        <hr>
-
-        <button onclick="location.href='/'" class="btn-danger">На главную</button>
-
-        <div class="footer">
-            Web Serial работает только в Chrome/Edge и по HTTPS или localhost
         </div>
     </div>
 
-    <div class="modal-overlay" id="instructionsModal">
-        <div class="modal-box">
-            <span class="close-icon" id="closeModalBtn1">&times;</span>
-            <h2>Инструкция по прошивке</h2>
+    <hr>
 
-            <div class="section">Подготовка</div>
-            <ul>
-                <li>Используйте браузер <strong>Chrome</strong> (версия 89+) или <strong>Edge</strong>.</li>
-                <li>Подключите ESP к компьютеру USB-кабелем.</li>
-                <li>Если плата не определяется - установите драйвер <strong>CH340</strong> или <strong>CP2102</strong>.</li>
-            </ul>
+    <button onclick="location.href='/'" class="btn-danger">На главную</button>
 
-            <div class="section">Если плата не определяется</div>
-            <ul>
-                <li>Зажмите кнопку <strong>BOOT</strong> на плате.</li>
-                <li>Кратно нажмите <strong>RESET</strong>.</li>
-                <li>Отпустите <strong>BOOT</strong>.</li>
-                <li>Повторите подключение.</li>
-            </ul>
-
-            <div class="section">Выбор варианта для ESP32</div>
-            <ul>
-                <li><strong>Вариант 1</strong> - No OTA (2MB APP / 2MB SPIFFS)</li>
-                <li><strong>Вариант 2</strong> - No OTA (2MB APP / 2MB SPIFFS)</li>
-                <li><strong>Вариант 3</strong> - No OTA (2MB APP / 2MB SPIFFS)</li>
-            </ul>
-
-            <div class="note">
-                <strong>Примечание:</strong> если не знаете, какой вариант выбрать - уточните у автора прошивки или посмотрите в Arduino IDE: <strong>Инструменты - Partition Scheme</strong>.
-            </div>
-
-            <div class="section">Что происходит дальше</div>
-            <ul>
-                <li>Браузер скачает <code>.zip</code> с прошивкой с GitHub.</li>
-                <li>Распакует его в памяти.</li>
-                <li>Отправит данные на ESP через USB.</li>
-                <li>ESP перезагрузится с новой прошивкой.</li>
-            </ul>
-
-            <div class="section">Во время прошивки</div>
-            <ul>
-                <li><strong>Не отключайте</strong> USB-кабель.</li>
-                <li><strong>Не закрывайте</strong> вкладку браузера.</li>
-                <li><strong>Не выключайте</strong> компьютер.</li>
-            </ul>
-
-            <button class="close-modal" id="closeModalBtn2">Понятно, закрыть</button>
-        </div>
+    <div class="footer">
+        Web Serial работает только в Chrome/Edge и по HTTPS или localhost
     </div>
+</div>
+
+<div class="modal-overlay" id="instructionsModal">
+    <div class="modal-box">
+        <span class="close-icon" id="closeModalBtn1">&times;</span>
+        <h2>Инструкция по прошивке</h2>
+
+        <div class="section">Подготовка</div>
+        <ul>
+            <li>Используйте браузер <strong>Chrome</strong> (версия 89+) или <strong>Edge</strong>.</li>
+            <li>Подключите ESP к компьютеру USB-кабелем.</li>
+            <li>Если плата не определяется - установите драйвер <strong>CH340</strong> или <strong>CP2102</strong>.</li>
+        </ul>
+
+        <div class="section">Если плата не определяется</div>
+        <ul>
+            <li>Зажмите кнопку <strong>BOOT</strong> на плате.</li>
+            <li>Кратно нажмите <strong>RESET</strong>.</li>
+            <li>Отпустите <strong>BOOT</strong>.</li>
+            <li>Повторите подключение.</li>
+        </ul>
+
+        <div class="section">Выбор варианта для ESP32</div>
+        <ul>
+            <li><strong>Вариант 1</strong> - No OTA (2MB APP / 2MB SPIFFS)</li>
+            <li><strong>Вариант 2</strong> - No OTA (2MB APP / 2MB SPIFFS)</li>
+            <li><strong>Вариант 3</strong> - No OTA (2MB APP / 2MB SPIFFS)</li>
+        </ul>
+
+        <div class="note">
+            <strong>Примечание:</strong> если не знаете, какой вариант выбрать - уточните у автора прошивки или посмотрите в Arduino IDE: <strong>Инструменты - Partition Scheme</strong>.
+        </div>
+
+        <div class="section">Что происходит дальше</div>
+        <ul>
+            <li>Браузер скачает <code>.zip</code> с прошивкой с GitHub.</li>
+            <li>Распакует его в памяти.</li>
+            <li>Отправит данные на ESP через USB.</li>
+            <li>ESP перезагрузится с новой прошивкой.</li>
+        </ul>
+
+        <div class="section">Во время прошивки</div>
+        <ul>
+            <li><strong>Не отключайте</strong> USB-кабель.</li>
+            <li><strong>Не закрывайте</strong> вкладку браузера.</li>
+            <li><strong>Не выключайте</strong> компьютер.</li>
+        </ul>
+
+        <button class="close-modal" id="closeModalBtn2">Понятно, закрыть</button>
+    </div>
+</div>
 
     <script type="module">
 import {
@@ -588,7 +588,7 @@ const FIRMWARE_VARIANTS = {
     'ESP32_V1': {
         zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_ESP32_VARIANT_1.zip',
         chipFamily: 'ESP32',
-        description: 'ESP32 — Вариант 1 (Default 4MB)',
+        description: 'ESP32 - Вариант 1 (No OTA (2MB APP / 2MB SPIFFS))',
         parts: [{
                 keywords: ['bootloader'],
                 address: 0x00001000,
@@ -614,7 +614,7 @@ const FIRMWARE_VARIANTS = {
     'ESP32_V2': {
         zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_ESP32_VARIANT_2.zip',
         chipFamily: 'ESP32',
-        description: 'ESP32 — Вариант 2 (Minimal SPIFFS)',
+        description: 'ESP32 - Вариант 2 (No OTA (2MB APP / 2MB SPIFFS))',
         parts: [{
                 keywords: ['bootloader'],
                 address: 0x00001000,
@@ -640,7 +640,7 @@ const FIRMWARE_VARIANTS = {
     'ESP32_V3': {
         zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_ESP32_VARIANT_3.zip',
         chipFamily: 'ESP32',
-        description: 'ESP32 — Вариант 3 (No OTA)',
+        description: 'ESP32 - Вариант 3 (No OTA (2MB APP / 2MB SPIFFS))',
         parts: [{
                 keywords: ['bootloader'],
                 address: 0x00001000,
@@ -737,10 +737,29 @@ document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
 });
 
+function detectBrowser() {
+    const ua = navigator.userAgent;
+
+    if (ua.includes('Firefox/')) return 'Firefox';
+    if (ua.includes('Edg/')) return 'Edge';
+    if (ua.includes('OPR/') || ua.includes('Opera/')) return 'Opera';
+    if (ua.includes('Vivaldi/')) return 'Vivaldi';
+    if (ua.includes('Brave/')) return 'Brave';
+    if (ua.includes('YaBrowser/')) return 'Яндекс.Браузер';
+    if (ua.includes('CentBrowser/')) return 'Cent Browser';
+    if (ua.includes('Chrome/')) return 'Chrome';
+    if (ua.includes('Safari/') && !ua.includes('Chrome/')) return 'Safari';
+
+    return 'неизвестный браузер';
+}
+
 if (!('serial' in navigator)) {
-    showStatus('Web Serial не поддерживается. Используйте Chrome или Edge.', 'error');
+    const browserName = detectBrowser();
+    showStatus(
+        browserName + ' не поддерживает Web Serial. Используйте Chrome, Edge, Opera, Vivaldi, Brave или Cent Browser.', 'error'
+    );
     connectBtn.disabled = true;
-    log('Web Serial не поддерживается браузером');
+    log('Web Serial не поддерживается браузером: ' + browserName);
 } else {
     log('Web Serial поддерживается');
 }
