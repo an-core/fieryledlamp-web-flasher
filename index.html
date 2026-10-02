@@ -231,7 +231,7 @@
         button,
         .file-label,
         select {
-            background: #2c3e66;
+            background: #574c93;
             color: white;
             border: none;
             padding: 10px 25px;
@@ -402,9 +402,9 @@
         <div class="method-desc">
             <span class="warning-text">
                 <strong>Важное предупреждение!</strong><br>
-				Требуется браузер на движке <strong>Chromium</strong>:<br>
-				Chrome, Edge, Opera, Vivaldi, Brave, Cent Browser, Яндекс.Браузер.<br>
-				<strong>Firefox и Safari не поддерживают Web Serial.</strong><br>
+                Требуется браузер на движке <strong>Chromium</strong>:<br>
+                Chrome, Edge, Opera, Vivaldi, Brave, Cent Browser, Яндекс.Браузер.<br>
+                <strong>Firefox и Safari не поддерживают Web Serial.</strong><br>
             </span>
         </div>
 
@@ -436,6 +436,19 @@
                         <option value="">— выберите вариант прошивки —</option>
                     </select>
                 </div>
+            </div>
+        </div>
+
+        <div class="step-row">
+            <span class="step-num">3.5</span>
+            <div class="step-content">
+                <b>Режим прошивки</b>
+                <small>Что именно прошить. По умолчанию - всё.</small>
+                <select id="flashMode" style="margin-top:8px;">
+                    <option value="all">Полная прошивка (все файлы)</option>
+                    <option value="firmware">Только прошивка (firmware.bin)</option>
+                    <option value="littlefs">Только файловая система (littlefs.bin)</option>
+                </select>
             </div>
         </div>
 
@@ -764,8 +777,32 @@ async function downloadVariantZip(variant) {
         log('Загружено ' + (blob.size / 1024).toFixed(1) + ' KB');
 
         const zip = await JSZip.loadAsync(blob);
-
         const missing = [];
+        const flashMode = document.getElementById('flashMode')?.value || 'all';
+
+        const partsToFlash = variant.parts.filter(part => {
+            if (flashMode === 'all') return true;
+            if (flashMode === 'firmware') return part.keywords.includes('firmware');
+            if (flashMode === 'littlefs') return part.keywords.includes('littlefs');
+            return true;
+        });
+
+        if (partsToFlash.length === 0) {
+            log('ОШИБКА: не выбрано ни одного файла для прошивки');
+            flashBtn.disabled = false;
+            connectBtn.disabled = false;
+            return;
+        }
+
+        log('Режим: ' + flashMode + ', файлов: ' + partsToFlash.length);
+
+        if (flashMode === 'firmware') {
+            showStatus('Внимание: прошивается ТОЛЬКО firmware. Partition table должна совпадать.', 'warning');
+        }
+        if (flashMode === 'littlefs') {
+            showStatus('Внимание: прошивается ТОЛЬКО файловая система. Прошивка останется прежней.', 'warning');
+        }
+
         for (const part of variant.parts) {
             const file = findFileInZip(zip, part.keywords);
             if (!file) {
