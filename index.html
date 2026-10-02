@@ -533,325 +533,456 @@
     </div>
 
     <script type="module">
-        import { ESPLoader, Transport } from 'https://unpkg.com/esptool-js@0.4.5/bundle.js';
-        import JSZip from 'https://cdn.jsdelivr.net/npm/jszip@3.10.1/+esm';
+        import {
+    ESPLoader,
+    Transport
+} from 'https://unpkg.com/esptool-js@0.4.5/bundle.js';
+import JSZip from 'https://cdn.jsdelivr.net/npm/jszip@3.10.1/+esm';
 
-        const FIRMWARE_VARIANTS = {
-            'ESP32-S3': {
-                zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_ESP32S3.zip',
-                chipFamily: 'ESP32-S3',
-                description: 'ESP32-S3 (16MB)',
-                parts: [
-                    { name: 'bootloader.bin', address: 0x00000000 },
-                    { name: 'partitions.bin', address: 0x00008000 },
-                    { name: 'boot_app0.bin', address: 0x0000E000 },
-                    { name: 'firmware.bin', address: 0x00010000 },
-                    { name: 'littlefs.bin', address: 0x00C90000 },
-                ],
+function findFileInZip(zip, keywords) {
+    const allFiles = Object.keys(zip.files);
+    for (const filePath of allFiles) {
+        const file = zip.files[filePath];
+        if (file.dir) continue;
+
+        const fileName = filePath.toLowerCase();
+        const matches = keywords.every(k => fileName.includes(k.toLowerCase()));
+        if (matches) {
+            return file;
+        }
+    }
+    return null;
+}
+
+const FIRMWARE_VARIANTS = {
+    'ESP32-S3': {
+        zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_ESP32S3.zip',
+        chipFamily: 'ESP32-S3',
+        description: 'ESP32-S3 (16MB)',
+        parts: [{
+                keywords: ['bootloader'],
+                address: 0x00000000,
+                required: true
             },
-            'ESP32_V1': {
-                zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_ESP32_VARIANT_1.zip',
-                chipFamily: 'ESP32',
-                description: 'ESP32 - Вариант 1 (No OTA)',
-                parts: [
-                    { name: 'bootloader.bin', address: 0x00001000 },
-                    { name: 'partitions.bin', address: 0x00008000 },
-                    { name: 'boot_app0.bin', address: 0x0000E000 },
-                    { name: 'firmware.bin', address: 0x00010000 },
-                ],
+            {
+                keywords: ['partitions'],
+                address: 0x00008000,
+                required: true
             },
-            'ESP32_V2': {
-                zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_ESP32_VARIANT_2.zip',
-                chipFamily: 'ESP32',
-                description: 'ESP32 - Вариант 2 (No OTA)',
-                parts: [
-                    { name: 'bootloader.bin', address: 0x00001000 },
-                    { name: 'partitions.bin', address: 0x00008000 },
-                    { name: 'boot_app0.bin', address: 0x0000E000 },
-                    { name: 'firmware.bin', address: 0x00010000 },
-                ],
+            {
+                keywords: ['boot_app0'],
+                address: 0x0000E000,
+                required: false
             },
-            'ESP32_V3': {
-                zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_ESP32_VARIANT_3.zip',
-                chipFamily: 'ESP32',
-                description: 'ESP32 - Вариант 3 (No OTA)',
-                parts: [
-                    { name: 'bootloader.bin', address: 0x00001000 },
-                    { name: 'partitions.bin', address: 0x00008000 },
-                    { name: 'boot_app0.bin', address: 0x0000E000 },
-                    { name: 'firmware.bin', address: 0x00010000 },
-                ],
+            {
+                keywords: ['firmware'],
+                address: 0x00010000,
+                required: true
             },
-        };
+            {
+                keywords: ['littlefs'],
+                address: 0x00C90000,
+                required: true
+            },
+        ],
+    },
+    'ESP32_V1': {
+        zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_ESP32_VARIANT_1.zip',
+        chipFamily: 'ESP32',
+        description: 'ESP32 — Вариант 1 (Default 4MB)',
+        parts: [{
+                keywords: ['bootloader'],
+                address: 0x00001000,
+                required: true
+            },
+            {
+                keywords: ['partitions'],
+                address: 0x00008000,
+                required: true
+            },
+            {
+                keywords: ['boot_app0'],
+                address: 0x0000E000,
+                required: false
+            },
+            {
+                keywords: ['firmware'],
+                address: 0x00010000,
+                required: true
+            },
+        ],
+    },
+    'ESP32_V2': {
+        zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_ESP32_VARIANT_2.zip',
+        chipFamily: 'ESP32',
+        description: 'ESP32 — Вариант 2 (Minimal SPIFFS)',
+        parts: [{
+                keywords: ['bootloader'],
+                address: 0x00001000,
+                required: true
+            },
+            {
+                keywords: ['partitions'],
+                address: 0x00008000,
+                required: true
+            },
+            {
+                keywords: ['boot_app0'],
+                address: 0x0000E000,
+                required: false
+            },
+            {
+                keywords: ['firmware'],
+                address: 0x00010000,
+                required: true
+            },
+        ],
+    },
+    'ESP32_V3': {
+        zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_ESP32_VARIANT_3.zip',
+        chipFamily: 'ESP32',
+        description: 'ESP32 — Вариант 3 (No OTA)',
+        parts: [{
+                keywords: ['bootloader'],
+                address: 0x00001000,
+                required: true
+            },
+            {
+                keywords: ['partitions'],
+                address: 0x00008000,
+                required: true
+            },
+            {
+                keywords: ['boot_app0'],
+                address: 0x0000E000,
+                required: false
+            },
+            {
+                keywords: ['firmware'],
+                address: 0x00010000,
+                required: true
+            },
+        ],
+    },
+};
 
-        const FLASH_OPTIONS = {
-            baudrate: 921600,
-            romBaudrate: 115200,
-            flashSize: 'keep',
-            flashMode: 'keep',
-            flashFreq: 'keep',
-            eraseAll: false,
-            compress: true,
-        };
+const FLASH_OPTIONS = {
+    baudrate: 921600,
+    romBaudrate: 115200,
+    flashSize: 'keep',
+    flashMode: 'keep',
+    flashFreq: 'keep',
+    eraseAll: false,
+    compress: true,
+};
 
-        const logEl = document.getElementById('log');
-        const statusEl = document.getElementById('status');
-        const connectBtn = document.getElementById('connectBtn');
-        const flashBtn = document.getElementById('flashBtn');
-        const variantSelector = document.getElementById('variantSelector');
-        const variantSelect = document.getElementById('variantSelect');
-        const detectedInfo = document.getElementById('detectedInfo');
-        const progressBarOuter = document.getElementById('progressBarOuter');
-        const progressBarInner = document.getElementById('progressBarInner');
+const logEl = document.getElementById('log');
+const statusEl = document.getElementById('status');
+const connectBtn = document.getElementById('connectBtn');
+const flashBtn = document.getElementById('flashBtn');
+const variantSelector = document.getElementById('variantSelector');
+const variantSelect = document.getElementById('variantSelect');
+const detectedInfo = document.getElementById('detectedInfo');
+const progressBarOuter = document.getElementById('progressBarOuter');
+const progressBarInner = document.getElementById('progressBarInner');
 
-        let port = null;
-        let transport = null;
-        let loader = null;
-        let zipData = null;
-        let selectedVariant = null;
-        let detectedChip = null;
+let port = null;
+let transport = null;
+let loader = null;
+let zipData = null;
+let selectedVariant = null;
+let detectedChip = null;
 
-        function log(msg) {
-            const now = new Date();
-            const time = now.toTimeString().substr(0, 8);
-            const div = document.createElement('div');
-            div.textContent = `[${time}] ${msg}`;
-            logEl.appendChild(div);
-            logEl.scrollTop = logEl.scrollHeight;
-        }
+function log(msg) {
+    const now = new Date();
+    const time = now.toTimeString().substr(0, 8);
+    const div = document.createElement('div');
+    div.textContent = `[${time}] ${msg}`;
+    logEl.appendChild(div);
+    logEl.scrollTop = logEl.scrollHeight;
+}
 
-        function showStatus(msg, type) {
-            statusEl.textContent = msg;
-            statusEl.className = 'status active ' + type;
-        }
+function showStatus(msg, type) {
+    statusEl.textContent = msg;
+    statusEl.className = 'status active ' + type;
+}
 
-        function setProgress(percent, text) {
-            progressBarOuter.classList.add('active');
-            progressBarInner.style.width = percent + '%';
-            progressBarInner.textContent = text || (percent + '%');
-        }
+function setProgress(percent, text) {
+    progressBarOuter.classList.add('active');
+    progressBarInner.style.width = percent + '%';
+    progressBarInner.textContent = text || (percent + '%');
+}
 
-        function hideProgress() {
-            progressBarOuter.classList.remove('active');
-        }
+function hideProgress() {
+    progressBarOuter.classList.remove('active');
+}
 
-        const modal = document.getElementById('instructionsModal');
-        const openBtn = document.getElementById('showInstructions');
-        const closeBtns = document.querySelectorAll('#closeModalBtn1, #closeModalBtn2');
+const modal = document.getElementById('instructionsModal');
+const openBtn = document.getElementById('showInstructions');
+const closeBtns = document.querySelectorAll('#closeModalBtn1, #closeModalBtn2');
 
-        function openModal() { modal.classList.add('open'); }
-        function closeModal() { modal.classList.remove('open'); }
+function openModal() {
+    modal.classList.add('open');
+}
 
-        openBtn.addEventListener('click', openModal);
-        closeBtns.forEach(btn => btn.addEventListener('click', closeModal));
-        modal.addEventListener('click', function(e) {
-            if (e.target === this) closeModal();
-        });
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
-        });
+function closeModal() {
+    modal.classList.remove('open');
+}
 
-        if (!('serial' in navigator)) {
-            showStatus('Web Serial не поддерживается. Используйте Chrome или Edge.', 'error');
-            connectBtn.disabled = true;
-            log('Web Serial не поддерживается браузером');
-        } else {
-            log('Web Serial поддерживается');
-        }
+openBtn.addEventListener('click', openModal);
+closeBtns.forEach(btn => btn.addEventListener('click', closeModal));
+modal.addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+});
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+});
 
-        async function downloadVariantZip(variant) {
-            log('Загрузка архива: ' + variant.description);
-            showStatus('Загрузка архива...', 'info');
-            try {
-                const response = await fetch(variant.zipUrl);
-                if (!response.ok) throw new Error('HTTP ' + response.status);
-                const blob = await response.blob();
-                log('Загружено ' + (blob.size / 1024).toFixed(1) + ' KB');
+if (!('serial' in navigator)) {
+    showStatus('Web Serial не поддерживается. Используйте Chrome или Edge.', 'error');
+    connectBtn.disabled = true;
+    log('Web Serial не поддерживается браузером');
+} else {
+    log('Web Serial поддерживается');
+}
 
-                const zip = await JSZip.loadAsync(blob);
+async function downloadVariantZip(variant) {
+    log('Загрузка архива: ' + variant.description);
+    showStatus('Загрузка архива...', 'info');
+    try {
+        const response = await fetch(variant.zipUrl);
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        const blob = await response.blob();
+        log('Загружено ' + (blob.size / 1024).toFixed(1) + ' KB');
 
-                const missing = [];
-                for (const part of variant.parts) {
-                    if (!zip.file(part.name)) missing.push(part.name);
+        const zip = await JSZip.loadAsync(blob);
+
+        const missing = [];
+        for (const part of variant.parts) {
+            const file = findFileInZip(zip, part.keywords);
+            if (!file) {
+                if (part.required) {
+                    missing.push(part.keywords.join('+'));
+                } else {
+                    log('  ⚠ Не найден (необязательный): ' + part.keywords.join('+'));
                 }
-                if (missing.length > 0) {
-                    throw new Error('В архиве нет файлов: ' + missing.join(', '));
-                }
-
-                log('Архив распакован, все файлы на месте');
-                return zip;
-            } catch (e) {
-                log('Ошибка загрузки: ' + e.message);
-                showStatus('Ошибка загрузки архива: ' + e.message, 'error');
-                return null;
+            } else {
+                log('  Найден: ' + file.name);
             }
         }
+        if (missing.length > 0) {
+            throw new Error('В архиве нет файлов: ' + missing.join(', '));
+        }
 
-        connectBtn.onclick = async () => {
-            if (loader) {
-                log('Уже подключено');
-                return;
-            }
+        log('Архив распакован, все файлы на месте');
+        return zip;
+    } catch (e) {
+        log('Ошибка загрузки: ' + e.message);
+        showStatus('Ошибка загрузки архива: ' + e.message, 'error');
+        return null;
+    }
+}
 
-            try {
-                log('Запрос USB-порта...');
-                showStatus('Запрос USB-порта...', 'info');
+connectBtn.onclick = async () => {
+    if (loader) {
+        log('Уже подключено');
+        return;
+    }
 
-                port = await navigator.serial.requestPort();
-                const info = port.getInfo();
-                log('Порт выбран: USB ' + (info.usbVendorId ? '0x' + info.usbVendorId.toString(16) : '?'));
+    try {
+        log('Запрос USB-порта...');
+        showStatus('Запрос USB-порта...', 'info');
 
-                transport = new Transport(port, true);
-                loader = new ESPLoader({
-                    transport,
-                    baudrate: FLASH_OPTIONS.baudrate,
-                    romBaudrate: FLASH_OPTIONS.romBaudrate,
-                });
+        port = await navigator.serial.requestPort();
+        const info = port.getInfo();
+        log('Порт выбран: USB ' + (info.usbVendorId ? '0x' + info.usbVendorId.toString(16) : '?'));
 
-                log('Подключение к ESP...');
-                showStatus('Подключение к ESP...', 'info');
-                const chip = await loader.main();
-                detectedChip = chip;
-                log('Чип: ' + chip);
+        transport = new Transport(port, true);
+        loader = new ESPLoader({
+            transport,
+            baudrate: FLASH_OPTIONS.baudrate,
+            romBaudrate: FLASH_OPTIONS.romBaudrate,
+        });
 
-                if (chip.includes('ESP32-S3') || chip.includes('ESP32S3')) {
-                    selectedVariant = 'ESP32-S3';
-                    variantSelector.style.display = 'none';
+        log('Подключение к ESP...');
+        showStatus('Подключение к ESP...', 'info');
+        const chip = await loader.main();
+        detectedChip = chip;
+        log('Чип: ' + chip);
 
-                    const variant = FIRMWARE_VARIANTS[selectedVariant];
-                    detectedInfo.classList.add('active');
-                    detectedInfo.innerHTML = `
+        if (chip.includes('ESP32-S3') || chip.includes('ESP32S3')) {
+            selectedVariant = 'ESP32-S3';
+            variantSelector.style.display = 'none';
+
+            const variant = FIRMWARE_VARIANTS[selectedVariant];
+            detectedInfo.classList.add('active');
+            detectedInfo.innerHTML = `
                         <b>Определено:</b><br>
                         Чип: <b>${chip}</b><br>
                         Вариант: <b>${variant.description}</b>
                     `;
 
-                    log('Определён ESP32-S3, загрузка архива...');
-                    zipData = await downloadVariantZip(variant);
-                    if (!zipData) return;
+            log('Определён ESP32-S3, загрузка архива...');
+            zipData = await downloadVariantZip(variant);
+            if (!zipData) return;
 
-                    flashBtn.disabled = false;
-                    showStatus('Подключено: ' + chip + ' - готово к прошивке', 'success');
-                } else if (chip.includes('ESP32')) {
-                    variantSelector.style.display = 'block';
-                    variantSelect.innerHTML = '<option value="">— выберите вариант —</option>';
-                    for (const [key, variant] of Object.entries(FIRMWARE_VARIANTS)) {
-                        if (variant.chipFamily === 'ESP32') {
-                            const opt = document.createElement('option');
-                            opt.value = key;
-                            opt.textContent = variant.description;
-                            variantSelect.appendChild(opt);
-                        }
-                    }
-                    showStatus('Подключено: ' + chip + ' - выберите вариант прошивки', 'info');
-                } else {
-                    log('Неизвестный чип: ' + chip);
-                    showStatus('Неизвестный чип: ' + chip, 'error');
+            flashBtn.disabled = false;
+            showStatus('Подключено: ' + chip + ' - готово к прошивке', 'success');
+        } else if (chip.includes('ESP32')) {
+            variantSelector.style.display = 'block';
+            variantSelect.innerHTML = '<option value="">— выберите вариант —</option>';
+            for (const [key, variant] of Object.entries(FIRMWARE_VARIANTS)) {
+                if (variant.chipFamily === 'ESP32') {
+                    const opt = document.createElement('option');
+                    opt.value = key;
+                    opt.textContent = variant.description;
+                    variantSelect.appendChild(opt);
                 }
-            } catch (e) {
-                log('Ошибка подключения: ' + e.message);
-                showStatus('Ошибка подключения: ' + e.message, 'error');
-                loader = null;
-                transport = null;
             }
-        };
+            showStatus('Подключено: ' + chip + ' - выберите вариант прошивки', 'info');
+        } else {
+            log('Неизвестный чип: ' + chip);
+            showStatus('Неизвестный чип: ' + chip, 'error');
+        }
+    } catch (e) {
+        log('Ошибка подключения: ' + e.message);
+        showStatus('Ошибка подключения: ' + e.message, 'error');
+        loader = null;
+        transport = null;
+    }
+};
 
-        variantSelect.onchange = async (e) => {
-            const value = e.target.value;
-            if (!value) {
-                flashBtn.disabled = true;
-                showStatus('Выберите вариант прошивки', 'warning');
-                return;
-            }
+variantSelect.onchange = async (e) => {
+    const value = e.target.value;
+    if (!value) {
+        flashBtn.disabled = true;
+        showStatus('Выберите вариант прошивки', 'warning');
+        return;
+    }
 
-            selectedVariant = value;
-            const variant = FIRMWARE_VARIANTS[value];
-            log('Выбран вариант: ' + variant.description);
+    selectedVariant = value;
+    const variant = FIRMWARE_VARIANTS[value];
+    log('Выбран вариант: ' + variant.description);
 
-            detectedInfo.classList.add('active');
-            detectedInfo.innerHTML = `
+    detectedInfo.classList.add('active');
+    detectedInfo.innerHTML = `
                 <b>Определено:</b><br>
                 Чип: <b>${detectedChip}</b><br>
                 Вариант: <b>${variant.description}</b>
             `;
 
-            zipData = await downloadVariantZip(variant);
-            if (!zipData) {
-                flashBtn.disabled = true;
-                return;
-            }
+    zipData = await downloadVariantZip(variant);
+    if (!zipData) {
+        flashBtn.disabled = true;
+        return;
+    }
 
-            flashBtn.disabled = false;
-            showStatus('Готово к прошивке: ' + variant.description, 'success');
-        };
+    flashBtn.disabled = false;
+    showStatus('Готово к прошивке: ' + variant.description, 'success');
+};
 
-        flashBtn.onclick = async () => {
-            if (!loader || !zipData || !selectedVariant) {
-                log('Не всё готово для прошивки');
-                return;
-            }
+flashBtn.onclick = async () => {
+    if (!loader || !zipData || !selectedVariant) {
+        log('Не всё готово для прошивки');
+        return;
+    }
 
-            const variant = FIRMWARE_VARIANTS[selectedVariant];
+    const variant = FIRMWARE_VARIANTS[selectedVariant];
 
-            flashBtn.disabled = true;
-            connectBtn.disabled = true;
-            setProgress(0, '0%');
+    flashBtn.disabled = true;
+    connectBtn.disabled = true;
+    setProgress(0, '0%');
 
-            try {
-                log('Подготовка файлов...');
-                showStatus('Подготовка файлов...', 'info');
+    try {
+        log('Подготовка файлов...');
+        showStatus('Подготовка файлов...', 'info');
 
-                const fileArray = [];
-                for (const part of variant.parts) {
-                    const file = zipData.file(part.name);
-                    const arrayBuffer = await file.async('arraybuffer');
-                    const binaryString = Array.from(new Uint8Array(arrayBuffer)) .map(b => String.fromCharCode(b)).join('');
+        const fileArray = [];
+        const fileNames = [];
 
-                    fileArray.push({ data: binaryString, address: part.address });
-                    log('  ' + part.name + ' @ 0x' + part.address.toString(16).padStart(8, '0') + ' (' + (arrayBuffer.byteLength / 1024).toFixed(1) + ' KB)');
+        for (const part of variant.parts) {
+            const file = findFileInZip(zipData, part.keywords);
+            if (!file) {
+                if (part.required) {
+                    log('ОШИБКА: обязательный файл не найден: ' + part.keywords.join('+'));
+                    continue;
+                } else {
+                    log('Пропуск необязательного: ' + part.keywords.join('+'));
+                    continue;
                 }
-
-                log('Начало прошивки...');
-                showStatus('Прошивка... Не отключайте USB!', 'warning');
-
-                await loader.writeFlash({
-                    fileArray: fileArray,
-                    flashSize: FLASH_OPTIONS.flashSize,
-                    flashMode: FLASH_OPTIONS.flashMode,
-                    flashFreq: FLASH_OPTIONS.flashFreq,
-                    eraseAll: FLASH_OPTIONS.eraseAll,
-                    compress: FLASH_OPTIONS.compress,
-                    calculateMD5Hash: () => '',
-                    reportProgress: (fileIndex, written, total) => {
-                        const percent = Math.round(written / total * 100);
-                        setProgress(percent, percent + '%');
-                        if (fileIndex < variant.parts.length) {
-                            showStatus('Запись ' + variant.parts[fileIndex].name + '... ' + percent + '%', 'info');
-                        }
-                    },
-                });
-
-                log('Прошивка завершена, перезагрузка...');
-                await loader.after();
-
-                setProgress(100, '100%');
-                showStatus('Прошивка успешно завершена!', 'success');
-                log('ESP перезагружается');
-
-                try {
-                    await transport.disconnect();
-                    await port.close();
-                } catch (e) {}
-                loader = null;
-                transport = null;
-                port = null;
-            } catch (e) {
-                log('Ошибка прошивки: ' + e.message);
-                showStatus('Ошибка прошивки: ' + e.message, 'error');
-                flashBtn.disabled = false;
-                connectBtn.disabled = false;
             }
-        };
+
+            const arrayBuffer = await file.async('arraybuffer');
+            const binaryString = Array.from(new Uint8Array(arrayBuffer))
+                .map(b => String.fromCharCode(b)).join('');
+
+            fileArray.push({
+                data: binaryString,
+                address: part.address
+            });
+            fileNames.push(file.name);
+
+            log('  ' + file.name + ' @ 0x' + part.address.toString(16).padStart(8, '0') +
+                ' (' + (arrayBuffer.byteLength / 1024).toFixed(1) + ' KB)');
+        }
+
+        if (fileArray.length === 0) {
+            log('ОШИБКА: нет файлов для прошивки');
+            flashBtn.disabled = false;
+            connectBtn.disabled = false;
+            return;
+        }
+
+        log('Начало прошивки...');
+        showStatus('Прошивка... Не отключайте USB!', 'warning');
+
+        await loader.writeFlash({
+            fileArray: fileArray,
+            flashSize: FLASH_OPTIONS.flashSize,
+            flashMode: FLASH_OPTIONS.flashMode,
+            flashFreq: FLASH_OPTIONS.flashFreq,
+            eraseAll: FLASH_OPTIONS.eraseAll,
+            compress: FLASH_OPTIONS.compress,
+            calculateMD5Hash: () => '',
+            reportProgress: (fileIndex, written, total) => {
+                const percent = Math.round(written / total * 100);
+                setProgress(percent, percent + '%');
+                const currentName = fileNames[fileIndex] || 'файл';
+                showStatus('Запись ' + currentName + '... ' + percent + '%', 'info');
+            },
+        });
+
+        log('Прошивка завершена, перезагрузка...');
+        await loader.after();
+
+        setProgress(100, '100%');
+        showStatus('Прошивка успешно завершена!', 'success');
+        log('ESP перезагружается');
+
+        setTimeout(() => hideProgress(), 2000);
+
+        try {
+            await transport.disconnect();
+            await port.close();
+        } catch (e) {}
+        loader = null;
+        transport = null;
+        port = null;
+    } catch (e) {
+        log('Ошибка прошивки: ' + e.message);
+        showStatus('Ошибка прошивки: ' + e.message, 'error');
+        flashBtn.disabled = false;
+        connectBtn.disabled = false;
+
+        try {
+            if (transport) await transport.disconnect();
+            if (port) await port.close();
+        } catch (e2) {}
+        loader = null;
+        transport = null;
+        port = null;
+    }
+};
     </script>
 </body>
 </html>
