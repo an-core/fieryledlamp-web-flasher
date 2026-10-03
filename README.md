@@ -1,4 +1,4 @@
-# fieryledlamp-web-flasher
+# [fieryledlamp-web-flasher](https://an-core.github.io/fieryledlamp-web-flasher/)
 
 Web Flasher для FieryLedLamp (ESP32 / ESP32-S3).
 
