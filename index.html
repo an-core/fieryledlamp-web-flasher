@@ -691,10 +691,22 @@ hr {
                 <b>Выберите прошивку</b>
                 <small>Для ESP32-S3 - автоматически (Для ESP32 - выберите вариант)</small>
                 <div id="detectedInfo" class="detected-info"></div>
+
                 <div id="variantSelector" style="display:none; margin-top:10px;">
                     <select id="variantSelect">
                         <option value="">- выберите вариант прошивки -</option>
                     </select>
+                </div>
+
+                <label class="dl-toggle" id="mishanyaBlock" style="margin-top:12px; display:none;">
+                    <input type="checkbox" id="mishanyaToggle">
+                    <b>Прошивка от MishanyaTS (ESP32-S3)</b>
+                </label>
+
+                <div id="mishanyaWarning" class="warning-text" style="display:none; margin-top:8px;">
+                    <strong>Внимание!</strong> Это отдельная прошивка с другим веб-интерфейсом и другой файловой системой.<br>
+                    Настройки будут <strong>полностью заменены</strong>.<br>
+                    Доступна только <strong>полная прошивка</strong>.
                 </div>
             </div>
         </div>
@@ -703,7 +715,7 @@ hr {
             <span class="step-num">3.1</span>
             <div class="step-content">
                 <b>Режим прошивки</b>
-                <small>Что именно прошить: все файлы (полная прошивка), только firmware, только littlefs</small>
+                <small>Что именно прошить.</small>
                 <select id="flashMode" style="margin-top:8px;">
                     <option value="all">Полная прошивка (все файлы)</option>
                     <option value="firmware">Только firmware.bin</option>
@@ -1026,6 +1038,40 @@ const FIRMWARE_VARIANTS = {
     },
 };
 
+const FIRMWARE_VARIANTS_MISHANYA = {
+    'ESP32-S3': {
+        zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_ESP32S3_MISHANYA.zip',
+        chipFamily: 'ESP32-S3',
+        description: 'MishanyaTS - ESP32-S3 (16MB)',
+        parts: [{
+                keywords: ['bootloader'],
+                address: 0x00000000,
+                required: true
+            },
+            {
+                keywords: ['partitions'],
+                address: 0x00008000,
+                required: true
+            },
+            {
+                keywords: ['boot_app0'],
+                address: 0x0000E000,
+                required: false
+            },
+            {
+                keywords: ['firmware'],
+                address: 0x00010000,
+                required: true
+            },
+            {
+                keywords: ['littlefs'],
+                address: 0x00C90000,
+                required: true
+            },
+        ],
+    },
+};
+
 const FLASH_OPTIONS = {
     baudrate: 921600,
     romBaudrate: 115200,
@@ -1047,11 +1093,16 @@ const progressBarOuter = document.getElementById('progressBarOuter');
 const progressBarInner = document.getElementById('progressBarInner');
 
 let port = null;
+let useMishanya = false;
 let transport = null;
 let loader = null;
 let zipData = null;
 let selectedVariant = null;
 let detectedChip = null;
+
+function getActiveVariants() {
+    return useMishanya ? FIRMWARE_VARIANTS_MISHANYA : FIRMWARE_VARIANTS;
+}
 
 function log(msg) {
     const now = new Date();
@@ -1201,7 +1252,11 @@ connectBtn.onclick = async () => {
             selectedVariant = 'ESP32-S3';
             variantSelector.style.display = 'none';
 
-            const variant = FIRMWARE_VARIANTS[selectedVariant];
+            document.getElementById('mishanyaBlock').style.display = 'inline-flex';
+            document.getElementById('mishanyaToggle').checked = useMishanya;
+            document.getElementById('mishanyaWarning').style.display = useMishanya ? 'block' : 'none';
+
+            const variant = getActiveVariants()[selectedVariant];
             detectedInfo.classList.add('active');
             detectedInfo.innerHTML = ` <b>Определено:</b><br> Чип: <b>${chip}</b><br> Вариант: <b>${variant.description}</b> `;
 
@@ -1215,6 +1270,11 @@ connectBtn.onclick = async () => {
 
             showStatus('Подключено: ' + chip + ' - готово к прошивке', 'success');
         } else if (chip.includes('ESP32')) {
+            document.getElementById('mishanyaBlock').style.display = 'none';
+            document.getElementById('mishanyaToggle').checked = false;
+            document.getElementById('mishanyaWarning').style.display = 'none';
+            useMishanya = false;
+
             variantSelector.style.display = 'block';
             variantSelect.innerHTML = '<option value="">- выберите вариант -</option>';
             for (const [key, variant] of Object.entries(FIRMWARE_VARIANTS)) {
@@ -1249,7 +1309,7 @@ variantSelect.onchange = async (e) => {
     }
 
     selectedVariant = value;
-    const variant = FIRMWARE_VARIANTS[value];
+    const variant = getActiveVariants()[value];
     log('Выбран вариант: ' + variant.description);
 
     detectedInfo.classList.add('active');
@@ -1269,12 +1329,22 @@ variantSelect.onchange = async (e) => {
 };
 
 flashBtn.onclick = async () => {
+    const flashMode = document.getElementById('flashMode')?.value || 'all';
+
+    if (useMishanya && flashMode !== 'all') {
+        log('ОШИБКА: для прошивки MishanyaTS доступна только полная прошивка');
+        showStatus('Для прошивки MishanyaTS доступна только полная прошивка', 'error');
+        flashBtn.disabled = false;
+        connectBtn.disabled = false;
+        return;
+    }
+
     if (!loader || !zipData || !selectedVariant) {
         log('Не всё готово для прошивки');
         return;
     }
 
-    const variant = FIRMWARE_VARIANTS[selectedVariant];
+    const variant = getActiveVariants()[selectedVariant];
 
     flashBtn.disabled = true;
     connectBtn.disabled = true;
@@ -1283,8 +1353,6 @@ flashBtn.onclick = async () => {
     try {
         log('Подготовка файлов...');
         showStatus('Подготовка файлов...', 'info');
-
-        const flashMode = document.getElementById('flashMode')?.value || 'all';
 
         const partsToFlash = variant.parts.filter(part => {
             if (flashMode === 'all') return true;
@@ -1301,6 +1369,7 @@ flashBtn.onclick = async () => {
         }
 
         log('Режим: ' + flashMode + ', файлов: ' + partsToFlash.length);
+        log('Источник: ' + (useMishanya ? 'MishanyaTS' : 'an-core'));
 
         if (flashMode === 'firmware') {
             if (!confirm('Внимание: будет прошит ТОЛЬКО firmware.bin.\nPartition table должна совпадать.\n\nПродолжить?')) {
@@ -1570,6 +1639,42 @@ document.getElementById('dlToggle').addEventListener('change', function() {
     } else {
         panel.classList.add('hidden');
         hint.classList.remove('active');
+    }
+});
+
+document.getElementById('mishanyaToggle').addEventListener('change', function() {
+    useMishanya = this.checked;
+
+    const warn = document.getElementById('mishanyaWarning');
+    const flashMode = document.getElementById('flashMode');
+
+    if (this.checked) {
+        warn.style.display = 'block';
+
+        flashMode.value = 'all';
+        flashMode.querySelector('option[value="firmware"]').disabled = true;
+        flashMode.querySelector('option[value="littlefs"]').disabled = true;
+    } else {
+        warn.style.display = 'none';
+        flashMode.querySelector('option[value="firmware"]').disabled = false;
+        flashMode.querySelector('option[value="littlefs"]').disabled = false;
+    }
+
+    resetDownloadState();
+    zipData = null;
+    flashBtn.disabled = true;
+
+    if (selectedVariant && detectedChip && detectedChip.includes('ESP32-S3')) {
+        const variant = getActiveVariants()['ESP32-S3'];
+        detectedInfo.innerHTML = `<b>Определено:</b><br> Чип: <b>${detectedChip}</b><br> Вариант: <b>${variant.description}</b>`;
+        showStatus('Загрузка архива...', 'info');
+        downloadVariantZip(variant).then(async zip => {
+            if (!zip) return;
+            zipData = zip;
+            await populateDownloadList(zip);
+            flashBtn.disabled = false;
+            showStatus('Готово к прошивке: ' + variant.description, 'success');
+        });
     }
 });
     </script>
