@@ -452,6 +452,22 @@ button:disabled {
     margin-left: 4px;
 }
 
+.dl-hint {
+    display: none;
+    padding: 10px 14px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    background: rgba(255, 170, 0, 0.12);
+    border-left: 4px solid #ffaa00;
+    color: #ffcc88;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.dl-hint.active {
+    display: block;
+}
+
 .notice {
     background: rgba(0, 204, 102, 0.12);
     border-left: 4px solid #00cc66;
@@ -703,10 +719,13 @@ hr {
                     <input type="checkbox" id="dlToggle">
                     <b>Скачать .bin файлы</b>
                 </label>
-				<small>Список отображается только после подключения ESP к компьютеру</small>
+                <small>Список отображается только после подключения ESP к компьютеру</small>
                 <small>Отметьте нужные файлы галочками или скачайте весь архив</small>
 
                 <div id="dlPanel" class="dl-panel hidden">
+                    <div id="dlHint" class="dl-hint">
+                        ⓘ Список файлов появится после подключения ESP. <b>Нажмите «Подключиться к ESP» в шаге 2.
+                    </div>
                     <div id="downloadList" class="dl-list"></div>
                     <button id="downloadOneBtn" disabled>Скачать выбранное</button>
                     <button id="downloadAllBtn" disabled>Скачать всё (.zip)</button>
@@ -1428,6 +1447,9 @@ function resetDownloadState() {
 
     const panel = document.getElementById('dlPanel');
     if (panel) panel.classList.add('hidden');
+
+    const hint = document.getElementById('dlHint');
+    if (hint) hint.classList.remove('active');
 }
 
 async function populateDownloadList(zip) {
@@ -1439,6 +1461,15 @@ async function populateDownloadList(zip) {
         if (f.dir) return false;
         return path.toLowerCase().endsWith('.bin');
     });
+
+    if (paths.length === 0) {
+        box.innerHTML = '<div style="color:#ff9999;font-size:13px;padding:6px 0;">В архиве не найдено .bin файлов</div>';
+        document.getElementById('downloadOneBtn').disabled = true;
+        document.getElementById('downloadAllBtn').disabled = false;
+        const hint = document.getElementById('dlHint');
+        if (hint) hint.classList.remove('active');
+        return;
+    }
 
     for (const path of paths) {
         const f = zip.files[path];
@@ -1470,6 +1501,9 @@ async function populateDownloadList(zip) {
         label.appendChild(sizeSpan);
         box.appendChild(label);
     }
+
+    const hint = document.getElementById('dlHint');
+    if (hint) hint.classList.remove('active');
 
     document.getElementById('downloadOneBtn').disabled = false;
     document.getElementById('downloadAllBtn').disabled = false;
@@ -1527,10 +1561,19 @@ document.getElementById('downloadAllBtn').onclick = async () => {
 
 document.getElementById('dlToggle').addEventListener('change', function() {
     const panel = document.getElementById('dlPanel');
+    const hint = document.getElementById('dlHint');
+
     if (this.checked) {
         panel.classList.remove('hidden');
+
+        if (!zipData) {
+            hint.classList.add('active');
+        } else {
+            hint.classList.remove('active');
+        }
     } else {
         panel.classList.add('hidden');
+        hint.classList.remove('active');
     }
 });
     </script>
