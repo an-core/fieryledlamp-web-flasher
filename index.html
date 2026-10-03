@@ -340,6 +340,118 @@ button:disabled {
     background: linear-gradient(135deg, #a32525 0%, #f5576c 100%);
 }
 
+.dl-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+    font-size: 15px;
+}
+
+.dl-toggle input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #667eea;
+    border-radius: 5px;
+    background: rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.dl-toggle input[type="checkbox"]:checked {
+    background: #00cc66;
+    border-color: #00cc66;
+    box-shadow: 0 0 8px rgba(0, 204, 102, 0.5);
+}
+
+.dl-toggle input[type="checkbox"]:checked::after {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 1px;
+    width: 6px;
+    height: 10px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.dl-panel {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid #2a2e3a;
+}
+
+.dl-panel.hidden {
+    display: none;
+}
+
+.dl-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.dl-list input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #667eea;
+    border-radius: 5px;
+    background: rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.dl-list input[type="checkbox"]:checked {
+    background: #00cc66;
+    border-color: #00cc66;
+    box-shadow: 0 0 8px rgba(0, 204, 102, 0.5);
+}
+
+.dl-list input[type="checkbox"]:checked::after {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 1px;
+    width: 6px;
+    height: 10px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.dl-list label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 6px;
+    transition: background 0.15s;
+}
+
+.dl-list label:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.dl-size {
+    color: #888;
+    font-size: 12px;
+    margin-left: 4px;
+}
+
 .notice {
     background: rgba(0, 204, 102, 0.12);
     border-left: 4px solid #00cc66;
@@ -408,7 +520,7 @@ button:disabled {
     opacity: 0.7;
     line-height: 1.4;
     display: block;
-	color: #bbb9b9;
+    color: #bbb9b9;
 }
 
 .progress-bar-outer {
@@ -518,12 +630,12 @@ hr {
         <p><strong>Прошивка:</strong> Web Serial Flasher</p>
         <p><strong>Поддержка:</strong> ESP32 и ESP32-S3</p>
     </div>
-	
-	<div class="notice">
-    <strong>ⓘ Актуальные версии прошивки</strong><br>
-    Бинарники загружаются напрямую с GitHub-репозитория
-    <code>an-core/FieryLedLamp_mod</code> в момент прошивки.
-    Вы всегда получаете последний релиз.
+
+    <div class="notice">
+        <strong>Актуальные версии прошивки</strong><br>
+        Бинарники загружаются напрямую с GitHub-репозитория
+        <code>an-core/FieryLedLamp_mod</code> в момент прошивки.
+        Вы всегда получаете последний релиз.
     </div>
 
     <div class="method-card">
@@ -565,7 +677,7 @@ hr {
                 <div id="detectedInfo" class="detected-info"></div>
                 <div id="variantSelector" style="display:none; margin-top:10px;">
                     <select id="variantSelect">
-                        <option value="">— выберите вариант прошивки —</option>
+                        <option value="">- выберите вариант прошивки -</option>
                     </select>
                 </div>
             </div>
@@ -585,9 +697,26 @@ hr {
         </div>
 
         <div class="step-row">
+            <span class="step-num">3.2</span>
+            <div class="step-content">
+                <label class="dl-toggle">
+                    <input type="checkbox" id="dlToggle">
+                    <b>Скачать .bin файлы</b>
+                </label>
+                <small>Отметьте нужные файлы галочками или скачайте весь архив</small>
+
+                <div id="dlPanel" class="dl-panel hidden">
+                    <div id="downloadList" class="dl-list"></div>
+                    <button id="downloadOneBtn" disabled>Скачать выбранное</button>
+                    <button id="downloadAllBtn" disabled>Скачать всё (.zip)</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="step-row">
             <span class="step-num">4</span>
             <div class="step-content">
-                <b>Прошейте лампу</b>
+                <b>Прошейте устройство</b>
                 <small>Остальное выполняется автоматически</small>
                 <div id="status" class="status"></div>
                 <div class="progress-bar-outer" id="progressBarOuter">
@@ -632,11 +761,11 @@ hr {
 
         <div class="section">2. Подключение платы</div>
         <ul>
-            <li>Зажмите кнопку BOOT на плате ESP и подключите к компьютеру <strong>USB-кабелем</strong> (не зарядным - нужен data-кабель). 
-				После чего кнопку BOOT можно отпустить.</li>
+            <li>Зажмите кнопку BOOT на плате ESP и подключите к компьютеру <strong>USB-кабелем</strong> (не зарядным - нужен data-кабель).
+                После чего кнопку BOOT можно отпустить.</li>
             <li>Нажмите <strong>«Подключиться к ESP»</strong> - браузер покажет список COM-портов.</li>
         </ul>
-		
+
         <div class="section">3. Определение чипа и выбор варианта</div>
         <ul>
             <li>
@@ -653,12 +782,12 @@ hr {
                     </li>
                     <li>
                         <strong>Вариант 2</strong> - будильник «Рассвет», режим «Закат», расписание лампы,
-                        погода, MQTT, режим "Мультилампа", LED-панель, бэкап настроек, статусы устройств, информация о ПО, 
-						плюс поддержка <strong>SD-карты</strong>.
+                        погода, MQTT, режим "Мультилампа", LED-панель, бэкап настроек, статусы устройств, информация о ПО,
+                        плюс поддержка <strong>SD-карты</strong>.
                     </li>
                     <li>
                         <strong>Вариант 3</strong> - SD-карта, расписание лампы, погода, MQTT, LED-панель, статусы устройств, информация о ПО,
-						плюс <strong>поддержка нескольких матриц (MULTI_MATRIX)</strong>.
+                        плюс <strong>поддержка нескольких матриц (MULTI_MATRIX)</strong>.
                     </li>
                 </ul>
             </li>
@@ -672,8 +801,8 @@ hr {
                 bootloader, partition table, firmware и файловую систему.
             </li>
             <li>
-                <strong>Только firmware.bin</strong> - обновление <strong>только прошивки</strong>. 
-				Настройки и файловая система <strong>сохраняются</strong>. Используйте,
+                <strong>Только firmware.bin</strong> - обновление <strong>только прошивки</strong>.
+                Настройки и файловая система <strong>сохраняются</strong>. Используйте,
                 если вышло обновление кода, но partitions, littlefs не менялась.
             </li>
             <li>
@@ -753,56 +882,130 @@ function findFileInZip(zip, keywords) {
     return null;
 }
 
-const VERBOSE = false;
-
 const FIRMWARE_VARIANTS = {
     'ESP32-S3': {
         zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_ESP32S3.zip',
         chipFamily: 'ESP32-S3',
         description: 'ESP32-S3 (16MB)',
-        parts: [
-		{keywords: ['bootloader'], address: 0x00000000, required: true },
-        {keywords: ['partitions'], address: 0x00008000, required: true},
-        {keywords: ['boot_app0'], address: 0x0000E000, required: false},
-        {keywords: ['firmware'], address: 0x00010000, required: true},
-        {keywords: ['littlefs'], address: 0x00C90000, required: true},
-      ],
+        parts: [{
+                keywords: ['bootloader'],
+                address: 0x00000000,
+                required: true
+            },
+            {
+                keywords: ['partitions'],
+                address: 0x00008000,
+                required: true
+            },
+            {
+                keywords: ['boot_app0'],
+                address: 0x0000E000,
+                required: false
+            },
+            {
+                keywords: ['firmware'],
+                address: 0x00010000,
+                required: true
+            },
+            {
+                keywords: ['littlefs'],
+                address: 0x00C90000,
+                required: true
+            },
+        ],
     },
     'ESP32_V1': {
         zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_ESP32_VARIANT_1.zip',
         chipFamily: 'ESP32',
         description: 'ESP32 - Вариант 1 (USE_DAWN, USE_SUNSET, USE_SCHEDULE, USE_WEATHER, USE_MQTT, USE_MULTILAMP, LED_PANEL, BACKUP_CFG_FILES, STATUS_DEVICE, SOFT_INFO)',
-        parts: [
-        { keywords: ['bootloader'], address: 0x00001000, required: true },
-        { keywords: ['partitions'], address: 0x00008000, required: true },
-        { keywords: ['boot_app0'], address: 0x0000E000, required: false },
-        { keywords: ['firmware'], address: 0x00010000, required: true },
-        { keywords: ['littlefs'], address: 0x00210000, required: true },
-      ],
+        parts: [{
+                keywords: ['bootloader'],
+                address: 0x00001000,
+                required: true
+            },
+            {
+                keywords: ['partitions'],
+                address: 0x00008000,
+                required: true
+            },
+            {
+                keywords: ['boot_app0'],
+                address: 0x0000E000,
+                required: false
+            },
+            {
+                keywords: ['firmware'],
+                address: 0x00010000,
+                required: true
+            },
+            {
+                keywords: ['littlefs'],
+                address: 0x00210000,
+                required: true
+            },
+        ],
     },
     'ESP32_V2': {
         zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_ESP32_VARIANT_2.zip',
         chipFamily: 'ESP32',
         description: 'ESP32 - Вариант 2 (USE_SD, USE_DAWN, USE_SUNSET, USE_SCHEDULE, USE_WEATHER, USE_MQTT, USE_MULTILAMP, LED_PANEL, BACKUP_CFG_FILES, STATUS_DEVICE, SOFT_INFO)',
-        parts: [
-        { keywords: ['bootloader'], address: 0x00001000, required: true },
-        { keywords: ['partitions'], address: 0x00008000, required: true },
-        { keywords: ['boot_app0'], address: 0x0000E000, required: false },
-        { keywords: ['firmware'], address: 0x00010000, required: true },
-        { keywords: ['littlefs'], address: 0x00210000, required: true },
-	  ],
+        parts: [{
+                keywords: ['bootloader'],
+                address: 0x00001000,
+                required: true
+            },
+            {
+                keywords: ['partitions'],
+                address: 0x00008000,
+                required: true
+            },
+            {
+                keywords: ['boot_app0'],
+                address: 0x0000E000,
+                required: false
+            },
+            {
+                keywords: ['firmware'],
+                address: 0x00010000,
+                required: true
+            },
+            {
+                keywords: ['littlefs'],
+                address: 0x00210000,
+                required: true
+            },
+        ],
     },
     'ESP32_V3': {
         zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_ESP32_VARIANT_3.zip',
         chipFamily: 'ESP32',
         description: 'ESP32 - Вариант 3 (USE_SD, MULTI_MATRIX, USE_DAWN, USE_SUNSET, USE_SCHEDULE, USE_WEATHER, LED_PANEL, STATUS_DEVICE, SOFT_INFO)',
-        parts: [
-        { keywords: ['bootloader'], address: 0x00001000, required: true },
-        { keywords: ['partitions'], address: 0x00008000, required: true },
-        { keywords: ['boot_app0'], address: 0x0000E000, required: false },
-        { keywords: ['firmware'], address: 0x00010000, required: true },
-        { keywords: ['littlefs'], address: 0x00210000, required: true },
-	  ],
+        parts: [{
+                keywords: ['bootloader'],
+                address: 0x00001000,
+                required: true
+            },
+            {
+                keywords: ['partitions'],
+                address: 0x00008000,
+                required: true
+            },
+            {
+                keywords: ['boot_app0'],
+                address: 0x0000E000,
+                required: false
+            },
+            {
+                keywords: ['firmware'],
+                address: 0x00010000,
+                required: true
+            },
+            {
+                keywords: ['littlefs'],
+                address: 0x00210000,
+                required: true
+            },
+        ],
     },
 };
 
@@ -954,6 +1157,8 @@ connectBtn.onclick = async () => {
         return;
     }
 
+    resetDownloadState();
+
     try {
         log('Запрос USB-порта...');
         showStatus('Запрос USB-порта...', 'info');
@@ -987,11 +1192,14 @@ connectBtn.onclick = async () => {
             zipData = await downloadVariantZip(variant);
             if (!zipData) return;
 
+            await populateDownloadList(zipData);
+
             flashBtn.disabled = false;
+
             showStatus('Подключено: ' + chip + ' - готово к прошивке', 'success');
         } else if (chip.includes('ESP32')) {
             variantSelector.style.display = 'block';
-            variantSelect.innerHTML = '<option value="">— выберите вариант —</option>';
+            variantSelect.innerHTML = '<option value="">- выберите вариант -</option>';
             for (const [key, variant] of Object.entries(FIRMWARE_VARIANTS)) {
                 if (variant.chipFamily === 'ESP32') {
                     const opt = document.createElement('option');
@@ -1037,7 +1245,10 @@ variantSelect.onchange = async (e) => {
         return;
     }
 
+    await populateDownloadList(zipData);
+
     flashBtn.disabled = false;
+
     showStatus('Готово к прошивке: ' + variant.description, 'success');
 };
 
@@ -1137,11 +1348,11 @@ flashBtn.onclick = async () => {
             compress: FLASH_OPTIONS.compress,
             calculateMD5Hash: () => '',
             reportProgress: (fileIndex, written, total) => {
-            const percent = Math.round(written / total * 100);
-            setProgress(percent, percent + '%');
-            const currentName = fileNames[fileIndex] || 'файл';
-            showStatus('Запись ' + currentName + '...', 'info');
-           },
+                const percent = Math.round(written / total * 100);
+                setProgress(percent, percent + '%');
+                const currentName = fileNames[fileIndex] || 'файл';
+                showStatus('Запись ' + currentName + '...', 'info');
+            },
         });
 
         log('Прошивка завершена, перезагрузка...');
@@ -1176,10 +1387,12 @@ flashBtn.onclick = async () => {
         loader = null;
         transport = null;
         port = null;
+
         const flashModeSelect = document.getElementById('flashMode');
         if (flashModeSelect) {
             flashModeSelect.value = 'all';
         }
+        resetDownloadState();
     } catch (e) {
         log('Ошибка прошивки: ' + e.message);
         showStatus('Ошибка прошивки: ' + e.message, 'error');
@@ -1193,8 +1406,132 @@ flashBtn.onclick = async () => {
         loader = null;
         transport = null;
         port = null;
+
+        resetDownloadState();
     }
 };
+
+function resetDownloadState() {
+    zipData = null;
+
+    const box = document.getElementById('downloadList');
+    if (box) box.innerHTML = '';
+
+    const one = document.getElementById('downloadOneBtn');
+    const all = document.getElementById('downloadAllBtn');
+    if (one) one.disabled = true;
+    if (all) all.disabled = true;
+
+    const toggle = document.getElementById('dlToggle');
+    if (toggle) toggle.checked = false;
+
+    const panel = document.getElementById('dlPanel');
+    if (panel) panel.classList.add('hidden');
+}
+
+async function populateDownloadList(zip) {
+    const box = document.getElementById('downloadList');
+    box.innerHTML = '';
+
+    const paths = Object.keys(zip.files).filter(path => {
+        const f = zip.files[path];
+        if (f.dir) return false;
+        return path.toLowerCase().endsWith('.bin');
+    });
+
+    for (const path of paths) {
+        const f = zip.files[path];
+        const name = path.split('/').pop();
+
+        let size = 0;
+        try {
+            const buf = await f.async('uint8array');
+            size = buf.byteLength;
+        } catch (e) {
+            size = 0;
+        }
+
+        const label = document.createElement('label');
+
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.value = path;
+
+        const span = document.createElement('span');
+        span.textContent = name;
+
+        const sizeSpan = document.createElement('span');
+        sizeSpan.className = 'dl-size';
+        sizeSpan.textContent = ' (' + formatSize(size) + ')';
+
+        label.appendChild(cb);
+        label.appendChild(span);
+        label.appendChild(sizeSpan);
+        box.appendChild(label);
+    }
+
+    document.getElementById('downloadOneBtn').disabled = false;
+    document.getElementById('downloadAllBtn').disabled = false;
+}
+
+function formatSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+}
+
+function downloadBlob(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+document.getElementById('downloadOneBtn').onclick = async () => {
+    if (!zipData) return;
+
+    const checked = Array.from(document.querySelectorAll('#downloadList input:checked'));
+    if (checked.length === 0) return;
+
+    if (checked.length === 1) {
+        const path = checked[0].value;
+        const blob = await zipData.files[path].async('blob');
+        downloadBlob(blob, path.split('/').pop());
+        return;
+    }
+
+    const newZip = new JSZip();
+    for (const cb of checked) {
+        const path = cb.value;
+        const blob = await zipData.files[path].async('blob');
+        newZip.file(path.split('/').pop(), blob);
+    }
+    const out = await newZip.generateAsync({
+        type: 'blob'
+    });
+    downloadBlob(out, (selectedVariant || 'firmware') + '_selected.zip');
+};
+
+document.getElementById('downloadAllBtn').onclick = async () => {
+    if (!zipData) return;
+    const blob = await zipData.generateAsync({
+        type: 'blob'
+    });
+    downloadBlob(blob, (selectedVariant || 'firmware') + '.zip');
+};
+
+document.getElementById('dlToggle').addEventListener('change', function() {
+    const panel = document.getElementById('dlPanel');
+    if (this.checked) {
+        panel.classList.remove('hidden');
+    } else {
+        panel.classList.add('hidden');
+    }
+});
     </script>
 </body>
 </html>
