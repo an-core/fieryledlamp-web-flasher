@@ -717,7 +717,7 @@ hr {
             <span class="step-num">4</span>
             <div class="step-content">
                 <b>Прошейте устройство</b>
-                <small>Остальное выполняется автоматически</small>
+                <small>После успешной прошивки устройство автоматически перезагрузится</small>
                 <div id="status" class="status"></div>
                 <div class="progress-bar-outer" id="progressBarOuter">
                     <div class="progress-bar-inner" id="progressBarInner" style="width: 0%;">0%</div>
@@ -1355,7 +1355,7 @@ flashBtn.onclick = async () => {
             },
         });
 
-        log('Прошивка завершена, перезагрузка...');
+        log('Прошивка успешно завершена!');
         try {
             if (typeof loader.hardReset === 'function') {
                 await loader.hardReset();
