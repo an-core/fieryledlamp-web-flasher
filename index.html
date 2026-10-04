@@ -1033,7 +1033,9 @@ import {
 } from 'https://unpkg.com/esptool-js@0.4.5/bundle.js';
 import JSZip from 'https://cdn.jsdelivr.net/npm/jszip@3.10.1/+esm';
 
-// ИСТОЧНИКИ ПРОШИВОК
+// ---------------------------------------------------------------------
+// источники прошивок
+// ---------------------
 
 const FIRMWARE_VARIANTS = {
     'ESP32-S3': {
@@ -1206,7 +1208,9 @@ const FLASH_OPTIONS = {
     compress: true,
 };
 
-// СОСТОЯНИЕ
+// ---------------------------------------------------------------------
+// состояние
+// -----------
 
 let port = null;
 let transport = null;
@@ -1216,7 +1220,9 @@ let selectedVariant = null;
 let detectedChip = null;
 let useMishanya = false;
 
+// ---------------------------------------------------------------------
 // DOM
+// ------
 
 const logEl = document.getElementById('log');
 const statusEl = document.getElementById('status');
@@ -1228,7 +1234,9 @@ const detectedInfo = document.getElementById('detectedInfo');
 const progressBarOuter = document.getElementById('progressBarOuter');
 const progressBarInner = document.getElementById('progressBarInner');
 
-// ХЕЛПЕРЫ
+// ---------------------------------------------------------------------
+// хелперы
+// ---------
 
 function getActiveVariants() {
     return useMishanya ? FIRMWARE_VARIANTS_MISHANYA : FIRMWARE_VARIANTS;
@@ -1291,7 +1299,9 @@ function downloadBlob(blob, filename) {
     setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-// МОДАЛЬНЫЕ ОКНА
+// ---------------------------------------------------------------------
+// модальные окна
+// ----------------
 
 function setupModal(modalEl, openBtnId, closeBtnIds) {
     const openBtn = document.getElementById(openBtnId);
@@ -1318,7 +1328,9 @@ document.addEventListener('keydown', function(e) {
     document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
 });
 
-// ПРОВЕРКА БРАУЗЕРА
+// ---------------------------------------------------------------------
+// проверка браузера
+// -------------------
 
 function detectBrowser() {
     const ua = navigator.userAgent;
@@ -1343,7 +1355,9 @@ if (!('serial' in navigator)) {
     log('Web Serial поддерживается');
 }
 
-// ЗАГРУЗКА АРХИВА
+// ---------------------------------------------------------------------
+// загрузка архива
+// -----------------
 
 async function downloadVariantZip(variant) {
     log('Загрузка архива: ' + variant.description);
@@ -1379,7 +1393,9 @@ async function downloadVariantZip(variant) {
     }
 }
 
-// ПОДКЛЮЧЕНИЕ
+// ---------------------------------------------------------------------
+// подключение
+// -------------
 
 connectBtn.onclick = async () => {
     if (loader) {
@@ -1465,7 +1481,9 @@ connectBtn.onclick = async () => {
 
 log('Web Flasher загружен');
 
-// ВЫБОР ВАРИАНТА
+// ---------------------------------------------------------------------
+// выбор варианта
+// ----------------
 
 variantSelect.onchange = async (e) => {
     const value = e.target.value;
@@ -1493,7 +1511,9 @@ variantSelect.onchange = async (e) => {
     showStatus('Готово к прошивке: ' + variant.description, 'success');
 };
 
-// ПРОШИВКА
+// ---------------------------------------------------------------------
+// прошивка
+// ----------
 
 flashBtn.onclick = async () => {
     const flashMode = document.getElementById('flashMode')?.value || 'all';
@@ -1658,7 +1678,9 @@ flashBtn.onclick = async () => {
     }
 };
 
-// СКАЧИВАНИЕ .BIN
+// ---------------------------------------------------------------------
+// скачивание бинарников
+// -----------------------
 
 function resetDownloadState() {
     zipData = null;
@@ -1788,7 +1810,9 @@ document.getElementById('dlToggle').addEventListener('change', function() {
     }
 });
 
+// ---------------------------------------------------------------------
 // MISHANYA
+// ----------
 
 document.getElementById('mishanyaToggle').addEventListener('change', function() {
     useMishanya = this.checked;
