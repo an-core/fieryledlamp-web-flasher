@@ -239,13 +239,11 @@ h1 {
 
 .modal-box .close-icon {
     position: absolute;
-    top: 14px;
+    top: 5px;
     right: 18px;
     font-size: 26px;
     line-height: 1;
     color: #8899bb;
-    cursor: pointer;
-    transition: 0.2s;
 }
 
 .modal-box .close-icon:hover {
@@ -348,7 +346,7 @@ button:disabled {
 }
 
 .notice-link:hover {
-    color: #b8ffd0;
+    color: #26ff26;
 }
 
 .dl-toggle {
@@ -659,11 +657,11 @@ hr {
     </div>
 
     <div class="notice">
-        <strong>Актуальные версии прошивки</strong><br>
-        Бинарники загружаются напрямую с GitHub в момент прошивки - вы всегда получаете последний релиз. Источник зависит от выбранной прошивки:<br>
-        • <code>an-core/FieryLedLamp_mod</code> - <a href="#" id="showModInfo" class="notice-link">модифицированная прошивка</a><br>
-        • <code>MishanyaTS/FieryLedLamp</code> - основная прошивка (только ESP32-S3)
-    </div>
+    <strong>Актуальные версии прошивки</strong><br>
+    Бинарники загружаются напрямую с GitHub в момент прошивки - вы всегда получаете последний релиз. Источник зависит от выбранной прошивки:<br>
+    • <code>an-core/FieryLedLamp_mod</code> - <a href="#" id="showModInfo" class="notice-link" title="Подробнее о модифицированной прошивке">модифицированная прошивка</a><br>
+    • <code>MishanyaTS/FieryLedLamp</code> - <a href="https://github.com/MishanyaTS/FieryLedLamp" target="_blank" rel="noopener" class="notice-link">основная прошивка</a> (только ESP32-S3)
+   </div>
 
     <div class="method-card">
         <div class="method-title">
@@ -902,9 +900,10 @@ hr {
 <div class="modal-overlay" id="modInfoModal">
     <div class="modal-box">
         <span class="close-icon" id="closeModInfoBtn1">&times;</span>
+        <h2>Модифицированная прошивка FieryLedLamp</h2>
 
-        <p style="color:#c8d6ff; font-size:14px; margin-top:12px;">
-            Модифицированная прошивка FieryLedLamp с поддержкой эффектов jinx (.out).
+        <p style="margin: 10px 0 0 0; font-size: 13px;">
+            <a href="https://github.com/an-core/FieryLedLamp_mod/tree/main" target="_blank" rel="noopener" class="notice-link">Открыть в GitHub</a>
         </p>
 
         <div class="section">1. Поддерживаемое оборудование</div>
