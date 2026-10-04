@@ -340,6 +340,17 @@ button:disabled {
     background: linear-gradient(135deg, #a32525 0%, #f5576c 100%);
 }
 
+.notice-link {
+    color: #88ffaa;
+    text-decoration: underline;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.notice-link:hover {
+    color: #b8ffd0;
+}
+
 .dl-toggle {
     display: inline-flex;
     align-items: center;
@@ -648,11 +659,11 @@ hr {
     </div>
 
     <div class="notice">
-    <strong>Актуальные версии прошивки</strong><br>
-    Бинарники загружаются напрямую с GitHub в момент прошивки - вы всегда получаете последний релиз. Источник зависит от выбранной прошивки:<br>
-    • <code>an-core/FieryLedLamp_mod</code> - модифицированная прошивка (ESP32 / ESP32-S3) <br>
-    • <code>MishanyaTS/FieryLedLamp</code> - основная прошивка (только ESP32-S3)
-</div>
+        <strong>Актуальные версии прошивки</strong><br>
+        Бинарники загружаются напрямую с GitHub в момент прошивки - вы всегда получаете последний релиз. Источник зависит от выбранной прошивки:<br>
+        • <code>an-core/FieryLedLamp_mod</code> - <a href="#" id="showModInfo" class="notice-link">модифицированная прошивка</a><br>
+        • <code>MishanyaTS/FieryLedLamp</code> - основная прошивка (только ESP32-S3)
+    </div>
 
     <div class="method-card">
         <div class="method-title">
@@ -765,6 +776,7 @@ hr {
 
 </div>
 
+<!-- Модальное окно "Инструкция по прошивке" -->
 <div class="modal-overlay" id="instructionsModal">
     <div class="modal-box">
         <span class="close-icon" id="closeModalBtn1">&times;</span>
@@ -887,27 +899,144 @@ hr {
         <button class="close-modal" id="closeModalBtn2">Понятно, закрыть</button>
     </div>
 </div>
+
+<!-- Модальное окно "Модифицированная прошивка" -->
+<div class="modal-overlay" id="modInfoModal">
+    <div class="modal-box">
+        <span class="close-icon" id="closeModInfoBtn1">&times;</span>
+        <h2>Модифицированная прошивка FieryLedLamp</h2>
+
+        <p style="color:#c8d6ff; font-size:14px; margin-top:12px;">
+            Модифицированная прошивка FieryLedLamp с поддержкой эффектов jinx (.out)
+            на внешней SD-карте. Поддерживаемые платформы: <strong>ESP32 / ESP32-S3</strong>.
+        </p>
+
+        <div class="section">1. Поддерживаемое оборудование</div>
+        <ul>
+            <li>ESP32 WROOM</li>
+            <li>ESP32-S3 (N16R8)</li>
+            <li>Дисплей TM1637 (семисегментный индикатор)</li>
+            <li>Дисплей ST7789 (TFT 1.47" 172×320)</li>
+            <li>Сенсорная кнопка (touch TTP223)</li>
+            <li>Тактовая кнопка (физическая кнопка)</li>
+            <li>LED чип APA102 (VCC, GND, DATA, CLK)</li>
+            <li>LED чип WS2812B (VCC, GND, DATA)</li>
+            <li>ИК-пульт (38 кГц)</li>
+            <li>Радиопульт 433 МГц</li>
+            <li>MP3 плеер (DFPlayer mini)</li>
+            <li>SD карта для внешних эффектов JINX в формате .out</li>
+        </ul>
+
+        <div class="section">2. Динамическое управление модулями</div>
+        <p style="color:#d0d8e8; font-size:13px; margin:0 0 8px 0;">
+            Включение / выключение через web только для ESP32-S3:
+        </p>
+        <ul>
+            <li>Дисплей TM1637</li>
+            <li>Дисплей ST7789</li>
+            <li>Кнопка</li>
+            <li>ИК-приёмник</li>
+            <li>RF-приёмник</li>
+            <li>MP3 плеер</li>
+            <li>SD карта для внешних эффектов JINX в формате .out
+                <ul>
+                    <li>поддержка физической SD карты и эмуляции в LITTLEFS</li>
+                </ul>
+            </li>
+        </ul>
+
+        <div class="section">3. Wi-Fi функционал</div>
+        <ul>
+            <li>Мульти-WiFi: запоминание нескольких сетей с автоматическим переключением</li>
+            <li>Автоматическое переподключение при потере сигнала WiFi</li>
+        </ul>
+
+        <div class="section">4. Работа с LED</div>
+        <ul>
+            <li>Динамическая настройка матрицы из нескольких матриц в web без перепрошивки</li>
+            <li>Поддержка до 8 заводских матриц WS2812B 16×16</li>
+            <li>Настраиваемый вывод часов, даты, погодных данных и бегущей строки</li>
+            <li>Количество визуальных встроенных эффектов: <strong>130+</strong></li>
+            <li>Поддержка анимационных эффектов, созданных Jinx Frame Viewer</li>
+        </ul>
+
+        <div class="section">5. Интеграция с погодными сервисами</div>
+        <ul>
+            <li>Яндекс.Погода</li>
+            <li>OpenWeather</li>
+        </ul>
+
+        <div class="section">6. Отображение информации</div>
+        <ul>
+            <li>Вывод времени и погоды на веб-страницу устройства</li>
+            <li>Вывод даты, времени и погоды на дисплей (TM1637, ST7789)</li>
+            <li>Дублирование данных бегущей строкой на матрице (отключается)</li>
+        </ul>
+
+        <div class="section">7. Аудиовозможности</div>
+        <ul>
+            <li>Индивидуальные звуковые мелодии для каждого эффекта</li>
+            <li>Голосовое озвучивание текущего времени и погоды</li>
+            <li>Во время озвучивания активный эффект не останавливается</li>
+        </ul>
+
+        <div class="section">8. Управление ИК-пультом</div>
+        <ul>
+            <li>Выбор готового пульта из списка или добавление собственного</li>
+        </ul>
+
+        <div class="section">9. Управление кнопкой</div>
+        <ul>
+            <li>Количество нажатий для действия настраивается в web</li>
+        </ul>
+
+        <div class="section">10. Выбор шрифта</div>
+        <ul>
+            <li>3x5 (кроме текста бегущей строки)</li>
+            <li>5x8</li>
+            <li>8x13</li>
+            <li>10x16</li>
+        </ul>
+
+        <div class="section">11. Гибкое расписание</div>
+        <ul>
+            <li>Автоматическое включение/выключение устройства</li>
+            <li>Активация ночного режима (ночные часы)</li>
+            <li>Переключение режима цикла и запуск заданного эффекта по расписанию</li>
+        </ul>
+
+        <div class="section">12. Дополнительно</div>
+        <ul>
+            <li>Синхронное управление несколькими лампами в одной WiFi сети</li>
+            <li>Резервное копирование настроек (экспорт / импорт архива)</li>
+            <li>OTA-обновления (по воздуху)</li>
+            <li>Уведомление о новой версии в модальном окне «Информация о ПО»</li>
+            <li>Статусы устройств (модальное окно с информацией о компонентах)</li>
+            <li>Кликабельные подсказки на web-страницах</li>
+            <li>Пароль для Редактора файлов</li>
+            <li>Автоскрытие пунктов меню, отключённых в прошивке</li>
+        </ul>
+
+        <div class="section">Подключение</div>
+        <ul>
+            <li>При первом запуске поднимается точка доступа <code>FieryLedLamp</code></li>
+            <li>Пароль: <code>12341234</code></li>
+            <li>Открыть в браузере: <code>192.168.4.1</code></li>
+            <li>В настройках WiFi можно указать несколько сетей</li>
+        </ul>
+
+        <button class="close-modal" id="closeModInfoBtn2">Понятно, закрыть</button>
+    </div>
+</div>
+
   <script type="module">
-	import {
+import {
     ESPLoader,
     Transport
 } from 'https://unpkg.com/esptool-js@0.4.5/bundle.js';
 import JSZip from 'https://cdn.jsdelivr.net/npm/jszip@3.10.1/+esm';
 
-function findFileInZip(zip, keywords) {
-    const allFiles = Object.keys(zip.files);
-    for (const filePath of allFiles) {
-        const file = zip.files[filePath];
-        if (file.dir) continue;
-
-        const fileName = filePath.toLowerCase();
-        const matches = keywords.every(k => fileName.includes(k.toLowerCase()));
-        if (matches) {
-            return file;
-        }
-    }
-    return null;
-}
+// ИСТОЧНИКИ ПРОШИВОК
 
 const FIRMWARE_VARIANTS = {
     'ESP32-S3': {
@@ -1080,6 +1209,18 @@ const FLASH_OPTIONS = {
     compress: true,
 };
 
+// СОСТОЯНИЕ
+
+let port = null;
+let transport = null;
+let loader = null;
+let zipData = null;
+let selectedVariant = null;
+let detectedChip = null;
+let useMishanya = false;
+
+// DOM
+
 const logEl = document.getElementById('log');
 const statusEl = document.getElementById('status');
 const connectBtn = document.getElementById('connectBtn');
@@ -1090,16 +1231,26 @@ const detectedInfo = document.getElementById('detectedInfo');
 const progressBarOuter = document.getElementById('progressBarOuter');
 const progressBarInner = document.getElementById('progressBarInner');
 
-let port = null;
-let useMishanya = false;
-let transport = null;
-let loader = null;
-let zipData = null;
-let selectedVariant = null;
-let detectedChip = null;
+// ХЕЛПЕРЫ
 
 function getActiveVariants() {
     return useMishanya ? FIRMWARE_VARIANTS_MISHANYA : FIRMWARE_VARIANTS;
+}
+
+function getPartsForFlashMode(variant, flashMode) {
+    if (flashMode === 'firmware') return variant.parts.filter(p => p.keywords.includes('firmware'));
+    if (flashMode === 'littlefs') return variant.parts.filter(p => p.keywords.includes('littlefs'));
+    return variant.parts;
+}
+
+function findFileInZip(zip, keywords) {
+    for (const filePath of Object.keys(zip.files)) {
+        const file = zip.files[filePath];
+        if (file.dir) continue;
+        const fileName = filePath.toLowerCase();
+        if (keywords.every(k => fileName.includes(k.toLowerCase()))) return file;
+    }
+    return null;
 }
 
 function log(msg) {
@@ -1126,30 +1277,54 @@ function hideProgress() {
     progressBarOuter.classList.remove('active');
 }
 
-const modal = document.getElementById('instructionsModal');
-const openBtn = document.getElementById('showInstructions');
-const closeBtns = document.querySelectorAll('#closeModalBtn1, #closeModalBtn2');
-
-function openModal() {
-    modal.classList.add('open');
+function formatSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
 }
 
-function closeModal() {
-    modal.classList.remove('open');
+function downloadBlob(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-openBtn.addEventListener('click', openModal);
-closeBtns.forEach(btn => btn.addEventListener('click', closeModal));
-modal.addEventListener('click', function(e) {
-    if (e.target === this) closeModal();
-});
+// МОДАЛЬНЫЕ ОКНА
+
+function setupModal(modalEl, openBtnId, closeBtnIds) {
+    const openBtn = document.getElementById(openBtnId);
+    if (openBtn) {
+        openBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            modalEl.classList.add('open');
+        });
+    }
+    closeBtnIds.forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) btn.addEventListener('click', () => modalEl.classList.remove('open'));
+    });
+    modalEl.addEventListener('click', function(e) {
+        if (e.target === this) modalEl.classList.remove('open');
+    });
+}
+
+setupModal(document.getElementById('instructionsModal'), 'showInstructions', ['closeModalBtn1', 'closeModalBtn2']);
+setupModal(document.getElementById('modInfoModal'), 'showModInfo', ['closeModInfoBtn1', 'closeModInfoBtn2']);
+
 document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+    if (e.key !== 'Escape') return;
+    document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
 });
+
+// ПРОВЕРКА БРАУЗЕРА
 
 function detectBrowser() {
     const ua = navigator.userAgent;
-
     if (ua.includes('Firefox/')) return 'Firefox';
     if (ua.includes('Edg/')) return 'Edge';
     if (ua.includes('OPR/') || ua.includes('Opera/')) return 'Opera';
@@ -1159,7 +1334,6 @@ function detectBrowser() {
     if (ua.includes('CentBrowser/')) return 'Cent Browser';
     if (ua.includes('Chrome/')) return 'Chrome';
     if (ua.includes('Safari/') && !ua.includes('Chrome/')) return 'Safari';
-
     return 'неизвестный браузер';
 }
 
@@ -1172,6 +1346,8 @@ if (!('serial' in navigator)) {
     log('Web Serial поддерживается');
 }
 
+// ЗАГРУЗКА АРХИВА
+
 async function downloadVariantZip(variant) {
     log('Загрузка архива: ' + variant.description);
     showStatus('Загрузка архива...', 'info');
@@ -1183,30 +1359,19 @@ async function downloadVariantZip(variant) {
 
         const zip = await JSZip.loadAsync(blob);
         const flashMode = document.getElementById('flashMode')?.value || 'all';
-
-        const partsToFlash = variant.parts.filter(part => {
-            if (flashMode === 'all') return true;
-            if (flashMode === 'firmware') return part.keywords.includes('firmware');
-            if (flashMode === 'littlefs') return part.keywords.includes('littlefs');
-            return true;
-        });
+        const partsToFlash = getPartsForFlashMode(variant, flashMode);
 
         const missing = [];
         for (const part of partsToFlash) {
             const file = findFileInZip(zip, part.keywords);
             if (!file) {
-                if (part.required) {
-                    missing.push(part.keywords.join('+'));
-                } else {
-                    log('  ⚠ Не найден (необязательный): ' + part.keywords.join('+'));
-                }
+                if (part.required) missing.push(part.keywords.join('+'));
+                else log('  ⚠ Не найден (необязательный): ' + part.keywords.join('+'));
             } else {
                 log('  Найден: ' + file.name);
             }
         }
-        if (missing.length > 0) {
-            throw new Error('В архиве нет файлов: ' + missing.join(', '));
-        }
+        if (missing.length > 0) throw new Error('В архиве нет файлов: ' + missing.join(', '));
 
         log('Архив распакован, все файлы на месте');
         return zip;
@@ -1216,6 +1381,8 @@ async function downloadVariantZip(variant) {
         return null;
     }
 }
+
+// ПОДКЛЮЧЕНИЕ
 
 connectBtn.onclick = async () => {
     if (loader) {
@@ -1260,13 +1427,15 @@ connectBtn.onclick = async () => {
 
             log('Определён ESP32-S3, загрузка архива...');
             zipData = await downloadVariantZip(variant);
-            if (!zipData) return;
+            if (!zipData) {
+                flashBtn.disabled = true;
+                return;
+            }
 
             await populateDownloadList(zipData);
-
             flashBtn.disabled = false;
-
             showStatus('Подключено: ' + chip + ' - готово к прошивке', 'success');
+
         } else if (chip.includes('ESP32')) {
             document.getElementById('mishanyaBlock').style.display = 'none';
             document.getElementById('mishanyaToggle').checked = false;
@@ -1284,6 +1453,7 @@ connectBtn.onclick = async () => {
                 }
             }
             showStatus('Подключено: ' + chip + ' - выберите вариант прошивки', 'info');
+
         } else {
             log('Неизвестный чип: ' + chip);
             showStatus('Неизвестный чип: ' + chip, 'error');
@@ -1297,6 +1467,8 @@ connectBtn.onclick = async () => {
 };
 
 log('Web Flasher загружен');
+
+// ВЫБОР ВАРИАНТА
 
 variantSelect.onchange = async (e) => {
     const value = e.target.value;
@@ -1320,11 +1492,11 @@ variantSelect.onchange = async (e) => {
     }
 
     await populateDownloadList(zipData);
-
     flashBtn.disabled = false;
-
     showStatus('Готово к прошивке: ' + variant.description, 'success');
 };
+
+// ПРОШИВКА
 
 flashBtn.onclick = async () => {
     const flashMode = document.getElementById('flashMode')?.value || 'all';
@@ -1352,12 +1524,7 @@ flashBtn.onclick = async () => {
         log('Подготовка файлов...');
         showStatus('Подготовка файлов...', 'info');
 
-        const partsToFlash = variant.parts.filter(part => {
-            if (flashMode === 'all') return true;
-            if (flashMode === 'firmware') return part.keywords.includes('firmware');
-            if (flashMode === 'littlefs') return part.keywords.includes('littlefs');
-            return true;
-        });
+        const partsToFlash = getPartsForFlashMode(variant, flashMode);
 
         if (partsToFlash.length === 0) {
             log('ОШИБКА: не выбрано ни одного файла для прошивки');
@@ -1409,7 +1576,8 @@ flashBtn.onclick = async () => {
             });
             fileNames.push(file.name);
 
-            log('  ' + file.name + ' @ 0x' + part.address.toString(16).padStart(8, '0') + ' (' + (arrayBuffer.byteLength / 1024).toFixed(1) + ' KB)');
+            log('  ' + file.name + ' @ 0x' + part.address.toString(16).padStart(8, '0') +
+                ' (' + (arrayBuffer.byteLength / 1024).toFixed(1) + ' KB)');
         }
 
         if (fileArray.length === 0) {
@@ -1472,10 +1640,9 @@ flashBtn.onclick = async () => {
         port = null;
 
         const flashModeSelect = document.getElementById('flashMode');
-        if (flashModeSelect) {
-            flashModeSelect.value = 'all';
-        }
+        if (flashModeSelect) flashModeSelect.value = 'all';
         resetDownloadState();
+
     } catch (e) {
         log('Ошибка прошивки: ' + e.message);
         showStatus('Ошибка прошивки: ' + e.message, 'error');
@@ -1493,6 +1660,8 @@ flashBtn.onclick = async () => {
         resetDownloadState();
     }
 };
+
+// СКАЧИВАНИЕ .BIN
 
 function resetDownloadState() {
     zipData = null;
@@ -1539,15 +1708,18 @@ async function populateDownloadList(zip) {
         const name = path.split('/').pop();
 
         let size = 0;
-        try {
-            const buf = await f.async('uint8array');
-            size = buf.byteLength;
-        } catch (e) {
-            size = 0;
+        if (f._data && typeof f._data.uncompressedSize === 'number') {
+            size = f._data.uncompressedSize;
+        } else {
+            try {
+                const buf = await f.async('uint8array');
+                size = buf.byteLength;
+            } catch (e) {
+                size = 0;
+            }
         }
 
         const label = document.createElement('label');
-
         const cb = document.createElement('input');
         cb.type = 'checkbox';
         cb.value = path;
@@ -1570,23 +1742,6 @@ async function populateDownloadList(zip) {
 
     document.getElementById('downloadOneBtn').disabled = false;
     document.getElementById('downloadAllBtn').disabled = false;
-}
-
-function formatSize(bytes) {
-    if (bytes < 1024) return bytes + ' B';
-    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-    return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
-}
-
-function downloadBlob(blob, filename) {
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 document.getElementById('downloadOneBtn').onclick = async () => {
@@ -1628,17 +1783,15 @@ document.getElementById('dlToggle').addEventListener('change', function() {
 
     if (this.checked) {
         panel.classList.remove('hidden');
-
-        if (!zipData) {
-            hint.classList.add('active');
-        } else {
-            hint.classList.remove('active');
-        }
+        if (!zipData) hint.classList.add('active');
+        else hint.classList.remove('active');
     } else {
         panel.classList.add('hidden');
         hint.classList.remove('active');
     }
 });
+
+// MISHANYA
 
 document.getElementById('mishanyaToggle').addEventListener('change', function() {
     useMishanya = this.checked;
@@ -1648,7 +1801,6 @@ document.getElementById('mishanyaToggle').addEventListener('change', function() 
 
     if (this.checked) {
         warn.style.display = 'block';
-
         flashMode.value = 'all';
         flashMode.querySelector('option[value="firmware"]').disabled = true;
         flashMode.querySelector('option[value="littlefs"]').disabled = true;
@@ -1675,6 +1827,6 @@ document.getElementById('mishanyaToggle').addEventListener('change', function() 
         });
     }
 });
-    </script>
+</script>
 </body>
 </html>
