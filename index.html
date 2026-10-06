@@ -660,11 +660,11 @@ hr {
     </div>
 
     <div class="notice">
-    <strong>Всегда актуальные версии прошивки!</strong><br>
-    Бинарники загружаются напрямую с GitHub в момент прошивки - вы всегда получаете последний релиз. Источник зависит от выбранной прошивки:<br>
-    • <code>an-core/FieryLedLamp_mod</code> - <a href="#" id="showModInfo" class="notice-link" title="Подробнее о модифицированной прошивке">модифицированная прошивка</a><br>
-    • <code>MishanyaTS/FieryLedLamp</code> - <a href="https://github.com/MishanyaTS/FieryLedLamp" target="_blank" rel="noopener" class="notice-link">основная прошивка</a> (только ESP32-S3)
-   </div>
+        <strong>Всегда актуальные версии прошивки!</strong><br>
+        Бинарники загружаются напрямую с GitHub в момент прошивки - вы всегда получаете последний релиз. Источник зависит от выбранной прошивки:<br>
+        • <code>an-core/FieryLedLamp_mod</code> - <a href="#" id="showModInfo" class="notice-link" title="Подробнее о модифицированной прошивке">модифицированная прошивка</a><br>
+        • <code>MishanyaTS/FieryLedLamp</code> - <a href="https://github.com/MishanyaTS/FieryLedLamp" target="_blank" rel="noopener" class="notice-link">основная прошивка</a> (только ESP32-S3)
+    </div>
 
     <div class="method-card">
         <div class="method-title">
@@ -700,8 +700,7 @@ hr {
         <div class="step-row">
             <span class="step-num">3</span>
             <div class="step-content">
-                <b>Выберите прошивку</b>
-                <small>Для ESP32-S3 - автоматически (Для ESP32 - выберите вариант)</small>
+                <b>Выберите вариант прошивки</b>
                 <div id="detectedInfo" class="detected-info"></div>
 
                 <div id="variantSelector" style="display:none; margin-top:10px;">
@@ -785,48 +784,46 @@ hr {
         <div class="section">1. Подготовка</div>
         <ul>
             <li>
-                <strong>Браузер.</strong> Требуется браузер на движке <strong>Chromium</strong>:
-                Chrome 89+, Edge 89+, Opera, Vivaldi, Brave, Cent Browser, Яндекс.Браузер.
+                <strong>Браузер.</strong> Требуется браузер на движке <strong>Chromium</strong>: Chrome 89+, Edge 89+, Opera, Vivaldi, Brave, Cent Browser, Яндекс.Браузер.
             </li>
             <li>
-                <strong>Firefox и Safari не поддерживают Web Serial API</strong> - в них прошивка
-                невозможна. Откройте страницу в другом браузере.
+                <strong>Firefox и Safari не поддерживают Web Serial API</strong> - в них прошивка невозможна. Откройте страницу в другом браузере.
             </li>
             <li>
-                <strong>Драйвер USB-UART.</strong> Если плата не определяется в Диспетчере
-                устройств - установите драйвер: CH340, CP2102.
+                <strong>Драйвер USB-UART.</strong> Если плата не определяется в Диспетчере устройств - установите драйвер: CH340, CP2102.
             </li>
         </ul>
 
         <div class="section">2. Подключение платы</div>
         <ul>
-            <li>Зажмите кнопку BOOT на плате ESP и подключите к компьютеру <strong>USB-кабелем</strong> (не зарядным - нужен data-кабель).
-                После чего кнопку BOOT можно отпустить.</li>
+            <li>Зажмите кнопку BOOT на плате ESP и подключите к компьютеру <strong>USB-кабелем</strong> (не зарядным - нужен data-кабель). После чего кнопку BOOT можно отпустить.</li>
             <li>Нажмите <strong>«Подключиться к ESP»</strong> - браузер покажет список COM-портов.</li>
         </ul>
 
         <div class="section">3. Определение чипа и выбор варианта</div>
         <ul>
             <li>
-                <strong>ESP32-S3</strong> определяется <strong>автоматически</strong> - вариант
-                выбирается сам, ничего нажимать не нужно.
-            </li>
-            <li>
-                <strong>ESP32</strong> (классический) - флешер покажет <strong>список вариантов</strong>.
-                Выберите нужный:
+                <strong>ESP32-S3</strong> - флешер покажет <strong>список из двух вариантов</strong>:
                 <ul>
                     <li>
-                        <strong>Вариант 1</strong> - базовый: будильник «Рассвет», режим «Закат», расписание лампы,
-                        погода, MQTT, режим «Мультилампа», LED-панель, бэкап настроек, статусы устройств, информация о ПО.
+                        <strong>Вариант 1</strong> - без <code>MULTI_MATRIX</code>: используется <strong>одна</strong> LED-матрица (стандартный вариант).
                     </li>
                     <li>
-                        <strong>Вариант 2</strong> - будильник «Рассвет», режим «Закат», расписание лампы,
-                        погода, MQTT, режим «Мультилампа», LED-панель, бэкап настроек, статусы устройств, информация о ПО,
-                        плюс поддержка <strong>SD-карты</strong>.
+                        <strong>Вариант 2</strong> - с <code>MULTI_MATRIX</code>: используется поддержка <strong>нескольких</strong> последовательно соединённых матриц (до 8 штук 16×16).
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <strong>ESP32</strong> - флешер покажет <strong>список из трёх вариантов</strong>. Выберите нужный:
+                <ul>
+                    <li>
+                        <strong>Вариант 1</strong> - базовый: будильник «Рассвет», режим «Закат», расписание лампы, погода, MQTT, режим «Мультилампа», LED-панель, бэкап настроек, статусы устройств, информация о ПО.
                     </li>
                     <li>
-                        <strong>Вариант 3</strong> - SD-карта, расписание лампы, погода, MQTT, LED-панель, статусы устройств, информация о ПО,
-                        плюс <strong>поддержка нескольких матриц (MULTI_MATRIX)</strong>.
+                        <strong>Вариант 2</strong> - будильник «Рассвет», режим «Закат», расписание лампы, погода, MQTT, режим «Мультилампа», LED-панель, бэкап настроек, статусы устройств, информация о ПО, плюс поддержка <strong>SD-карты</strong>.
+                    </li>
+                    <li>
+                        <strong>Вариант 3</strong> - SD-карта, расписание лампы, погода, MQTT, LED-панель, статусы устройств, информация о ПО, плюс <strong>поддержка нескольких матриц (MULTI_MATRIX)</strong>.
                     </li>
                 </ul>
             </li>
@@ -835,24 +832,17 @@ hr {
         <div class="section">4. Режим прошивки</div>
         <ul>
             <li>
-                <strong>Полная прошивка (все файлы)</strong> - используется <strong>по умолчанию</strong>
-                и <strong>рекомендуется</strong> для первого запуска и обновлений. Прошивает
-                bootloader, partition table, firmware и файловую систему.
+                <strong>Полная прошивка (все файлы)</strong> - используется <strong>по умолчанию</strong> и <strong>рекомендуется</strong> для первого запуска и обновлений. Прошивает bootloader, partition table, firmware и файловую систему.
             </li>
             <li>
-                <strong>Только firmware.bin</strong> - обновление <strong>только прошивки</strong>.
-                Настройки и файловая система <strong>сохраняются</strong>. Используйте,
-                если вышло обновление кода, но partitions, littlefs не менялась.
+                <strong>Только firmware.bin</strong> - обновление <strong>только прошивки</strong>. Настройки и файловая система <strong>сохраняются</strong>. Используйте, если вышло обновление кода, но partitions, littlefs не менялась.
             </li>
             <li>
-                <strong>Только littlefs.bin</strong> - обновление <strong>только файловой системы</strong>
-                (веб-страницы, настройки). Прошивка <strong>остаётся прежней</strong>. Используйте,
-                если обновились только HTML/CSS/JS-файлы.
+                <strong>Только littlefs.bin</strong> - обновление <strong>только файловой системы</strong> (веб-страницы, настройки). Прошивка <strong>остаётся прежней</strong>. Используйте, если обновились только HTML/CSS/JS-файлы.
             </li>
         </ul>
         <div class="note">
-            <strong>Внимание:</strong> при выборе «Только firmware» partition table должна совпадать
-            с той, что уже залита в ESP. Если не уверены - выбирайте «Полная прошивка».
+            <strong>Внимание:</strong> при выборе «Только firmware» partition table должна совпадать с той, что уже залита в ESP. Если не уверены - выбирайте «Полная прошивка».
         </div>
 
         <div class="section">5. Прошивка</div>
@@ -880,19 +870,16 @@ hr {
         <div class="section">8. Частые проблемы</div>
         <ul>
             <li>
-                <strong>«Web Serial не поддерживается»</strong> - вы используете Firefox/Safari.
-                Откройте в Chrome или Edge.
+                <strong>«Web Serial не поддерживается»</strong> - вы используете Firefox/Safari. Откройте в Chrome или Edge.
             </li>
             <li>
                 <strong>«Failed to fetch»</strong> - Проверьте интернет.
             </li>
             <li>
-                <strong>«Порт занят»</strong> - закройте Arduino IDE, монитор порта и другие
-                программы, использующие COM-порт.
+                <strong>«Порт занят»</strong> - закройте Arduino IDE, монитор порта и другие программы, использующие COM-порт.
             </li>
             <li>
-                <strong>Устройство не запускается после прошивки</strong> - возможно, вы выбрали
-                «Только firmware» без совместимой partition table. Прошейте «Полная прошивка».
+                <strong>Устройство не запускается после прошивки</strong> - возможно, вы выбрали «Только firmware» без совместимой partition table. Прошейте «Полная прошивка».
             </li>
         </ul>
 
@@ -1039,10 +1026,41 @@ import JSZip from 'https://cdn.jsdelivr.net/npm/jszip@3.10.1/+esm';
 // ---------------------
 
 const FIRMWARE_VARIANTS = {
-    'ESP32-S3': {
-        zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_ESP32S3.zip',
+    'ESP32-S3_V1': {
+        zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_ESP32-S3_VARIANT_1.zip',
         chipFamily: 'ESP32-S3',
-        description: 'ESP32-S3 (16MB)',
+        description: 'ESP32-S3 - Вариант 1 (без MULTI_MATRIX)',
+        parts: [{
+                keywords: ['bootloader'],
+                address: 0x00000000,
+                required: true
+            },
+            {
+                keywords: ['partitions'],
+                address: 0x00008000,
+                required: true
+            },
+            {
+                keywords: ['boot_app0'],
+                address: 0x0000E000,
+                required: false
+            },
+            {
+                keywords: ['firmware'],
+                address: 0x00010000,
+                required: true
+            },
+            {
+                keywords: ['littlefs'],
+                address: 0x00C90000,
+                required: true
+            },
+        ],
+    },
+    'ESP32-S3_V2': {
+        zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_ESP32-S3_VARIANT_2.zip',
+        chipFamily: 'ESP32-S3',
+        description: 'ESP32-S3 - Вариант 2 (с MULTI_MATRIX)',
         parts: [{
                 keywords: ['bootloader'],
                 address: 0x00000000,
@@ -1428,27 +1446,24 @@ connectBtn.onclick = async () => {
         log('Чип: ' + chip);
 
         if (chip.includes('ESP32-S3') || chip.includes('ESP32S3')) {
-            selectedVariant = 'ESP32-S3';
-            variantSelector.style.display = 'none';
-
             document.getElementById('mishanyaBlock').style.display = 'inline-flex';
             document.getElementById('mishanyaToggle').checked = useMishanya;
             document.getElementById('mishanyaWarning').style.display = useMishanya ? 'block' : 'none';
 
-            const variant = getActiveVariants()[selectedVariant];
-            detectedInfo.classList.add('active');
-            detectedInfo.innerHTML = ` <b>Определено:</b><br> Чип: <b>${chip}</b><br> Вариант: <b>${variant.description}</b> `;
-
-            log('Определён ESP32-S3, загрузка архива...');
-            zipData = await downloadVariantZip(variant);
-            if (!zipData) {
-                flashBtn.disabled = true;
-                return;
+            variantSelector.style.display = 'block';
+            variantSelect.innerHTML = '<option value="">- выберите вариант -</option>';
+            for (const [key, variant] of Object.entries(getActiveVariants())) {
+                if (variant.chipFamily === 'ESP32-S3') {
+                    const opt = document.createElement('option');
+                    opt.value = key;
+                    opt.textContent = variant.description;
+                    variantSelect.appendChild(opt);
+                }
             }
 
-            await populateDownloadList(zipData);
-            flashBtn.disabled = false;
-            showStatus('Подключено: ' + chip + ' - готово к прошивке', 'success');
+            selectedVariant = null;
+            flashBtn.disabled = true;
+            showStatus('Подключено: ' + chip + ' — выберите вариант прошивки', 'info');
 
         } else if (chip.includes('ESP32')) {
             document.getElementById('mishanyaBlock').style.display = 'none';
@@ -1496,6 +1511,12 @@ variantSelect.onchange = async (e) => {
 
     selectedVariant = value;
     const variant = getActiveVariants()[value];
+    if (!variant) {
+        log('Неизвестный вариант: ' + value);
+        showStatus('Неизвестный вариант: ' + value, 'error');
+        flashBtn.disabled = true;
+        return;
+    }
     log('Выбран вариант: ' + variant.description);
 
     detectedInfo.classList.add('active');
@@ -1594,8 +1615,7 @@ flashBtn.onclick = async () => {
             });
             fileNames.push(file.name);
 
-            log('  ' + file.name + ' @ 0x' + part.address.toString(16).padStart(8, '0') +
-                ' (' + (arrayBuffer.byteLength / 1024).toFixed(1) + ' KB)');
+            log('  ' + file.name + ' @ 0x' + part.address.toString(16).padStart(8, '0') + ' (' + (arrayBuffer.byteLength / 1024).toFixed(1) + ' KB)');
         }
 
         if (fileArray.length === 0) {
@@ -1835,18 +1855,20 @@ document.getElementById('mishanyaToggle').addEventListener('change', function() 
     resetDownloadState();
     zipData = null;
     flashBtn.disabled = true;
+    selectedVariant = null;
 
-    if (selectedVariant && detectedChip && detectedChip.includes('ESP32-S3')) {
-        const variant = getActiveVariants()['ESP32-S3'];
-        detectedInfo.innerHTML = `<b>Определено:</b><br> Чип: <b>${detectedChip}</b><br> Вариант: <b>${variant.description}</b>`;
-        showStatus('Загрузка архива...', 'info');
-        downloadVariantZip(variant).then(async zip => {
-            if (!zip) return;
-            zipData = zip;
-            await populateDownloadList(zip);
-            flashBtn.disabled = false;
-            showStatus('Готово к прошивке: ' + variant.description, 'success');
-        });
+    if (detectedChip && detectedChip.includes('ESP32-S3')) {
+        variantSelector.style.display = 'block';
+        variantSelect.innerHTML = '<option value="">- выберите вариант -</option>';
+        for (const [key, variant] of Object.entries(getActiveVariants())) {
+            if (variant.chipFamily === 'ESP32-S3') {
+                const opt = document.createElement('option');
+                opt.value = key;
+                opt.textContent = variant.description;
+                variantSelect.appendChild(opt);
+            }
+        }
+        showStatus('Выберите вариант прошивки', 'info');
     }
 });
 </script>
