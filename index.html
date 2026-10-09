@@ -1521,7 +1521,7 @@ variantSelect.onchange = async (e) => {
     log('Выбран вариант: ' + variant.description);
 
     detectedInfo.classList.add('active');
-    detectedInfo.innerHTML = ` <b>Определено:</b><br> Чип: <b>${detectedChip}</b><br> Вариант: <b>${variant.description}</b> `;
+    detectedInfo.innerHTML = `<br> Чип: <b>${detectedChip}</b><br> Вариант: <b>${variant.description}</b> `;
 
     zipData = await downloadVariantZip(variant);
     if (!zipData) {
