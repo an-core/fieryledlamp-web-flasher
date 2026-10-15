@@ -702,22 +702,19 @@ hr {
             <span class="step-num">3</span>
             <div class="step-content">
                 <b>Выберите вариант прошивки</b>
-                <div id="detectedInfo" class="detected-info"></div>
+				
+				<label class="dl-toggle" id="mishanyaBlock" style="margin-top:12px; display:none;">
+                    <input type="checkbox" id="mishanyaToggle">
+                    <b>Использовать прошивку от MishanyaTS (ESP32-S3)</b>
+                </label>
 
                 <div id="variantSelector" style="display:none; margin-top:10px;">
                     <select id="variantSelect">
                         <option value="">- выберите вариант прошивки -</option>
                     </select>
                 </div>
-
-                <label class="dl-toggle" id="mishanyaBlock" style="margin-top:12px; display:none;">
-                    <input type="checkbox" id="mishanyaToggle">
-                    <b>Прошивка от MishanyaTS (ESP32-S3)</b>
-                </label>
-
-                <div id="mishanyaWarning" class="warning-text" style="display:none; margin-top:8px;">
-                    <strong>Внимание!</strong> Доступна только <strong>полная прошивка</strong>.
-                </div>
+				
+				<div id="detectedInfo" class="detected-info"></div>
             </div>
         </div>
 
@@ -726,6 +723,11 @@ hr {
             <div class="step-content">
                 <b>Режим прошивки</b>
                 <small>Что именно прошить</small>
+				
+				<div id="mishanyaWarning" class="warning-text" style="display:none; margin-top:8px;">
+                    <strong>Внимание!</strong> Доступна только <strong>полная прошивка</strong>.
+                </div>
+				
                 <select id="flashMode" style="margin-top:8px;">
                     <option value="all">Полная прошивка (все файлы)</option>
                     <option value="firmware">Только firmware.bin</option>
