@@ -342,8 +342,16 @@ button:disabled {
 }
 
 .btn-muted {
-    background: #3a3560 !important;
-    opacity: 0.85;
+    background: #2a2745 !important;
+    opacity: 0.55;
+    filter: grayscale(0.5);
+    cursor: pointer;
+    box-shadow: none;
+}
+
+.btn-muted:hover {
+    opacity: 0.75;
+    filter: grayscale(0.3);
 }
 
 .btn-ready {
