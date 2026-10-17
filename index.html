@@ -4,664 +4,488 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Web Flasher</title>
-	<link rel="icon" href="https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/FieryLedLamp/plus/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/FieryLedLamp/plus/favicon.ico" type="image/x-icon">
     <style>
-	* {
-    box-sizing: border-box;
-}
+    * { box-sizing: border-box; }
 
-body {
-    font-family: 'Roboto', sans-serif;
-    background: linear-gradient(135deg, #12151a 0%, #000000 100%);
-    color: white;
-    text-align: center;
-    padding: 20px;
-    padding: 20px;
-    margin: 0;
-    min-height: 100vh;
-}
-
-.container {
-    max-width: 700px;
-    margin: 10px auto;
-    background: rgb(129 121 121 / 10%);
-    border-radius: 20px;
-    padding: 10px;
-    backdrop-filter: blur(10px);
-}
-
-h1 {
-    margin-bottom: 30px;
-}
-
-.info {
-    background: rgb(93 99 114 / 30%);
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    text-align: left;
-}
-
-.method-card {
-    background: rgb(18 32 82 / 15%);
-    border-radius: 15px;
-    padding: 20px;
-    margin: 20px 0;
-    text-align: left;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    border: 1px solid #f1f5f32b;
-}
-
-.method-card:hover {
-    border-color: #667eea;
-    box-shadow: 0 0 12px rgba(102, 126, 234, 0.4);
-}
-
-.method-title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.method-desc {
-    font-size: 14px;
-    opacity: 0.8;
-    margin-bottom: 15px;
-}
-
-.info-btn {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid #667eea;
-    color: #c8d6ff;
-    border-radius: 30px;
-    padding: 4px 16px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    box-shadow: 0 0 6px rgba(102, 126, 234, 0.2);
-    margin-left: 8px;
-    white-space: nowrap;
-}
-
-.info-btn:hover {
-    background: #667eea;
-    color: #fff;
-    transform: scale(1.03);
-}
-
-.info-btn::before {
-    content: "ⓘ";
-    font-size: 16px;
-    font-weight: 600;
-}
-
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(5px);
-    display: none;
-    justify-content: center;
-    align-items: flex-start;
-    z-index: 1000;
-    padding: 40px 20px;
-	overflow-y: auto;
-}
-
-.modal-overlay.open {
-    display: flex;
-}
-
-.modal-box {
-    max-width: 560px;
-    width: 100%;
-    max-height: 90vh;
-	max-height: 90dvh;
-    overflow-y: auto;
-    background: #1a1e26;
-    border-radius: 24px;
-    padding: 30px 28px;
-    border: 1px solid #667eea55;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
-    text-align: left;
-    position: relative;
-    animation: modalFade 0.3s ease;
-}
-
-.modal-box::-webkit-scrollbar {
-    width: 6px;
-}
-
-.modal-box::-webkit-scrollbar-track {
-    background: #2a2e3a;
-    border-radius: 10px;
-}
-
-.modal-box::-webkit-scrollbar-thumb {
-    background: #667eea;
-    border-radius: 10px;
-}
-
-@keyframes modalFade {
-    0% {
-        opacity: 0;
-        transform: scale(0.96) translateY(10px);
+    body {
+        font-family: 'Roboto', sans-serif;
+        background: linear-gradient(135deg, #12151a 0%, #000000 100%);
+        color: white;
+        text-align: center;
+        padding: 20px;
+        margin: 0;
+        min-height: 100vh;
     }
 
-    100% {
-        opacity: 1;
-        transform: scale(1) translateY(0);
+    .container {
+        max-width: 700px;
+        margin: 10px auto;
+        background: rgb(129 121 121 / 10%);
+        border-radius: 20px;
+        padding: 10px;
+        backdrop-filter: blur(10px);
     }
-}
-
-.modal-box h2 {
-    margin-top: 0;
-    font-size: 22px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: #b8caff;
-    border-bottom: 1px solid #334;
-    padding-bottom: 12px;
-}
-
-.modal-box .section {
-    margin: 18px 0 12px 0;
-    font-weight: 700;
-    color: #b8caff;
-    font-size: 16px;
-    border-left: 3px solid #667eea;
-    padding-left: 12px;
-}
-
-.modal-box ul {
-    margin: 0 0 12px 0;
-    padding-left: 22px;
-}
-
-.modal-box ul li {
-    margin-bottom: 6px;
-    line-height: 1.6;
-    color: #d0d8e8;
-    font-size: 14px;
-}
-
-.modal-box ul li strong {
-    color: #b8caff;
-}
-
-.modal-box ul li code {
-    background: #2a2e3a;
-    padding: 1px 8px;
-    border-radius: 4px;
-    font-size: 13px;
-    color: #b8caff;
-    font-family: 'Courier New', monospace;
-}
-
-.modal-box .note {
-    background: rgba(102, 126, 234, 0.12);
-    border-left: 3px solid #667eea;
-    padding: 10px 14px;
-    border-radius: 6px;
-    margin: 10px 0;
-    font-size: 13px;
-    color: #c8d6ff;
-}
-
-.modal-box .close-modal {
-    background: #667eea;
-    border: none;
-    color: white;
-    padding: 10px 28px;
-    border-radius: 40px;
-    font-weight: 600;
-    font-size: 15px;
-    cursor: pointer;
-    margin-top: 18px;
-    transition: 0.2s;
-    width: 100%;
-    text-align: center;
-}
-
-.modal-box .close-modal:hover {
-    background: #7b92ff;
-    transform: scale(1.01);
-}
-
-.modal-box .close-icon {
-    position: absolute;
-    top: 5px;
-    right: 18px;
-    font-size: 26px;
-    line-height: 1;
-    color: #8899bb;
-    cursor: pointer;
-}
-
-.modal-box .close-icon:hover {
-    color: #fff;
-    transform: rotate(90deg);
-}
-
-.modal-box .link {
-    color: #7b92ff;
-    text-decoration: underline;
-    word-break: break-all;
-}
-
-.modal-box .link:hover {
-    color: #a8bbff;
-}
-
-.warning-text {
-    display: block;
-    margin-top: 10px;
-    padding: 12px 16px;
-    background: rgba(255, 60, 60, 0.18);
-    border-left: 5px solid #ff4444;
-    border-radius: 8px;
-    color: #ff9999;
-    font-weight: 700;
-    font-size: 15px;
-    line-height: 1.5;
-    text-shadow: 0 0 8px rgba(255, 60, 60, 0.3);
-}
-
-.warning-text strong {
-    color: #ff6666;
-}
-
-button,
-.file-label,
-select {
-    background: #574c93;
-    color: white;
-    border: none;
-    padding: 10px 25px;
-    font-size: 14px;
-    border-radius: 25px;
-    cursor: pointer;
-    margin: 5px;
-    transition: transform 0.2s;
-    display: inline-block;
-}
-
-select {
-    background: #0a0a0a;
-    color: #e0e0e0;
-    cursor: pointer;
-    width: 100%;
-    padding: 10px 15px;
-    border-radius: 15px;
-    border: 1px solid #2a2e3a;
-    font-size: 14px;
-    transition: border-color 0.25s ease, box-shadow 0.25s ease;
-}
-
-select:hover {
-    border-color: #667eea;
-    box-shadow: 0 0 8px rgba(102, 126, 234, 0.3);
-}
-
-select:focus {
-    outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 12px rgba(102, 126, 234, 0.4);
-}
-
-select option {
-    background: #0a0a0a;
-    color: #e0e0e0;
-    padding: 8px;
-}
-
-button:hover,
-.file-label:hover {
-    transform: scale(1.02);
-}
-
-button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none !important;
-}
-
-.btn-danger {
-    background: linear-gradient(135deg, #a32525 0%, #f5576c 100%);
-}
-
-.notice-link {
-    color: #88ffaa;
-    text-decoration: underline;
-    cursor: pointer;
-    transition: color 0.2s;
-}
-
-.notice-link:hover {
-    color: #26ff26;
-}
-
-.dl-toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    user-select: none;
-    font-size: 15px;
-}
-
-.dl-toggle input[type="checkbox"] {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 18px;
-    height: 18px;
-    border: 2px solid #667eea;
-    border-radius: 5px;
-    background: rgba(0, 0, 0, 0.3);
-    cursor: pointer;
-    position: relative;
-    transition: all 0.2s ease;
-    flex-shrink: 0;
-}
-
-.dl-toggle input[type="checkbox"]:checked {
-    background: #00cc66;
-    border-color: #00cc66;
-    box-shadow: 0 0 8px rgba(0, 204, 102, 0.5);
-}
-
-.dl-toggle input[type="checkbox"]:checked::after {
-    content: "";
-    position: absolute;
-    left: 4px;
-    top: 1px;
-    width: 6px;
-    height: 10px;
-    border: solid #fff;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
-}
-
-.dl-panel {
-    margin-top: 10px;
-    padding: 10px 12px;
-    border-radius: 10px;
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid #2a2e3a;
-}
-
-.dl-panel.hidden {
-    display: none;
-}
-
-.dl-list {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-bottom: 10px;
-}
-
-.dl-list input[type="checkbox"] {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 18px;
-    height: 18px;
-    border: 2px solid #667eea;
-    border-radius: 5px;
-    background: rgba(0, 0, 0, 0.3);
-    cursor: pointer;
-    position: relative;
-    transition: all 0.2s ease;
-    flex-shrink: 0;
-}
-
-.dl-list input[type="checkbox"]:checked {
-    background: #00cc66;
-    border-color: #00cc66;
-    box-shadow: 0 0 8px rgba(0, 204, 102, 0.5);
-}
-
-.dl-list input[type="checkbox"]:checked::after {
-    content: "";
-    position: absolute;
-    left: 4px;
-    top: 1px;
-    width: 6px;
-    height: 10px;
-    border: solid #fff;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
-}
-
-.dl-list label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    padding: 4px 6px;
-    border-radius: 6px;
-    transition: background 0.15s;
-}
-
-.dl-list label:hover {
-    background: rgba(255, 255, 255, 0.05);
-}
-
-.dl-size {
-    color: #888;
-    font-size: 12px;
-    margin-left: 4px;
-}
-
-.dl-hint {
-    display: none;
-    padding: 10px 14px;
-    margin-bottom: 10px;
-    border-radius: 8px;
-    background: rgba(255, 170, 0, 0.12);
-    border-left: 4px solid #ffaa00;
-    color: #ffcc88;
-    font-size: 13px;
-    line-height: 1.5;
-}
-
-.dl-hint.active {
-    display: block;
-}
-
-.notice {
-    background: rgba(0, 204, 102, 0.12);
-    border-left: 4px solid #00cc66;
-    border-radius: 10px;
-    padding: 12px 16px;
-    margin: 0 0 20px 0;
-    text-align: left;
-    font-size: 14px;
-    line-height: 1.5;
-    color: #b8ffd0;
-}
-
-.notice strong {
-    color: #88ffaa;
-}
-
-.notice code {
-    background: #2a2e3a;
-    padding: 1px 8px;
-    border-radius: 4px;
-    font-size: 13px;
-    color: #b8caff;
-    font-family: 'Courier New', monospace;
-}
-
-.step-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.step-row:last-child {
-    border-bottom: none;
-}
-
-.step-num {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #3a4887 0%, #292a2c 100%);
-    color: white;
-    min-width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    text-align: center;
-    font-weight: bold;
-    font-size: 14px;
-    flex-shrink: 0;
-}
-
-.step-content {
-    flex: 1;
-    text-align: left;
-}
-
-.step-content b {
-    display: block;
-    margin-bottom: 4px;
-    font-size: 15px;
-}
-
-.step-content small {
-    font-size: 13px;
-    opacity: 0.7;
-    line-height: 1.4;
-    display: block;
-    color: #bbb9b9;
-}
-
-.progress-bar-outer {
-    width: 100%;
-    height: 22px;
-    background: rgba(0, 0, 0, 0.4);
-    border-radius: 11px;
-    margin: 12px 0;
-    overflow: hidden;
-    position: relative;
-    display: none;
-}
-
-.progress-bar-outer.active {
-    display: block;
-}
-
-.progress-bar-inner {
-    height: 100%;
-    background: linear-gradient(90deg, #00cc66, #00ff88);
-    transition: width 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    font-weight: bold;
-    color: #003322;
-}
-
-.status {
-    margin-top: 15px;
-    padding: 12px 16px;
-    border-radius: 10px;
-    display: none;
-    font-size: 14px;
-    text-align: left;
-    line-height: 1.5;
-}
-
-.status.active {
-    display: block;
-}
-
-.status.success {
-    background: rgba(0, 255, 0, 0.15);
-    border: 1px solid #00cc66;
-    color: #88ffaa;
-}
-
-.status.error {
-    background: rgba(255, 0, 0, 0.15);
-    border: 1px solid #ff4444;
-    color: #ff9999;
-}
-
-.status.info {
-    background: rgba(102, 126, 234, 0.15);
-    border: 1px solid #667eea;
-    color: #c8d6ff;
-}
-
-.status.warning {
-    background: rgba(255, 170, 0, 0.15);
-    border: 1px solid #ffaa00;
-    color: #ffcc88;
-}
-
-.detected-info {
-    background: rgb(99 106 137 / 15%);
-    border: 1px solid #2d3455;
-    border-radius: 10px;
-    padding: 0 0 15px 15px;
-    margin: 15px 0;
-    text-align: left;
-    font-size: 14px;
-    display: none;
-    line-height: 1.6;
-}
-
-.detected-info.active {
-    display: block;
-}
-
-.detected-info b {
-    color: #b8caff;
-}
-
-.driver-link {
-    color: #01ff4f;
-    text-decoration: underline;
-    transition: color 0.2s ease;
-}
-.driver-link:hover {
-    color: #99b3ff;
-    cursor: pointer;
-}
-
-hr {
-    margin: 20px 0;
-    border-color: rgba(255, 255, 255, 0.2);
-}
-
-.footer {
-    font-size: 12px;
-    opacity: 0.6;
-    margin-top: 20px;
-}
-        
+
+    h1 { margin-bottom: 30px; }
+
+    .info {
+        background: rgb(93 99 114 / 30%);
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        text-align: left;
+    }
+
+    .method-card {
+        background: rgb(18 32 82 / 15%);
+        border-radius: 15px;
+        padding: 20px;
+        margin: 20px 0;
+        text-align: left;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid #f1f5f32b;
+    }
+
+    .method-card:hover {
+        border-color: #667eea;
+        box-shadow: 0 0 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .method-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .method-desc {
+        font-size: 14px;
+        opacity: 0.8;
+        margin-bottom: 15px;
+    }
+
+    .info-btn {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid #667eea;
+        color: #c8d6ff;
+        border-radius: 30px;
+        padding: 4px 16px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        box-shadow: 0 0 6px rgba(102, 126, 234, 0.2);
+        margin-left: 8px;
+        white-space: nowrap;
+    }
+
+    .info-btn:hover {
+        background: #667eea;
+        color: #fff;
+        transform: scale(1.03);
+    }
+
+    .info-btn::before {
+        content: "ⓘ";
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .modal-overlay {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(5px);
+        display: none;
+        justify-content: center;
+        align-items: flex-start;
+        z-index: 1000;
+        padding: 40px 20px;
+        overflow-y: auto;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal-box {
+        max-width: 560px;
+        width: 100%;
+        max-height: 90vh;
+        max-height: 90dvh;
+        overflow-y: auto;
+        background: #1a1e26;
+        border-radius: 24px;
+        padding: 30px 28px;
+        border: 1px solid #667eea55;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+        text-align: left;
+        position: relative;
+        animation: modalFade 0.3s ease;
+    }
+
+    .modal-box::-webkit-scrollbar { width: 6px; }
+    .modal-box::-webkit-scrollbar-track { background: #2a2e3a; border-radius: 10px; }
+    .modal-box::-webkit-scrollbar-thumb { background: #667eea; border-radius: 10px; }
+
+    @keyframes modalFade {
+        0% { opacity: 0; transform: scale(0.96) translateY(10px); }
+        100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal-box h2 {
+        margin-top: 0;
+        font-size: 22px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #b8caff;
+        border-bottom: 1px solid #334;
+        padding-bottom: 12px;
+    }
+
+    .modal-box .section {
+        margin: 18px 0 12px 0;
+        font-weight: 700;
+        color: #b8caff;
+        font-size: 16px;
+        border-left: 3px solid #667eea;
+        padding-left: 12px;
+    }
+
+    .modal-box ul { margin: 0 0 12px 0; padding-left: 22px; }
+    .modal-box ul li { margin-bottom: 6px; line-height: 1.6; color: #d0d8e8; font-size: 14px; }
+    .modal-box ul li strong { color: #b8caff; }
+    .modal-box ul li code {
+        background: #2a2e3a;
+        padding: 1px 8px;
+        border-radius: 4px;
+        font-size: 13px;
+        color: #b8caff;
+        font-family: 'Courier New', monospace;
+    }
+
+    .modal-box .note {
+        background: rgba(102, 126, 234, 0.12);
+        border-left: 3px solid #667eea;
+        padding: 10px 14px;
+        border-radius: 6px;
+        margin: 10px 0;
+        font-size: 13px;
+        color: #c8d6ff;
+    }
+
+    .modal-box .close-modal {
+        background: #667eea;
+        border: none;
+        color: white;
+        padding: 10px 28px;
+        border-radius: 40px;
+        font-weight: 600;
+        font-size: 15px;
+        cursor: pointer;
+        margin-top: 18px;
+        transition: 0.2s;
+        width: 100%;
+        text-align: center;
+    }
+
+    .modal-box .close-modal:hover { background: #7b92ff; transform: scale(1.01); }
+
+    .modal-box .close-icon {
+        position: absolute;
+        top: 5px; right: 18px;
+        font-size: 26px;
+        line-height: 1;
+        color: #8899bb;
+        cursor: pointer;
+    }
+
+    .modal-box .close-icon:hover { color: #fff; transform: rotate(90deg); }
+
+    .modal-box .link { color: #7b92ff; text-decoration: underline; word-break: break-all; }
+    .modal-box .link:hover { color: #a8bbff; }
+
+    .warning-text {
+        display: block;
+        margin-top: 10px;
+        padding: 12px 16px;
+        background: rgba(255, 60, 60, 0.18);
+        border-left: 5px solid #ff4444;
+        border-radius: 8px;
+        color: #ff9999;
+        font-weight: 700;
+        font-size: 15px;
+        line-height: 1.5;
+        text-shadow: 0 0 8px rgba(255, 60, 60, 0.3);
+    }
+
+    .warning-text strong { color: #ff6666; }
+
+    button,
+    .file-label,
+    select {
+        background: #574c93;
+        color: white;
+        border: none;
+        padding: 10px 25px;
+        font-size: 14px;
+        border-radius: 25px;
+        cursor: pointer;
+        margin: 5px;
+        transition: transform 0.2s;
+        display: inline-block;
+    }
+
+    select {
+        background: #0a0a0a;
+        color: #e0e0e0;
+        cursor: pointer;
+        width: 100%;
+        padding: 10px 15px;
+        border-radius: 15px;
+        border: 1px solid #2a2e3a;
+        font-size: 14px;
+        transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    select:hover { border-color: #667eea; box-shadow: 0 0 8px rgba(102, 126, 234, 0.3); }
+    select:focus { outline: none; border-color: #667eea; box-shadow: 0 0 12px rgba(102, 126, 234, 0.4); }
+    select option { background: #0a0a0a; color: #e0e0e0; padding: 8px; }
+
+    button:hover,
+    .file-label:hover { transform: scale(1.02); }
+
+    button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none !important;
+    }
+
+    .btn-danger { background: linear-gradient(135deg, #a32525 0%, #f5576c 100%); }
+
+    .notice-link {
+        color: #88ffaa;
+        text-decoration: underline;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+    .notice-link:hover { color: #26ff26; }
+
+    .dl-toggle,
+    .dl-list label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        user-select: none;
+        font-size: 15px;
+    }
+
+    .dl-toggle input[type="checkbox"],
+    .dl-list input[type="checkbox"] {
+        appearance: none;
+        -webkit-appearance: none;
+        width: 18px;
+        height: 18px;
+        border: 2px solid #667eea;
+        border-radius: 5px;
+        background: rgba(0, 0, 0, 0.3);
+        cursor: pointer;
+        position: relative;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+    }
+
+    .dl-toggle input[type="checkbox"]:checked,
+    .dl-list input[type="checkbox"]:checked {
+        background: #00cc66;
+        border-color: #00cc66;
+        box-shadow: 0 0 8px rgba(0, 204, 102, 0.5);
+    }
+
+    .dl-toggle input[type="checkbox"]:checked::after,
+    .dl-list input[type="checkbox"]:checked::after {
+        content: "";
+        position: absolute;
+        left: 4px;
+        top: 1px;
+        width: 6px;
+        height: 10px;
+        border: solid #fff;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+    }
+
+    .dl-panel {
+        margin-top: 10px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid #2a2e3a;
+    }
+
+    .dl-panel.hidden { display: none; }
+
+    .dl-list {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 10px;
+    }
+
+    .dl-list label { padding: 4px 6px; border-radius: 6px; transition: background 0.15s; }
+    .dl-list label:hover { background: rgba(255, 255, 255, 0.05); }
+
+    .dl-size { color: #888; font-size: 12px; margin-left: 4px; }
+
+    .dl-hint {
+        display: none;
+        padding: 10px 14px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        background: rgba(255, 170, 0, 0.12);
+        border-left: 4px solid #ffaa00;
+        color: #ffcc88;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .dl-hint.active { display: block; }
+
+    .notice {
+        background: rgba(0, 204, 102, 0.12);
+        border-left: 4px solid #00cc66;
+        border-radius: 10px;
+        padding: 12px 16px;
+        margin: 0 0 20px 0;
+        text-align: left;
+        font-size: 14px;
+        line-height: 1.5;
+        color: #b8ffd0;
+    }
+
+    .notice strong { color: #88ffaa; }
+    .notice code {
+        background: #2a2e3a;
+        padding: 1px 8px;
+        border-radius: 4px;
+        font-size: 13px;
+        color: #b8caff;
+        font-family: 'Courier New', monospace;
+    }
+
+    .step-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .step-row:last-child { border-bottom: none; }
+
+    .step-num {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #3a4887 0%, #292a2c 100%);
+        color: white;
+        min-width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        text-align: center;
+        font-weight: bold;
+        font-size: 14px;
+        flex-shrink: 0;
+    }
+
+    .step-content { flex: 1; text-align: left; }
+    .step-content b { display: block; margin-bottom: 4px; font-size: 15px; }
+    .step-content small {
+        font-size: 13px;
+        opacity: 0.7;
+        line-height: 1.4;
+        display: block;
+        color: #bbb9b9;
+    }
+
+    .progress-bar-outer {
+        width: 100%;
+        height: 22px;
+        background: rgba(0, 0, 0, 0.4);
+        border-radius: 11px;
+        margin: 12px 0;
+        overflow: hidden;
+        position: relative;
+        display: none;
+    }
+
+    .progress-bar-outer.active { display: block; }
+
+    .progress-bar-inner {
+        height: 100%;
+        background: linear-gradient(90deg, #00cc66, #00ff88);
+        transition: width 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: bold;
+        color: #003322;
+    }
+
+    .status {
+        margin-top: 15px;
+        padding: 12px 16px;
+        border-radius: 10px;
+        display: none;
+        font-size: 14px;
+        text-align: left;
+        line-height: 1.5;
+    }
+
+    .status.active { display: block; }
+    .status.success { background: rgba(0, 255, 0, 0.15); border: 1px solid #00cc66; color: #88ffaa; }
+    .status.error { background: rgba(255, 0, 0, 0.15); border: 1px solid #ff4444; color: #ff9999; }
+    .status.info { background: rgba(102, 126, 234, 0.15); border: 1px solid #667eea; color: #c8d6ff; }
+    .status.warning { background: rgba(255, 170, 0, 0.15); border: 1px solid #ffaa00; color: #ffcc88; }
+
+    .detected-info {
+        background: rgb(99 106 137 / 15%);
+        border: 1px solid #2d3455;
+        border-radius: 10px;
+        padding: 0 0 15px 15px;
+        margin: 15px 0;
+        text-align: left;
+        font-size: 14px;
+        display: none;
+        line-height: 1.6;
+    }
+
+    .detected-info.active { display: block; }
+    .detected-info b { color: #b8caff; }
+
+    .driver-link {
+        color: #01ff4f;
+        text-decoration: underline;
+        transition: color 0.2s ease;
+    }
+    .driver-link:hover { color: #99b3ff; cursor: pointer; }
+
+    hr { margin: 20px 0; border-color: rgba(255, 255, 255, 0.2); }
+
+    .footer { font-size: 12px; opacity: 0.6; margin-top: 20px; }
     </style>
 </head>
 <body>
-	<div class="container">
+    <div class="container">
     <h1>WEB FLASHER FIERYLEDLAMP</h1>
 
     <div class="info">
@@ -674,7 +498,7 @@ hr {
         <strong>Всегда актуальные версии прошивки!</strong><br>
         Бинарники загружаются напрямую с GitHub в момент прошивки - вы всегда получаете последний релиз. Источник зависит от выбранной прошивки:<br>
         • <code>MishanyaTS/FieryLedLamp</code> - <a href="https://github.com/MishanyaTS/FieryLedLamp" target="_blank" rel="noopener" class="notice-link" title="Открыть в GitHub">основная прошивка</a> (только ESP32-S3)<br>
-		• <code>an-core/FieryLedLamp_mod</code> - <a href="#" id="showModInfo" class="notice-link" title="Подробнее о модифицированной прошивке">модифицированная прошивка</a>
+        • <code>an-core/FieryLedLamp_mod</code> - <a href="#" id="showModInfo" class="notice-link" title="Подробнее о модифицированной прошивке">модифицированная прошивка</a>
     </div>
 
     <div class="method-card">
@@ -695,7 +519,7 @@ hr {
             <span class="step-num">1</span>
             <div class="step-content">
                 <b>Подключите плату USB-кабелем к компьютеру</b>
-                <small>Проверьте в Диспетчере устройств (Win+X), чтобы были установлены необходимые драйверы: CH340 / CP2102, <a href="https://zadig.akeo.ie" target="_blank" rel="noopener noreferrer" class="driver-link" title="Открыть страницу загрузки драйвера (для ESP32-S3)">USB-Serial-JTAG peripheral driver</a>
+                <small>Проверьте в Диспетчере устройств (Win+X), чтобы были установлены необходимые драйверы: CH340 / CP2102, <a href="https://zadig.akeo.ie" target="_blank" rel="noopener noreferrer" class="driver-link" title="Открыть страницу загрузки драйвера (Zadig)">USB-Serial-JTAG peripheral driver</a>
             </div>
         </div>
 
@@ -712,8 +536,8 @@ hr {
             <span class="step-num">3</span>
             <div class="step-content">
                 <b>Выберите вариант прошивки</b>
-				
-				<label class="dl-toggle" id="mishanyaBlock" style="margin-top:12px; display:none;">
+
+                <label class="dl-toggle" id="mishanyaBlock" style="margin-top:12px; display:none;">
                     <input type="checkbox" id="mishanyaToggle">
                     <b>Использовать прошивку от MishanyaTS (ESP32-S3)</b>
                 </label>
@@ -723,8 +547,8 @@ hr {
                         <option value="">- выберите вариант прошивки -</option>
                     </select>
                 </div>
-				
-				<div id="detectedInfo" class="detected-info"></div>
+
+                <div id="detectedInfo" class="detected-info"></div>
             </div>
         </div>
 
@@ -733,11 +557,11 @@ hr {
             <div class="step-content">
                 <b>Режим прошивки</b>
                 <small>Что именно прошить</small>
-				
-				<div id="mishanyaWarning" class="warning-text" style="display:none; margin-top:8px;">
+
+                <div id="mishanyaWarning" class="warning-text" style="display:none; margin-top:8px;">
                     <strong>Внимание!</strong> Доступна только <strong>полная прошивка</strong>.
                 </div>
-				
+
                 <select id="flashMode" style="margin-top:8px;">
                     <option value="all">Полная прошивка (все файлы)</option>
                     <option value="firmware">Только firmware.bin</option>
@@ -757,7 +581,7 @@ hr {
 
                 <div id="dlPanel" class="dl-panel hidden">
                     <div id="dlHint" class="dl-hint">
-                        Список файлов появится после подключения ESP. <b>Нажмите «Подключиться к ESP» в шаге 2.
+                        Список файлов появится после подключения ESP. <b>Нажмите «Подключиться к ESP» в шаге 2.</b>
                     </div>
                     <div id="downloadList" class="dl-list"></div>
                     <button id="downloadOneBtn" disabled>Скачать выбранное</button>
@@ -786,7 +610,6 @@ hr {
     </div>
 
     <hr>
-
 </div>
 
 <div class="modal-overlay" id="instructionsModal">
@@ -796,15 +619,9 @@ hr {
 
         <div class="section">1. Подготовка</div>
         <ul>
-            <li>
-                <strong>Браузер.</strong> Требуется браузер на движке <strong>Chromium</strong>: Chrome 89+, Edge 89+, Opera, Vivaldi, Brave, Cent Browser, Яндекс.Браузер.
-            </li>
-            <li>
-                <strong>Firefox и Safari не поддерживают Web Serial API</strong> - в них прошивка невозможна. Откройте страницу в другом браузере.
-            </li>
-            <li>
-                <strong>Драйвер USB-UART.</strong> Если плата не определяется в Диспетчере устройств - установите драйвер: CH340, CP2102.
-            </li>
+            <li><strong>Браузер.</strong> Требуется браузер на движке <strong>Chromium</strong>: Chrome 89+, Edge 89+, Opera, Vivaldi, Brave, Cent Browser, Яндекс.Браузер.</li>
+            <li><strong>Firefox и Safari не поддерживают Web Serial API</strong> - в них прошивка невозможна. Откройте страницу в другом браузере.</li>
+            <li><strong>Драйвер USB-UART.</strong> Если плата не определяется в Диспетчере устройств - установите драйвер: CH340, CP2102.</li>
         </ul>
 
         <div class="section">2. Подключение платы</div>
@@ -818,41 +635,25 @@ hr {
             <li>
                 <strong>ESP32-S3</strong> - флешер покажет <strong>список из двух вариантов</strong>:
                 <ul>
-                    <li>
-                        <strong>Вариант 1</strong> - без <code>MULTI_MATRIX</code>: используется <strong>одна</strong> LED-матрица (стандартный вариант).
-                    </li>
-                    <li>
-                        <strong>Вариант 2</strong> - с <code>MULTI_MATRIX</code>: используется поддержка <strong>нескольких</strong> последовательно соединённых матриц (до 8 штук 16×16).
-                    </li>
+                    <li><strong>Вариант 1</strong> - без <code>MULTI_MATRIX</code>: используется <strong>одна</strong> LED-матрица (стандартный вариант).</li>
+                    <li><strong>Вариант 2</strong> - с <code>MULTI_MATRIX</code>: используется поддержка <strong>нескольких</strong> последовательно соединённых матриц (до 8 штук 16×16).</li>
                 </ul>
             </li>
             <li>
                 <strong>ESP32</strong> - флешер покажет <strong>список из трёх вариантов</strong>. Выберите нужный:
                 <ul>
-                    <li>
-                        <strong>Вариант 1</strong> - базовый: будильник «Рассвет», режим «Закат», расписание лампы, погода, MQTT, режим «Мультилампа», LED-панель, бэкап настроек, статусы устройств, информация о ПО.
-                    </li>
-                    <li>
-                        <strong>Вариант 2</strong> - будильник «Рассвет», режим «Закат», расписание лампы, погода, MQTT, режим «Мультилампа», LED-панель, бэкап настроек, статусы устройств, информация о ПО, плюс поддержка <strong>SD-карты</strong>.
-                    </li>
-                    <li>
-                        <strong>Вариант 3</strong> - SD-карта, расписание лампы, погода, MQTT, LED-панель, статусы устройств, информация о ПО, плюс <strong>поддержка нескольких матриц (MULTI_MATRIX)</strong>.
-                    </li>
+                    <li><strong>Вариант 1</strong> - базовый: будильник «Рассвет», режим «Закат», расписание лампы, погода, MQTT, режим «Мультилампа», LED-панель, бэкап настроек, статусы устройств, информация о ПО.</li>
+                    <li><strong>Вариант 2</strong> - будильник «Рассвет», режим «Закат», расписание лампы, погода, MQTT, режим «Мультилампа», LED-панель, бэкап настроек, статусы устройств, информация о ПО, плюс поддержка <strong>SD-карты</strong>.</li>
+                    <li><strong>Вариант 3</strong> - SD-карта, расписание лампы, погода, MQTT, LED-панель, статусы устройств, информация о ПО, плюс <strong>поддержка нескольких матриц (MULTI_MATRIX)</strong>.</li>
                 </ul>
             </li>
         </ul>
 
         <div class="section">4. Режим прошивки</div>
         <ul>
-            <li>
-                <strong>Полная прошивка (все файлы)</strong> - используется <strong>по умолчанию</strong> и <strong>рекомендуется</strong> для первого запуска и обновлений. Прошивает bootloader, partition table, firmware и файловую систему.
-            </li>
-            <li>
-                <strong>Только firmware.bin</strong> - обновление <strong>только прошивки</strong>. Настройки и файловая система <strong>сохраняются</strong>. Используйте, если вышло обновление кода, но partitions, littlefs не менялась.
-            </li>
-            <li>
-                <strong>Только littlefs.bin</strong> - обновление <strong>только файловой системы</strong> (веб-страницы, настройки). Прошивка <strong>остаётся прежней</strong>. Используйте, если обновились только HTML/CSS/JS-файлы.
-            </li>
+            <li><strong>Полная прошивка (все файлы)</strong> - используется <strong>по умолчанию</strong> и <strong>рекомендуется</strong> для первого запуска и обновлений. Прошивает bootloader, partition table, firmware и файловую систему.</li>
+            <li><strong>Только firmware.bin</strong> - обновление <strong>только прошивки</strong>. Настройки и файловая система <strong>сохраняются</strong>. Используйте, если вышло обновление кода, но partitions, littlefs не менялась.</li>
+            <li><strong>Только littlefs.bin</strong> - обновление <strong>только файловой системы</strong> (веб-страницы, настройки). Прошивка <strong>остаётся прежней</strong>. Используйте, если обновились только HTML/CSS/JS-файлы.</li>
         </ul>
         <div class="note">
             <strong>Внимание:</strong> при выборе «Только firmware» partition table должна совпадать с той, что уже залита в ESP. Если не уверены - выбирайте «Полная прошивка».
@@ -873,27 +674,17 @@ hr {
 
         <div class="section">7. После прошивки</div>
         <ul>
-            <li>
-                Если выполнена "Полная прошивка", устройство создаст <strong>точку доступа</strong> с именем <code>FieryLedLamp</code>.
-            </li>
+            <li>Если выполнена "Полная прошивка", устройство создаст <strong>точку доступа</strong> с именем <code>FieryLedLamp</code>.</li>
             <li>Подключитесь к ней и откройте <code>http://192.168.4.1</code> для настройки.</li>
             <li>Далее можно указать логин и пароль вашей WiFi-сети.</li>
         </ul>
 
         <div class="section">8. Частые проблемы</div>
         <ul>
-            <li>
-                <strong>«Web Serial не поддерживается»</strong> - вы используете Firefox/Safari. Откройте в Chrome или Edge.
-            </li>
-            <li>
-                <strong>«Failed to fetch»</strong> - Проверьте интернет.
-            </li>
-            <li>
-                <strong>«Порт занят»</strong> - закройте Arduino IDE, монитор порта и другие программы, использующие COM-порт.
-            </li>
-            <li>
-                <strong>Устройство не запускается после прошивки</strong> - возможно, вы выбрали «Только firmware» без совместимой partition table. Прошейте «Полная прошивка».
-            </li>
+            <li><strong>«Web Serial не поддерживается»</strong> - вы используете Firefox/Safari. Откройте в Chrome или Edge.</li>
+            <li><strong>«Failed to fetch»</strong> - Проверьте интернет.</li>
+            <li><strong>«Порт занят»</strong> - закройте Arduino IDE, монитор порта и другие программы, использующие COM-порт.</li>
+            <li><strong>Устройство не запускается после прошивки</strong> - возможно, вы выбрали «Только firmware» без совместимой partition table. Прошейте «Полная прошивка».</li>
         </ul>
 
         <button class="close-modal" id="closeModalBtn2">Понятно, закрыть</button>
@@ -926,9 +717,7 @@ hr {
         </ul>
 
         <div class="section">2. Динамическое управление модулями</div>
-        <p style="color:#d0d8e8; font-size:13px; margin:0 0 8px 0;">
-            Включение / выключение через web только для ESP32-S3:
-        </p>
+        <p style="color:#d0d8e8; font-size:13px; margin:0 0 8px 0;">Включение / выключение через web только для ESP32-S3:</p>
         <ul>
             <li>Дисплей TM1637</li>
             <li>Дисплей ST7789</li>
@@ -937,9 +726,7 @@ hr {
             <li>RF-приёмник</li>
             <li>MP3 плеер</li>
             <li>SD карта для внешних эффектов JINX в формате .out
-                <ul>
-                    <li>поддержка физической SD карты и эмуляции в LITTLEFS</li>
-                </ul>
+                <ul><li>поддержка физической SD карты и эмуляции в LITTLEFS</li></ul>
             </li>
         </ul>
 
@@ -1027,7 +814,7 @@ hr {
     </div>
 </div>
 
-  <script type="module">
+<script type="module">
 import {
     ESPLoader,
     Transport
@@ -1035,163 +822,71 @@ import {
 import JSZip from 'https://cdn.jsdelivr.net/npm/jszip@3.10.1/+esm';
 
 // ---------------------------------------------------------------------
+
+const FETCH_TIMEOUT_MS = 60000;
+
+// ---------------------------------------------------------------------
 // источники прошивок
 // ---------------------
-
 const FIRMWARE_VARIANTS = {
     'ESP32-S3_V1': {
         zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_for_web-flasher/bin_ESP32-S3_VARIANT_1.zip',
         chipFamily: 'ESP32-S3',
         description: 'ESP32-S3 - Вариант 1 (без MULTI_MATRIX)',
-        parts: [{
-                keywords: ['bootloader'],
-                address: 0x00000000,
-                required: true
-            },
-            {
-                keywords: ['partitions'],
-                address: 0x00008000,
-                required: true
-            },
-            {
-                keywords: ['boot_app0'],
-                address: 0x0000E000,
-                required: false
-            },
-            {
-                keywords: ['firmware'],
-                address: 0x00010000,
-                required: true
-            },
-            {
-                keywords: ['littlefs'],
-                address: 0x00C90000,
-                required: true
-            },
+        parts: [
+            { keywords: ['bootloader'], address: 0x00000000, required: true },
+            { keywords: ['partitions'], address: 0x00008000, required: true },
+            { keywords: ['boot_app0'], address: 0x0000E000, required: false },
+            { keywords: ['firmware'], address: 0x00010000, required: true },
+            { keywords: ['littlefs'], address: 0x00C90000, required: true },
         ],
     },
     'ESP32-S3_V2': {
         zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_for_web-flasher/bin_ESP32-S3_VARIANT_2.zip',
         chipFamily: 'ESP32-S3',
         description: 'ESP32-S3 - Вариант 2 (с MULTI_MATRIX)',
-        parts: [{
-                keywords: ['bootloader'],
-                address: 0x00000000,
-                required: true
-            },
-            {
-                keywords: ['partitions'],
-                address: 0x00008000,
-                required: true
-            },
-            {
-                keywords: ['boot_app0'],
-                address: 0x0000E000,
-                required: false
-            },
-            {
-                keywords: ['firmware'],
-                address: 0x00010000,
-                required: true
-            },
-            {
-                keywords: ['littlefs'],
-                address: 0x00C90000,
-                required: true
-            },
+        parts: [
+            { keywords: ['bootloader'], address: 0x00000000, required: true },
+            { keywords: ['partitions'], address: 0x00008000, required: true },
+            { keywords: ['boot_app0'], address: 0x0000E000, required: false },
+            { keywords: ['firmware'], address: 0x00010000, required: true },
+            { keywords: ['littlefs'], address: 0x00C90000, required: true },
         ],
     },
     'ESP32_V1': {
         zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_for_web-flasher/bin_ESP32_VARIANT_1.zip',
         chipFamily: 'ESP32',
         description: 'ESP32 - Вариант 1 (USE_DAWN, USE_SUNSET, USE_SCHEDULE, USE_WEATHER, USE_MQTT, USE_MULTILAMP, LED_PANEL, BACKUP_CFG_FILES, STATUS_DEVICE, SOFT_INFO)',
-        parts: [{
-                keywords: ['bootloader'],
-                address: 0x00001000,
-                required: true
-            },
-            {
-                keywords: ['partitions'],
-                address: 0x00008000,
-                required: true
-            },
-            {
-                keywords: ['boot_app0'],
-                address: 0x0000E000,
-                required: false
-            },
-            {
-                keywords: ['firmware'],
-                address: 0x00010000,
-                required: true
-            },
-            {
-                keywords: ['littlefs'],
-                address: 0x00210000,
-                required: true
-            },
+        parts: [
+            { keywords: ['bootloader'], address: 0x00001000, required: true },
+            { keywords: ['partitions'], address: 0x00008000, required: true },
+            { keywords: ['boot_app0'], address: 0x0000E000, required: false },
+            { keywords: ['firmware'], address: 0x00010000, required: true },
+            { keywords: ['littlefs'], address: 0x00210000, required: true },
         ],
     },
     'ESP32_V2': {
         zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_for_web-flasher/bin_ESP32_VARIANT_2.zip',
         chipFamily: 'ESP32',
         description: 'ESP32 - Вариант 2 (USE_SD, USE_DAWN, USE_SUNSET, USE_SCHEDULE, USE_WEATHER, USE_MQTT, USE_MULTILAMP, LED_PANEL, BACKUP_CFG_FILES, STATUS_DEVICE, SOFT_INFO)',
-        parts: [{
-                keywords: ['bootloader'],
-                address: 0x00001000,
-                required: true
-            },
-            {
-                keywords: ['partitions'],
-                address: 0x00008000,
-                required: true
-            },
-            {
-                keywords: ['boot_app0'],
-                address: 0x0000E000,
-                required: false
-            },
-            {
-                keywords: ['firmware'],
-                address: 0x00010000,
-                required: true
-            },
-            {
-                keywords: ['littlefs'],
-                address: 0x00210000,
-                required: true
-            },
+        parts: [
+            { keywords: ['bootloader'], address: 0x00001000, required: true },
+            { keywords: ['partitions'], address: 0x00008000, required: true },
+            { keywords: ['boot_app0'], address: 0x0000E000, required: false },
+            { keywords: ['firmware'], address: 0x00010000, required: true },
+            { keywords: ['littlefs'], address: 0x00210000, required: true },
         ],
     },
     'ESP32_V3': {
         zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_for_web-flasher/bin_ESP32_VARIANT_3.zip',
         chipFamily: 'ESP32',
         description: 'ESP32 - Вариант 3 (USE_SD, MULTI_MATRIX, USE_DAWN, USE_SUNSET, USE_SCHEDULE, USE_WEATHER, LED_PANEL, STATUS_DEVICE, SOFT_INFO)',
-        parts: [{
-                keywords: ['bootloader'],
-                address: 0x00001000,
-                required: true
-            },
-            {
-                keywords: ['partitions'],
-                address: 0x00008000,
-                required: true
-            },
-            {
-                keywords: ['boot_app0'],
-                address: 0x0000E000,
-                required: false
-            },
-            {
-                keywords: ['firmware'],
-                address: 0x00010000,
-                required: true
-            },
-            {
-                keywords: ['littlefs'],
-                address: 0x00210000,
-                required: true
-            },
+        parts: [
+            { keywords: ['bootloader'], address: 0x00001000, required: true },
+            { keywords: ['partitions'], address: 0x00008000, required: true },
+            { keywords: ['boot_app0'], address: 0x0000E000, required: false },
+            { keywords: ['firmware'], address: 0x00010000, required: true },
+            { keywords: ['littlefs'], address: 0x00210000, required: true },
         ],
     },
 };
@@ -1201,31 +896,12 @@ const FIRMWARE_VARIANTS_MISHANYA = {
         zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_for_web-flasher/bin_ESP32S3_MISHANYA.zip',
         chipFamily: 'ESP32-S3',
         description: 'MishanyaTS - ESP32-S3 (16MB)',
-        parts: [{
-                keywords: ['bootloader'],
-                address: 0x00000000,
-                required: true
-            },
-            {
-                keywords: ['partitions'],
-                address: 0x00008000,
-                required: true
-            },
-            {
-                keywords: ['boot_app0'],
-                address: 0x0000E000,
-                required: false
-            },
-            {
-                keywords: ['firmware'],
-                address: 0x00010000,
-                required: true
-            },
-            {
-                keywords: ['littlefs'],
-                address: 0x00C90000,
-                required: true
-            },
+        parts: [
+            { keywords: ['bootloader'], address: 0x00000000, required: true },
+            { keywords: ['partitions'], address: 0x00008000, required: true },
+            { keywords: ['boot_app0'], address: 0x0000E000, required: false },
+            { keywords: ['firmware'], address: 0x00010000, required: true },
+            { keywords: ['littlefs'], address: 0x00C90000, required: true },
         ],
     },
 };
@@ -1242,8 +918,7 @@ const FLASH_OPTIONS = {
 
 // ---------------------------------------------------------------------
 // состояние
-// -----------
-
+// ---------------------------------------------------------------------
 let port = null;
 let transport = null;
 let loader = null;
@@ -1251,11 +926,12 @@ let zipData = null;
 let selectedVariant = null;
 let detectedChip = null;
 let useMishanya = false;
+let isFlashing = false;
+let isConnecting = false;
 
 // ---------------------------------------------------------------------
 // DOM
-// ------
-
+// ---------------------------------------------------------------------
 const logEl = document.getElementById('log');
 const statusEl = document.getElementById('status');
 const connectBtn = document.getElementById('connectBtn');
@@ -1268,8 +944,7 @@ const progressBarInner = document.getElementById('progressBarInner');
 
 // ---------------------------------------------------------------------
 // хелперы
-// ---------
-
+// ---------------------------------------------------------------------
 function getActiveVariants() {
     return useMishanya ? FIRMWARE_VARIANTS_MISHANYA : FIRMWARE_VARIANTS;
 }
@@ -1331,10 +1006,23 @@ function downloadBlob(blob, filename) {
     setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
+async function safeClosePort() {
+    try {
+        if (transport) {
+            try { await transport.disconnect(); } catch (e) {}
+        }
+        if (port) {
+            try { await port.close(); } catch (e) {}
+        }
+    } catch (e) {}
+    transport = null;
+    port = null;
+    loader = null;
+}
+
 // ---------------------------------------------------------------------
 // модальные окна
-// ----------------
-
+// ---------------------------------------------------------------------
 function setupModal(modalEl, openBtnId, closeBtnIds) {
     const openBtn = document.getElementById(openBtnId);
     if (openBtn) {
@@ -1362,8 +1050,7 @@ document.addEventListener('keydown', function(e) {
 
 // ---------------------------------------------------------------------
 // проверка браузера
-// -------------------
-
+// ---------------------------------------------------------------------
 function detectBrowser() {
     const ua = navigator.userAgent;
     if (ua.includes('Firefox/')) return 'Firefox';
@@ -1388,14 +1075,17 @@ if (!('serial' in navigator)) {
 }
 
 // ---------------------------------------------------------------------
-// загрузка архива
-// -----------------
-
+// FIX: загрузка архива с таймаутом
+// ---------------------------------------------------------------------
 async function downloadVariantZip(variant) {
     log('Загрузка архива: ' + variant.description);
     showStatus('Загрузка архива...', 'info');
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+
     try {
-        const response = await fetch(variant.zipUrl);
+        const response = await fetch(variant.zipUrl, { signal: controller.signal });
         if (!response.ok) throw new Error('HTTP ' + response.status);
         const blob = await response.blob();
         log('Загружено ' + (blob.size / 1024).toFixed(1) + ' KB');
@@ -1419,22 +1109,34 @@ async function downloadVariantZip(variant) {
         log('Архив распакован, все файлы на месте');
         return zip;
     } catch (e) {
-        log('Ошибка загрузки: ' + e.message);
-        showStatus('Ошибка загрузки архива: ' + e.message, 'error');
+        if (e.name === 'AbortError') {
+            log('Ошибка загрузки: превышен таймаут (' + (FETCH_TIMEOUT_MS / 1000) + ' с)');
+            showStatus('Ошибка загрузки архива: превышен таймаут. Проверьте соединение.', 'error');
+        } else {
+            log('Ошибка загрузки: ' + e.message);
+            showStatus('Ошибка загрузки архива: ' + e.message, 'error');
+        }
         return null;
+    } finally {
+        clearTimeout(timeoutId);
     }
 }
 
 // ---------------------------------------------------------------------
 // подключение
-// -------------
-
+// ---------------------------------------------------------------------
 connectBtn.onclick = async () => {
+    if (isConnecting || isFlashing) {
+        log('Операция уже выполняется');
+        return;
+    }
     if (loader) {
         log('Уже подключено');
         return;
     }
 
+    isConnecting = true;
+    connectBtn.disabled = true;
     resetDownloadState();
 
     try {
@@ -1499,12 +1201,15 @@ connectBtn.onclick = async () => {
         } else {
             log('Неизвестный чип: ' + chip);
             showStatus('Неизвестный чип: ' + chip, 'error');
+            await safeClosePort();
         }
     } catch (e) {
         log('Ошибка подключения: ' + e.message);
         showStatus('Ошибка подключения: ' + e.message, 'error');
-        loader = null;
-        transport = null;
+        await safeClosePort();
+    } finally {
+        isConnecting = false;
+        if (!loader) connectBtn.disabled = false;
     }
 };
 
@@ -1512,8 +1217,7 @@ log('Web Flasher загружен');
 
 // ---------------------------------------------------------------------
 // выбор варианта
-// ----------------
-
+// ---------------------------------------------------------------------
 variantSelect.onchange = async (e) => {
     const value = e.target.value;
     if (!value) {
@@ -1533,7 +1237,18 @@ variantSelect.onchange = async (e) => {
     log('Выбран вариант: ' + variant.description);
 
     detectedInfo.classList.add('active');
-    detectedInfo.innerHTML = `<br> Чип: <b>${detectedChip}</b><br> Вариант: <b>${variant.description}</b> `;
+    detectedInfo.innerHTML = '';
+    const br = document.createElement('br');
+    detectedInfo.appendChild(br);
+    detectedInfo.appendChild(document.createTextNode(' Чип: '));
+    const bChip = document.createElement('b');
+    bChip.textContent = detectedChip;
+    detectedInfo.appendChild(bChip);
+    detectedInfo.appendChild(document.createElement('br'));
+    detectedInfo.appendChild(document.createTextNode(' Вариант: '));
+    const bVar = document.createElement('b');
+    bVar.textContent = variant.description;
+    detectedInfo.appendChild(bVar);
 
     zipData = await downloadVariantZip(variant);
     if (!zipData) {
@@ -1548,16 +1263,18 @@ variantSelect.onchange = async (e) => {
 
 // ---------------------------------------------------------------------
 // прошивка
-// ----------
-
+// ---------------------------------------------------------------------
 flashBtn.onclick = async () => {
+    if (isFlashing || isConnecting) {
+        log('Прошивка уже выполняется');
+        return;
+    }
+
     const flashMode = document.getElementById('flashMode')?.value || 'all';
 
     if (useMishanya && flashMode !== 'all') {
         log('ОШИБКА: для прошивки MishanyaTS доступна только полная прошивка');
         showStatus('Для прошивки MishanyaTS доступна только полная прошивка', 'error');
-        flashBtn.disabled = false;
-        connectBtn.disabled = false;
         return;
     }
 
@@ -1568,6 +1285,7 @@ flashBtn.onclick = async () => {
 
     const variant = getActiveVariants()[selectedVariant];
 
+    isFlashing = true;
     flashBtn.disabled = true;
     connectBtn.disabled = true;
     setProgress(0, '0%');
@@ -1622,10 +1340,7 @@ flashBtn.onclick = async () => {
             const binaryString = Array.from(new Uint8Array(arrayBuffer))
                 .map(b => String.fromCharCode(b)).join('');
 
-            fileArray.push({
-                data: binaryString,
-                address: part.address
-            });
+            fileArray.push({ data: binaryString, address: part.address });
             fileNames.push(file.name);
 
             log('  ' + file.name + ' @ 0x' + part.address.toString(16).padStart(8, '0') + ' (' + (arrayBuffer.byteLength / 1024).toFixed(1) + ' KB)');
@@ -1648,7 +1363,7 @@ flashBtn.onclick = async () => {
             flashFreq: FLASH_OPTIONS.flashFreq,
             eraseAll: FLASH_OPTIONS.eraseAll,
             compress: FLASH_OPTIONS.compress,
-            calculateMD5Hash: () => '',
+
             reportProgress: (fileIndex, written, total) => {
                 const percent = Math.round(written / total * 100);
                 setProgress(percent, percent + '%');
@@ -1658,6 +1373,7 @@ flashBtn.onclick = async () => {
         });
 
         log('Прошивка успешно завершена!');
+
         try {
             if (typeof loader.hardReset === 'function') {
                 await loader.hardReset();
@@ -1682,13 +1398,7 @@ flashBtn.onclick = async () => {
 
         setTimeout(() => hideProgress(), 2000);
 
-        try {
-            await transport.disconnect();
-            await port.close();
-        } catch (e) {}
-        loader = null;
-        transport = null;
-        port = null;
+        await safeClosePort();
 
         const flashModeSelect = document.getElementById('flashMode');
         if (flashModeSelect) flashModeSelect.value = 'all';
@@ -1697,27 +1407,21 @@ flashBtn.onclick = async () => {
     } catch (e) {
         log('Ошибка прошивки: ' + e.message);
         showStatus('Ошибка прошивки: ' + e.message, 'error');
+        await safeClosePort();
+        resetDownloadState();
+    } finally {
+        isFlashing = false;
         flashBtn.disabled = false;
         connectBtn.disabled = false;
-
-        try {
-            if (transport) await transport.disconnect();
-            if (port) await port.close();
-        } catch (e2) {}
-        loader = null;
-        transport = null;
-        port = null;
-
-        resetDownloadState();
     }
 };
 
 // ---------------------------------------------------------------------
 // скачивание бинарников
-// -----------------------
-
+// ---------------------------------------------------------------------
 function resetDownloadState() {
     zipData = null;
+    selectedVariant = null;
 
     const box = document.getElementById('downloadList');
     if (box) box.innerHTML = '';
@@ -1760,16 +1464,12 @@ async function populateDownloadList(zip) {
         const f = zip.files[path];
         const name = path.split('/').pop();
 
+        // FIX: не распаковываем весь файл ради размера — берём из метаданных
         let size = 0;
-        if (f._data && typeof f._data.uncompressedSize === 'number') {
+        if (f._data && typeof f._data.uncompressedSize === 'number' && f._data.uncompressedSize > 0) {
             size = f._data.uncompressedSize;
-        } else {
-            try {
-                const buf = await f.async('uint8array');
-                size = buf.byteLength;
-            } catch (e) {
-                size = 0;
-            }
+        } else if (f._data && typeof f._data.compressedSize === 'number') {
+            size = f._data.compressedSize;
         }
 
         const label = document.createElement('label');
@@ -1782,7 +1482,7 @@ async function populateDownloadList(zip) {
 
         const sizeSpan = document.createElement('span');
         sizeSpan.className = 'dl-size';
-        sizeSpan.textContent = ' (' + formatSize(size) + ')';
+        sizeSpan.textContent = size > 0 ? ' (' + formatSize(size) + ')' : '';
 
         label.appendChild(cb);
         label.appendChild(span);
@@ -1816,17 +1516,13 @@ document.getElementById('downloadOneBtn').onclick = async () => {
         const blob = await zipData.files[path].async('blob');
         newZip.file(path.split('/').pop(), blob);
     }
-    const out = await newZip.generateAsync({
-        type: 'blob'
-    });
+    const out = await newZip.generateAsync({ type: 'blob' });
     downloadBlob(out, (selectedVariant || 'firmware') + '_selected.zip');
 };
 
 document.getElementById('downloadAllBtn').onclick = async () => {
     if (!zipData) return;
-    const blob = await zipData.generateAsync({
-        type: 'blob'
-    });
+    const blob = await zipData.generateAsync({ type: 'blob' });
     downloadBlob(blob, (selectedVariant || 'firmware') + '.zip');
 };
 
@@ -1846,8 +1542,7 @@ document.getElementById('dlToggle').addEventListener('change', function() {
 
 // ---------------------------------------------------------------------
 // MISHANYA
-// ----------
-
+// ---------------------------------------------------------------------
 document.getElementById('mishanyaToggle').addEventListener('change', function() {
     useMishanya = this.checked;
 
@@ -1866,7 +1561,6 @@ document.getElementById('mishanyaToggle').addEventListener('change', function() 
     }
 
     resetDownloadState();
-    zipData = null;
     flashBtn.disabled = true;
     selectedVariant = null;
 
