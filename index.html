@@ -345,8 +345,12 @@ button:disabled {
     background: #2a2745 !important;
     opacity: 0.55;
     filter: grayscale(0.5);
-    cursor: pointer;
     box-shadow: none;
+}
+
+button:disabled.btn-muted,
+button:disabled {
+    cursor: not-allowed;
 }
 
 .btn-muted:hover {
@@ -765,7 +769,11 @@ hr {
             <div class="step-content">
                 <b>Подключитесь к ESP</b>
                 <small>Браузер покажет список COM-портов (Выберите нужный)</small>
-                <button id="connectBtn" class="btn-muted" style="margin-top:8px;">Подключиться к ESP</button>
+                <button id="connectBtn" class="btn-muted" disabled style="margin-top:8px;">Подключиться к ESP</button>
+                <div id="manualPortHint" style="margin-top:8px; display:none;">
+                    <small style="opacity:0.7;">Не видите устройство? </small>
+                    <a href="#" id="manualPortLink" class="notice-link">Разрешить порт вручную</a>
+                </div>
             </div>
         </div>
 
