@@ -6,486 +6,715 @@
     <title>Web Flasher</title>
     <link rel="icon" href="https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/FieryLedLamp/plus/favicon.ico" type="image/x-icon">
     <style>
-    * { box-sizing: border-box; }
+* {
+    box-sizing: border-box;
+}
 
-    body {
-        font-family: 'Roboto', sans-serif;
-        background: linear-gradient(135deg, #12151a 0%, #000000 100%);
-        color: white;
-        text-align: center;
-        padding: 20px;
-        margin: 0;
-        min-height: 100vh;
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #12151a 0%, #000000 100%);
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin: 0;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 700px;
+    margin: 10px auto;
+    background: rgb(129 121 121 / 10%);
+    border-radius: 20px;
+    padding: 10px;
+    backdrop-filter: blur(10px);
+}
+
+h1 {
+    margin-bottom: 30px;
+}
+
+.info {
+    background: rgb(93 99 114 / 30%);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.method-card {
+    background: rgb(18 32 82 / 15%);
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px 0;
+    text-align: left;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #f1f5f32b;
+}
+
+.method-card:hover {
+    border-color: #667eea;
+    box-shadow: 0 0 12px rgba(102, 126, 234, 0.4);
+}
+
+.method-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.method-desc {
+    font-size: 14px;
+    opacity: 0.8;
+    margin-bottom: 15px;
+}
+
+.info-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid #667eea;
+    color: #c8d6ff;
+    border-radius: 30px;
+    padding: 4px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 0 6px rgba(102, 126, 234, 0.2);
+    margin-left: 8px;
+    white-space: nowrap;
+}
+
+.info-btn:hover {
+    background: #667eea;
+    color: #fff;
+    transform: scale(1.03);
+}
+
+.info-btn::before {
+    content: "ⓘ";
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    display: none;
+    justify-content: center;
+    align-items: flex-start;
+    z-index: 1000;
+    padding: 40px 20px;
+    overflow-y: auto;
+}
+
+.modal-overlay.open {
+    display: flex;
+}
+
+.modal-box {
+    max-width: 560px;
+    width: 100%;
+    max-height: 90vh;
+    max-height: 90dvh;
+    overflow-y: auto;
+    background: #1a1e26;
+    border-radius: 24px;
+    padding: 30px 28px;
+    border: 1px solid #667eea55;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+    text-align: left;
+    position: relative;
+    animation: modalFade 0.3s ease;
+}
+
+.modal-box::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal-box::-webkit-scrollbar-track {
+    background: #2a2e3a;
+    border-radius: 10px;
+}
+
+.modal-box::-webkit-scrollbar-thumb {
+    background: #667eea;
+    border-radius: 10px;
+}
+
+@keyframes modalFade {
+    0% {
+        opacity: 0;
+        transform: scale(0.96) translateY(10px);
     }
 
-    .container {
-        max-width: 700px;
-        margin: 10px auto;
-        background: rgb(129 121 121 / 10%);
-        border-radius: 20px;
-        padding: 10px;
-        backdrop-filter: blur(10px);
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.modal-box h2 {
+    margin-top: 0;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #b8caff;
+    border-bottom: 1px solid #334;
+    padding-bottom: 12px;
+}
+
+.modal-box .section {
+    margin: 18px 0 12px 0;
+    font-weight: 700;
+    color: #b8caff;
+    font-size: 16px;
+    border-left: 3px solid #667eea;
+    padding-left: 12px;
+}
+
+.modal-box ul {
+    margin: 0 0 12px 0;
+    padding-left: 22px;
+}
+
+.modal-box ul li {
+    margin-bottom: 6px;
+    line-height: 1.6;
+    color: #d0d8e8;
+    font-size: 14px;
+}
+
+.modal-box ul li strong {
+    color: #b8caff;
+}
+
+.modal-box ul li code {
+    background: #2a2e3a;
+    padding: 1px 8px;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #b8caff;
+    font-family: 'Courier New', monospace;
+}
+
+.modal-box .note {
+    background: rgba(102, 126, 234, 0.12);
+    border-left: 3px solid #667eea;
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin: 10px 0;
+    font-size: 13px;
+    color: #c8d6ff;
+}
+
+.modal-box .close-modal {
+    background: #667eea;
+    border: none;
+    color: white;
+    padding: 10px 28px;
+    border-radius: 40px;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 18px;
+    transition: 0.2s;
+    width: 100%;
+    text-align: center;
+}
+
+.modal-box .close-modal:hover {
+    background: #7b92ff;
+    transform: scale(1.01);
+}
+
+.modal-box .close-icon {
+    position: absolute;
+    top: 5px;
+    right: 18px;
+    font-size: 26px;
+    line-height: 1;
+    color: #8899bb;
+    cursor: pointer;
+}
+
+.modal-box .close-icon:hover {
+    color: #fff;
+    transform: rotate(90deg);
+}
+
+.modal-box .link {
+    color: #7b92ff;
+    text-decoration: underline;
+    word-break: break-all;
+}
+
+.modal-box .link:hover {
+    color: #a8bbff;
+}
+
+.warning-text {
+    display: block;
+    margin-top: 10px;
+    padding: 12px 16px;
+    background: rgba(255, 60, 60, 0.18);
+    border-left: 5px solid #ff4444;
+    border-radius: 8px;
+    color: #ff9999;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 1.5;
+    text-shadow: 0 0 8px rgba(255, 60, 60, 0.3);
+}
+
+.warning-text strong {
+    color: #ff6666;
+}
+
+button,
+.file-label,
+select {
+    background: #574c93;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    font-size: 14px;
+    border-radius: 25px;
+    cursor: pointer;
+    margin: 5px;
+    transition: transform 0.2s;
+    display: inline-block;
+}
+
+select {
+    background: #0a0a0a;
+    color: #e0e0e0;
+    cursor: pointer;
+    width: 100%;
+    padding: 10px 15px;
+    border-radius: 15px;
+    border: 1px solid #2a2e3a;
+    font-size: 14px;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+select:hover {
+    border-color: #667eea;
+    box-shadow: 0 0 8px rgba(102, 126, 234, 0.3);
+}
+
+select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 12px rgba(102, 126, 234, 0.4);
+}
+
+select option {
+    background: #0a0a0a;
+    color: #e0e0e0;
+    padding: 8px;
+}
+
+button:hover,
+.file-label:hover {
+    transform: scale(1.02);
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #a32525 0%, #f5576c 100%);
+}
+
+.btn-muted {
+    background: #3a3560 !important;
+    opacity: 0.85;
+}
+
+.btn-ready {
+    background: linear-gradient(135deg, #2f7a3e 0%, #44aa5c 100%) !important;
+    box-shadow: 0 0 0 3px rgba(68, 170, 92, 0.25), 0 0 18px rgba(68, 170, 92, 0.65), 0 6px 16px rgba(0, 0, 0, 0.4);
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    animation: btnPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes btnPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 3px rgba(68, 170, 92, 0.25), 0 0 18px rgba(68, 170, 92, 0.65), 0 6px 16px rgba(0, 0, 0, 0.4);
     }
 
-    h1 { margin-bottom: 30px; }
+    50% {
+        transform: scale(1.035);
+        box-shadow: 0 0 0 5px rgba(68, 170, 92, 0.18), 0 0 28px rgba(68, 170, 92, 0.85), 0 6px 20px rgba(0, 0, 0, 0.45);
+    }
+}
 
-    .info {
-        background: rgb(93 99 114 / 30%);
-        padding: 15px;
-        border-radius: 10px;
-        margin-bottom: 20px;
-        text-align: left;
+.btn-muted {
+    background: #3a3560 !important;
+    opacity: 0.75;
+    filter: saturate(0.7);
+}
+
+.notice-link {
+    color: #88ffaa;
+    text-decoration: underline;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.notice-link:hover {
+    color: #26ff26;
+}
+
+.step-locked {
+    opacity: 0.35;
+    pointer-events: none;
+    filter: grayscale(0.6);
+    transition: opacity 0.35s ease, filter 0.35s ease;
+}
+
+.step-revealed {
+    animation: stepReveal 0.4s ease;
+}
+
+@keyframes stepReveal {
+    0% {
+        opacity: 0;
+        transform: translateY(-6px);
     }
 
-    .method-card {
-        background: rgb(18 32 82 / 15%);
-        border-radius: 15px;
-        padding: 20px;
-        margin: 20px 0;
-        text-align: left;
-        transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        border: 1px solid #f1f5f32b;
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dl-toggle,
+.dl-list label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+    font-size: 15px;
+}
+
+.dl-toggle input[type="checkbox"],
+.dl-list input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #667eea;
+    border-radius: 5px;
+    background: rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.dl-toggle input[type="checkbox"]:checked,
+.dl-list input[type="checkbox"]:checked {
+    background: #00cc66;
+    border-color: #00cc66;
+    box-shadow: 0 0 8px rgba(0, 204, 102, 0.5);
+}
+
+.dl-toggle input[type="checkbox"]:checked::after,
+.dl-list input[type="checkbox"]:checked::after {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 1px;
+    width: 6px;
+    height: 10px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.dl-panel {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid #2a2e3a;
+}
+
+.dl-panel.hidden {
+    display: none;
+}
+
+.dl-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.dl-list label {
+    padding: 4px 6px;
+    border-radius: 6px;
+    transition: background 0.15s;
+}
+
+.dl-list label:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.dl-size {
+    color: #888;
+    font-size: 12px;
+    margin-left: 4px;
+}
+
+.dl-hint {
+    display: none;
+    padding: 10px 14px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    background: rgba(255, 170, 0, 0.12);
+    border-left: 4px solid #ffaa00;
+    color: #ffcc88;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.dl-hint.active {
+    display: block;
+}
+
+.device-hint {
+    display: none;
+    margin-top: 8px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    background: rgba(0, 204, 102, 0.12);
+    border-left: 3px solid #44aa5c;
+    color: #88ffaa;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: left;
+    animation: hintFade 0.3s ease;
+}
+
+.device-hint.active {
+    display: inline-block;
+}
+
+@keyframes hintFade {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
     }
 
-    .method-card:hover {
-        border-color: #667eea;
-        box-shadow: 0 0 12px rgba(102, 126, 234, 0.4);
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
+}
 
-    .method-title {
-        font-size: 24px;
-        font-weight: bold;
-        margin-bottom: 10px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        flex-wrap: wrap;
-    }
+.notice {
+    background: rgba(0, 204, 102, 0.12);
+    border-left: 4px solid #00cc66;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin: 0 0 20px 0;
+    text-align: left;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #b8ffd0;
+}
 
-    .method-desc {
-        font-size: 14px;
-        opacity: 0.8;
-        margin-bottom: 15px;
-    }
+.notice strong {
+    color: #88ffaa;
+}
 
-    .info-btn {
-        background: rgba(255, 255, 255, 0.08);
-        border: 1px solid #667eea;
-        color: #c8d6ff;
-        border-radius: 30px;
-        padding: 4px 16px;
-        font-size: 14px;
-        font-weight: 500;
-        cursor: pointer;
-        transition: all 0.25s ease;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        box-shadow: 0 0 6px rgba(102, 126, 234, 0.2);
-        margin-left: 8px;
-        white-space: nowrap;
-    }
+.notice code {
+    background: #2a2e3a;
+    padding: 1px 8px;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #b8caff;
+    font-family: 'Courier New', monospace;
+}
 
-    .info-btn:hover {
-        background: #667eea;
-        color: #fff;
-        transform: scale(1.03);
-    }
+.step-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
 
-    .info-btn::before {
-        content: "ⓘ";
-        font-size: 16px;
-        font-weight: 600;
-    }
+.step-row:last-child {
+    border-bottom: none;
+}
 
-    .modal-overlay {
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background: rgba(0, 0, 0, 0.7);
-        backdrop-filter: blur(5px);
-        display: none;
-        justify-content: center;
-        align-items: flex-start;
-        z-index: 1000;
-        padding: 40px 20px;
-        overflow-y: auto;
-    }
+.step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #3a4887 0%, #292a2c 100%);
+    color: white;
+    min-width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    text-align: center;
+    font-weight: bold;
+    font-size: 14px;
+    flex-shrink: 0;
+}
 
-    .modal-overlay.open { display: flex; }
+.step-content {
+    flex: 1;
+    text-align: left;
+}
 
-    .modal-box {
-        max-width: 560px;
-        width: 100%;
-        max-height: 90vh;
-        max-height: 90dvh;
-        overflow-y: auto;
-        background: #1a1e26;
-        border-radius: 24px;
-        padding: 30px 28px;
-        border: 1px solid #667eea55;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
-        text-align: left;
-        position: relative;
-        animation: modalFade 0.3s ease;
-    }
+.step-content b {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 15px;
+}
 
-    .modal-box::-webkit-scrollbar { width: 6px; }
-    .modal-box::-webkit-scrollbar-track { background: #2a2e3a; border-radius: 10px; }
-    .modal-box::-webkit-scrollbar-thumb { background: #667eea; border-radius: 10px; }
+.step-content small {
+    font-size: 13px;
+    opacity: 0.7;
+    line-height: 1.4;
+    display: block;
+    color: #bbb9b9;
+}
 
-    @keyframes modalFade {
-        0% { opacity: 0; transform: scale(0.96) translateY(10px); }
-        100% { opacity: 1; transform: scale(1) translateY(0); }
-    }
+.progress-bar-outer {
+    width: 100%;
+    height: 22px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 11px;
+    margin: 12px 0;
+    overflow: hidden;
+    position: relative;
+    display: none;
+}
 
-    .modal-box h2 {
-        margin-top: 0;
-        font-size: 22px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        color: #b8caff;
-        border-bottom: 1px solid #334;
-        padding-bottom: 12px;
-    }
+.progress-bar-outer.active {
+    display: block;
+}
 
-    .modal-box .section {
-        margin: 18px 0 12px 0;
-        font-weight: 700;
-        color: #b8caff;
-        font-size: 16px;
-        border-left: 3px solid #667eea;
-        padding-left: 12px;
-    }
+.progress-bar-inner {
+    height: 100%;
+    background: linear-gradient(90deg, #00cc66, #00ff88);
+    transition: width 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    color: #003322;
+}
 
-    .modal-box ul { margin: 0 0 12px 0; padding-left: 22px; }
-    .modal-box ul li { margin-bottom: 6px; line-height: 1.6; color: #d0d8e8; font-size: 14px; }
-    .modal-box ul li strong { color: #b8caff; }
-    .modal-box ul li code {
-        background: #2a2e3a;
-        padding: 1px 8px;
-        border-radius: 4px;
-        font-size: 13px;
-        color: #b8caff;
-        font-family: 'Courier New', monospace;
-    }
+.status {
+    margin-top: 15px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    display: none;
+    font-size: 14px;
+    text-align: left;
+    line-height: 1.5;
+}
 
-    .modal-box .note {
-        background: rgba(102, 126, 234, 0.12);
-        border-left: 3px solid #667eea;
-        padding: 10px 14px;
-        border-radius: 6px;
-        margin: 10px 0;
-        font-size: 13px;
-        color: #c8d6ff;
-    }
+.status.active {
+    display: block;
+}
 
-    .modal-box .close-modal {
-        background: #667eea;
-        border: none;
-        color: white;
-        padding: 10px 28px;
-        border-radius: 40px;
-        font-weight: 600;
-        font-size: 15px;
-        cursor: pointer;
-        margin-top: 18px;
-        transition: 0.2s;
-        width: 100%;
-        text-align: center;
-    }
+.status.success {
+    background: rgba(0, 255, 0, 0.15);
+    border: 1px solid #00cc66;
+    color: #88ffaa;
+}
 
-    .modal-box .close-modal:hover { background: #7b92ff; transform: scale(1.01); }
+.status.error {
+    background: rgba(255, 0, 0, 0.15);
+    border: 1px solid #ff4444;
+    color: #ff9999;
+}
 
-    .modal-box .close-icon {
-        position: absolute;
-        top: 5px; right: 18px;
-        font-size: 26px;
-        line-height: 1;
-        color: #8899bb;
-        cursor: pointer;
-    }
+.status.info {
+    background: rgba(102, 126, 234, 0.15);
+    border: 1px solid #667eea;
+    color: #c8d6ff;
+}
 
-    .modal-box .close-icon:hover { color: #fff; transform: rotate(90deg); }
+.status.warning {
+    background: rgba(255, 170, 0, 0.15);
+    border: 1px solid #ffaa00;
+    color: #ffcc88;
+}
 
-    .modal-box .link { color: #7b92ff; text-decoration: underline; word-break: break-all; }
-    .modal-box .link:hover { color: #a8bbff; }
+.detected-info {
+    background: rgb(99 106 137 / 15%);
+    border: 1px solid #2d3455;
+    border-radius: 10px;
+    padding: 0 0 15px 15px;
+    margin: 15px 0;
+    text-align: left;
+    font-size: 14px;
+    display: none;
+    line-height: 1.6;
+}
 
-    .warning-text {
-        display: block;
-        margin-top: 10px;
-        padding: 12px 16px;
-        background: rgba(255, 60, 60, 0.18);
-        border-left: 5px solid #ff4444;
-        border-radius: 8px;
-        color: #ff9999;
-        font-weight: 700;
-        font-size: 15px;
-        line-height: 1.5;
-        text-shadow: 0 0 8px rgba(255, 60, 60, 0.3);
-    }
+.detected-info.active {
+    display: block;
+}
 
-    .warning-text strong { color: #ff6666; }
+.detected-info b {
+    color: #b8caff;
+}
 
-    button,
-    .file-label,
-    select {
-        background: #574c93;
-        color: white;
-        border: none;
-        padding: 10px 25px;
-        font-size: 14px;
-        border-radius: 25px;
-        cursor: pointer;
-        margin: 5px;
-        transition: transform 0.2s;
-        display: inline-block;
-    }
+.driver-link {
+    color: #01ff4f;
+    text-decoration: underline;
+    transition: color 0.2s ease;
+}
 
-    select {
-        background: #0a0a0a;
-        color: #e0e0e0;
-        cursor: pointer;
-        width: 100%;
-        padding: 10px 15px;
-        border-radius: 15px;
-        border: 1px solid #2a2e3a;
-        font-size: 14px;
-        transition: border-color 0.25s ease, box-shadow 0.25s ease;
-    }
+.driver-link:hover {
+    color: #99b3ff;
+    cursor: pointer;
+}
 
-    select:hover { border-color: #667eea; box-shadow: 0 0 8px rgba(102, 126, 234, 0.3); }
-    select:focus { outline: none; border-color: #667eea; box-shadow: 0 0 12px rgba(102, 126, 234, 0.4); }
-    select option { background: #0a0a0a; color: #e0e0e0; padding: 8px; }
+hr {
+    margin: 20px 0;
+    border-color: rgba(255, 255, 255, 0.2);
+}
 
-    button:hover,
-    .file-label:hover { transform: scale(1.02); }
-
-    button:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-        transform: none !important;
-    }
-
-    .btn-danger { background: linear-gradient(135deg, #a32525 0%, #f5576c 100%); }
-
-    .notice-link {
-        color: #88ffaa;
-        text-decoration: underline;
-        cursor: pointer;
-        transition: color 0.2s;
-    }
-    .notice-link:hover { color: #26ff26; }
-
-    .dl-toggle,
-    .dl-list label {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        cursor: pointer;
-        user-select: none;
-        font-size: 15px;
-    }
-
-    .dl-toggle input[type="checkbox"],
-    .dl-list input[type="checkbox"] {
-        appearance: none;
-        -webkit-appearance: none;
-        width: 18px;
-        height: 18px;
-        border: 2px solid #667eea;
-        border-radius: 5px;
-        background: rgba(0, 0, 0, 0.3);
-        cursor: pointer;
-        position: relative;
-        transition: all 0.2s ease;
-        flex-shrink: 0;
-    }
-
-    .dl-toggle input[type="checkbox"]:checked,
-    .dl-list input[type="checkbox"]:checked {
-        background: #00cc66;
-        border-color: #00cc66;
-        box-shadow: 0 0 8px rgba(0, 204, 102, 0.5);
-    }
-
-    .dl-toggle input[type="checkbox"]:checked::after,
-    .dl-list input[type="checkbox"]:checked::after {
-        content: "";
-        position: absolute;
-        left: 4px;
-        top: 1px;
-        width: 6px;
-        height: 10px;
-        border: solid #fff;
-        border-width: 0 2px 2px 0;
-        transform: rotate(45deg);
-    }
-
-    .dl-panel {
-        margin-top: 10px;
-        padding: 10px 12px;
-        border-radius: 10px;
-        background: rgba(0, 0, 0, 0.2);
-        border: 1px solid #2a2e3a;
-    }
-
-    .dl-panel.hidden { display: none; }
-
-    .dl-list {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-        margin-bottom: 10px;
-    }
-
-    .dl-list label { padding: 4px 6px; border-radius: 6px; transition: background 0.15s; }
-    .dl-list label:hover { background: rgba(255, 255, 255, 0.05); }
-
-    .dl-size { color: #888; font-size: 12px; margin-left: 4px; }
-
-    .dl-hint {
-        display: none;
-        padding: 10px 14px;
-        margin-bottom: 10px;
-        border-radius: 8px;
-        background: rgba(255, 170, 0, 0.12);
-        border-left: 4px solid #ffaa00;
-        color: #ffcc88;
-        font-size: 13px;
-        line-height: 1.5;
-    }
-
-    .dl-hint.active { display: block; }
-
-    .notice {
-        background: rgba(0, 204, 102, 0.12);
-        border-left: 4px solid #00cc66;
-        border-radius: 10px;
-        padding: 12px 16px;
-        margin: 0 0 20px 0;
-        text-align: left;
-        font-size: 14px;
-        line-height: 1.5;
-        color: #b8ffd0;
-    }
-
-    .notice strong { color: #88ffaa; }
-    .notice code {
-        background: #2a2e3a;
-        padding: 1px 8px;
-        border-radius: 4px;
-        font-size: 13px;
-        color: #b8caff;
-        font-family: 'Courier New', monospace;
-    }
-
-    .step-row {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 12px 0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .step-row:last-child { border-bottom: none; }
-
-    .step-num {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(135deg, #3a4887 0%, #292a2c 100%);
-        color: white;
-        min-width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        text-align: center;
-        font-weight: bold;
-        font-size: 14px;
-        flex-shrink: 0;
-    }
-
-    .step-content { flex: 1; text-align: left; }
-    .step-content b { display: block; margin-bottom: 4px; font-size: 15px; }
-    .step-content small {
-        font-size: 13px;
-        opacity: 0.7;
-        line-height: 1.4;
-        display: block;
-        color: #bbb9b9;
-    }
-
-    .progress-bar-outer {
-        width: 100%;
-        height: 22px;
-        background: rgba(0, 0, 0, 0.4);
-        border-radius: 11px;
-        margin: 12px 0;
-        overflow: hidden;
-        position: relative;
-        display: none;
-    }
-
-    .progress-bar-outer.active { display: block; }
-
-    .progress-bar-inner {
-        height: 100%;
-        background: linear-gradient(90deg, #00cc66, #00ff88);
-        transition: width 0.3s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 12px;
-        font-weight: bold;
-        color: #003322;
-    }
-
-    .status {
-        margin-top: 15px;
-        padding: 12px 16px;
-        border-radius: 10px;
-        display: none;
-        font-size: 14px;
-        text-align: left;
-        line-height: 1.5;
-    }
-
-    .status.active { display: block; }
-    .status.success { background: rgba(0, 255, 0, 0.15); border: 1px solid #00cc66; color: #88ffaa; }
-    .status.error { background: rgba(255, 0, 0, 0.15); border: 1px solid #ff4444; color: #ff9999; }
-    .status.info { background: rgba(102, 126, 234, 0.15); border: 1px solid #667eea; color: #c8d6ff; }
-    .status.warning { background: rgba(255, 170, 0, 0.15); border: 1px solid #ffaa00; color: #ffcc88; }
-
-    .detected-info {
-        background: rgb(99 106 137 / 15%);
-        border: 1px solid #2d3455;
-        border-radius: 10px;
-        padding: 0 0 15px 15px;
-        margin: 15px 0;
-        text-align: left;
-        font-size: 14px;
-        display: none;
-        line-height: 1.6;
-    }
-
-    .detected-info.active { display: block; }
-    .detected-info b { color: #b8caff; }
-
-    .driver-link {
-        color: #01ff4f;
-        text-decoration: underline;
-        transition: color 0.2s ease;
-    }
-    .driver-link:hover { color: #99b3ff; cursor: pointer; }
-
-    hr { margin: 20px 0; border-color: rgba(255, 255, 255, 0.2); }
-
-    .footer { font-size: 12px; opacity: 0.6; margin-top: 20px; }
+.footer {
+    font-size: 12px;
+    opacity: 0.6;
+    margin-top: 20px;
+}
     </style>
 </head>
 <body>
-    <div class="container">
+<div class="container">
     <h1>WEB FLASHER FIERYLEDLAMP</h1>
 
     <div class="info">
@@ -532,7 +761,7 @@
             </div>
         </div>
 
-        <div class="step-row">
+        <div class="step-row step-locked" id="stepVariant">
             <span class="step-num">3</span>
             <div class="step-content">
                 <b>Выберите вариант прошивки</b>
@@ -552,7 +781,7 @@
             </div>
         </div>
 
-        <div class="step-row">
+        <div class="step-row step-locked" id="stepFlashMode">
             <span class="step-num">3.1</span>
             <div class="step-content">
                 <b>Режим прошивки</b>
@@ -570,7 +799,7 @@
             </div>
         </div>
 
-        <div class="step-row">
+        <div class="step-row step-locked" id="stepDownload">
             <span class="step-num">3.2</span>
             <div class="step-content">
                 <label class="dl-toggle">
@@ -590,7 +819,7 @@
             </div>
         </div>
 
-        <div class="step-row">
+        <div class="step-row step-locked" id="stepFlash">
             <span class="step-num">4</span>
             <div class="step-content">
                 <b>Прошейте устройство</b>
@@ -726,7 +955,9 @@
             <li>RF-приёмник</li>
             <li>MP3 плеер</li>
             <li>SD карта для внешних эффектов JINX в формате .out
-                <ul><li>поддержка физической SD карты и эмуляции в LITTLEFS</li></ul>
+                <ul>
+                    <li>поддержка физической SD карты и эмуляции в LITTLEFS</li>
+                </ul>
             </li>
         </ul>
 
@@ -821,72 +1052,162 @@ import {
 } from 'https://unpkg.com/esptool-js@0.4.5/bundle.js';
 import JSZip from 'https://cdn.jsdelivr.net/npm/jszip@3.10.1/+esm';
 
-// ---------------------------------------------------------------------
-
 const FETCH_TIMEOUT_MS = 60000;
 
-// ---------------------------------------------------------------------
-// источники прошивок
-// ---------------------
 const FIRMWARE_VARIANTS = {
     'ESP32-S3_V1': {
         zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_for_web-flasher/bin_ESP32-S3_VARIANT_1.zip',
         chipFamily: 'ESP32-S3',
         description: 'ESP32-S3 - Вариант 1 (без MULTI_MATRIX)',
-        parts: [
-            { keywords: ['bootloader'], address: 0x00000000, required: true },
-            { keywords: ['partitions'], address: 0x00008000, required: true },
-            { keywords: ['boot_app0'], address: 0x0000E000, required: false },
-            { keywords: ['firmware'], address: 0x00010000, required: true },
-            { keywords: ['littlefs'], address: 0x00C90000, required: true },
+        parts: [{
+                keywords: ['bootloader'],
+                address: 0x00000000,
+                required: true
+            },
+            {
+                keywords: ['partitions'],
+                address: 0x00008000,
+                required: true
+            },
+            {
+                keywords: ['boot_app0'],
+                address: 0x0000E000,
+                required: false
+            },
+            {
+                keywords: ['firmware'],
+                address: 0x00010000,
+                required: true
+            },
+            {
+                keywords: ['littlefs'],
+                address: 0x00C90000,
+                required: true
+            },
         ],
     },
     'ESP32-S3_V2': {
         zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_for_web-flasher/bin_ESP32-S3_VARIANT_2.zip',
         chipFamily: 'ESP32-S3',
         description: 'ESP32-S3 - Вариант 2 (с MULTI_MATRIX)',
-        parts: [
-            { keywords: ['bootloader'], address: 0x00000000, required: true },
-            { keywords: ['partitions'], address: 0x00008000, required: true },
-            { keywords: ['boot_app0'], address: 0x0000E000, required: false },
-            { keywords: ['firmware'], address: 0x00010000, required: true },
-            { keywords: ['littlefs'], address: 0x00C90000, required: true },
+        parts: [{
+                keywords: ['bootloader'],
+                address: 0x00000000,
+                required: true
+            },
+            {
+                keywords: ['partitions'],
+                address: 0x00008000,
+                required: true
+            },
+            {
+                keywords: ['boot_app0'],
+                address: 0x0000E000,
+                required: false
+            },
+            {
+                keywords: ['firmware'],
+                address: 0x00010000,
+                required: true
+            },
+            {
+                keywords: ['littlefs'],
+                address: 0x00C90000,
+                required: true
+            },
         ],
     },
     'ESP32_V1': {
         zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_for_web-flasher/bin_ESP32_VARIANT_1.zip',
         chipFamily: 'ESP32',
         description: 'ESP32 - Вариант 1 (USE_DAWN, USE_SUNSET, USE_SCHEDULE, USE_WEATHER, USE_MQTT, USE_MULTILAMP, LED_PANEL, BACKUP_CFG_FILES, STATUS_DEVICE, SOFT_INFO)',
-        parts: [
-            { keywords: ['bootloader'], address: 0x00001000, required: true },
-            { keywords: ['partitions'], address: 0x00008000, required: true },
-            { keywords: ['boot_app0'], address: 0x0000E000, required: false },
-            { keywords: ['firmware'], address: 0x00010000, required: true },
-            { keywords: ['littlefs'], address: 0x00210000, required: true },
+        parts: [{
+                keywords: ['bootloader'],
+                address: 0x00001000,
+                required: true
+            },
+            {
+                keywords: ['partitions'],
+                address: 0x00008000,
+                required: true
+            },
+            {
+                keywords: ['boot_app0'],
+                address: 0x0000E000,
+                required: false
+            },
+            {
+                keywords: ['firmware'],
+                address: 0x00010000,
+                required: true
+            },
+            {
+                keywords: ['littlefs'],
+                address: 0x00210000,
+                required: true
+            },
         ],
     },
     'ESP32_V2': {
         zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_for_web-flasher/bin_ESP32_VARIANT_2.zip',
         chipFamily: 'ESP32',
         description: 'ESP32 - Вариант 2 (USE_SD, USE_DAWN, USE_SUNSET, USE_SCHEDULE, USE_WEATHER, USE_MQTT, USE_MULTILAMP, LED_PANEL, BACKUP_CFG_FILES, STATUS_DEVICE, SOFT_INFO)',
-        parts: [
-            { keywords: ['bootloader'], address: 0x00001000, required: true },
-            { keywords: ['partitions'], address: 0x00008000, required: true },
-            { keywords: ['boot_app0'], address: 0x0000E000, required: false },
-            { keywords: ['firmware'], address: 0x00010000, required: true },
-            { keywords: ['littlefs'], address: 0x00210000, required: true },
+        parts: [{
+                keywords: ['bootloader'],
+                address: 0x00001000,
+                required: true
+            },
+            {
+                keywords: ['partitions'],
+                address: 0x00008000,
+                required: true
+            },
+            {
+                keywords: ['boot_app0'],
+                address: 0x0000E000,
+                required: false
+            },
+            {
+                keywords: ['firmware'],
+                address: 0x00010000,
+                required: true
+            },
+            {
+                keywords: ['littlefs'],
+                address: 0x00210000,
+                required: true
+            },
         ],
     },
     'ESP32_V3': {
         zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_for_web-flasher/bin_ESP32_VARIANT_3.zip',
         chipFamily: 'ESP32',
         description: 'ESP32 - Вариант 3 (USE_SD, MULTI_MATRIX, USE_DAWN, USE_SUNSET, USE_SCHEDULE, USE_WEATHER, LED_PANEL, STATUS_DEVICE, SOFT_INFO)',
-        parts: [
-            { keywords: ['bootloader'], address: 0x00001000, required: true },
-            { keywords: ['partitions'], address: 0x00008000, required: true },
-            { keywords: ['boot_app0'], address: 0x0000E000, required: false },
-            { keywords: ['firmware'], address: 0x00010000, required: true },
-            { keywords: ['littlefs'], address: 0x00210000, required: true },
+        parts: [{
+                keywords: ['bootloader'],
+                address: 0x00001000,
+                required: true
+            },
+            {
+                keywords: ['partitions'],
+                address: 0x00008000,
+                required: true
+            },
+            {
+                keywords: ['boot_app0'],
+                address: 0x0000E000,
+                required: false
+            },
+            {
+                keywords: ['firmware'],
+                address: 0x00010000,
+                required: true
+            },
+            {
+                keywords: ['littlefs'],
+                address: 0x00210000,
+                required: true
+            },
         ],
     },
 };
@@ -896,12 +1217,31 @@ const FIRMWARE_VARIANTS_MISHANYA = {
         zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_for_web-flasher/bin_ESP32S3_MISHANYA.zip',
         chipFamily: 'ESP32-S3',
         description: 'MishanyaTS - ESP32-S3 (16MB)',
-        parts: [
-            { keywords: ['bootloader'], address: 0x00000000, required: true },
-            { keywords: ['partitions'], address: 0x00008000, required: true },
-            { keywords: ['boot_app0'], address: 0x0000E000, required: false },
-            { keywords: ['firmware'], address: 0x00010000, required: true },
-            { keywords: ['littlefs'], address: 0x00C90000, required: true },
+        parts: [{
+                keywords: ['bootloader'],
+                address: 0x00000000,
+                required: true
+            },
+            {
+                keywords: ['partitions'],
+                address: 0x00008000,
+                required: true
+            },
+            {
+                keywords: ['boot_app0'],
+                address: 0x0000E000,
+                required: false
+            },
+            {
+                keywords: ['firmware'],
+                address: 0x00010000,
+                required: true
+            },
+            {
+                keywords: ['littlefs'],
+                address: 0x00C90000,
+                required: true
+            },
         ],
     },
 };
@@ -916,9 +1256,6 @@ const FLASH_OPTIONS = {
     compress: true,
 };
 
-// ---------------------------------------------------------------------
-// состояние
-// ---------------------------------------------------------------------
 let port = null;
 let transport = null;
 let loader = null;
@@ -929,9 +1266,6 @@ let useMishanya = false;
 let isFlashing = false;
 let isConnecting = false;
 
-// ---------------------------------------------------------------------
-// DOM
-// ---------------------------------------------------------------------
 const logEl = document.getElementById('log');
 const statusEl = document.getElementById('status');
 const connectBtn = document.getElementById('connectBtn');
@@ -942,9 +1276,33 @@ const detectedInfo = document.getElementById('detectedInfo');
 const progressBarOuter = document.getElementById('progressBarOuter');
 const progressBarInner = document.getElementById('progressBarInner');
 
-// ---------------------------------------------------------------------
-// хелперы
-// ---------------------------------------------------------------------
+const stepEls = {
+    variant: document.getElementById('stepVariant'),
+    flashMode: document.getElementById('stepFlashMode'),
+    download: document.getElementById('stepDownload'),
+    flash: document.getElementById('stepFlash'),
+};
+
+function lockStep(el) {
+    if (!el) return;
+    el.classList.add('step-locked');
+    el.classList.remove('step-revealed');
+}
+
+function unlockStep(el) {
+    if (!el) return;
+    if (!el.classList.contains('step-locked')) return;
+    el.classList.remove('step-locked');
+    el.classList.add('step-revealed');
+}
+
+function lockAllSteps() {
+    lockStep(stepEls.variant);
+    lockStep(stepEls.flashMode);
+    lockStep(stepEls.download);
+    lockStep(stepEls.flash);
+}
+
 function getActiveVariants() {
     return useMishanya ? FIRMWARE_VARIANTS_MISHANYA : FIRMWARE_VARIANTS;
 }
@@ -1009,10 +1367,14 @@ function downloadBlob(blob, filename) {
 async function safeClosePort() {
     try {
         if (transport) {
-            try { await transport.disconnect(); } catch (e) {}
+            try {
+                await transport.disconnect();
+            } catch (e) {}
         }
         if (port) {
-            try { await port.close(); } catch (e) {}
+            try {
+                await port.close();
+            } catch (e) {}
         }
     } catch (e) {}
     transport = null;
@@ -1020,9 +1382,6 @@ async function safeClosePort() {
     loader = null;
 }
 
-// ---------------------------------------------------------------------
-// модальные окна
-// ---------------------------------------------------------------------
 function setupModal(modalEl, openBtnId, closeBtnIds) {
     const openBtn = document.getElementById(openBtnId);
     if (openBtn) {
@@ -1048,9 +1407,6 @@ document.addEventListener('keydown', function(e) {
     document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
 });
 
-// ---------------------------------------------------------------------
-// проверка браузера
-// ---------------------------------------------------------------------
 function detectBrowser() {
     const ua = navigator.userAgent;
     if (ua.includes('Firefox/')) return 'Firefox';
@@ -1074,9 +1430,6 @@ if (!('serial' in navigator)) {
     log('Web Serial поддерживается');
 }
 
-// ---------------------------------------------------------------------
-// FIX: загрузка архива с таймаутом
-// ---------------------------------------------------------------------
 async function downloadVariantZip(variant) {
     log('Загрузка архива: ' + variant.description);
     showStatus('Загрузка архива...', 'info');
@@ -1085,7 +1438,9 @@ async function downloadVariantZip(variant) {
     const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
 
     try {
-        const response = await fetch(variant.zipUrl, { signal: controller.signal });
+        const response = await fetch(variant.zipUrl, {
+            signal: controller.signal
+        });
         if (!response.ok) throw new Error('HTTP ' + response.status);
         const blob = await response.blob();
         log('Загружено ' + (blob.size / 1024).toFixed(1) + ' KB');
@@ -1122,9 +1477,6 @@ async function downloadVariantZip(variant) {
     }
 }
 
-// ---------------------------------------------------------------------
-// подключение
-// ---------------------------------------------------------------------
 connectBtn.onclick = async () => {
     if (isConnecting || isFlashing) {
         log('Операция уже выполняется');
@@ -1138,12 +1490,26 @@ connectBtn.onclick = async () => {
     isConnecting = true;
     connectBtn.disabled = true;
     resetDownloadState();
+    lockAllSteps();
 
     try {
         log('Запрос USB-порта...');
         showStatus('Запрос USB-порта...', 'info');
 
-        port = await navigator.serial.requestPort();
+        const portFilters = [{
+                usbVendorId: 0x10c4
+            },
+            {
+                usbVendorId: 0x1a86
+            },
+            {
+                usbVendorId: 0x303a
+            },
+        ];
+
+        port = await navigator.serial.requestPort({
+            filters: portFilters
+        });
         const info = port.getInfo();
         log('Порт выбран: USB ' + (info.usbVendorId ? '0x' + info.usbVendorId.toString(16) : '?'));
 
@@ -1159,6 +1525,10 @@ connectBtn.onclick = async () => {
         const chip = await loader.main();
         detectedChip = chip;
         log('Чип: ' + chip);
+
+        unlockStep(stepEls.variant);
+        unlockStep(stepEls.flashMode);
+        unlockStep(stepEls.download);
 
         if (chip.includes('ESP32-S3') || chip.includes('ESP32S3')) {
             document.getElementById('mishanyaBlock').style.display = 'inline-flex';
@@ -1202,11 +1572,13 @@ connectBtn.onclick = async () => {
             log('Неизвестный чип: ' + chip);
             showStatus('Неизвестный чип: ' + chip, 'error');
             await safeClosePort();
+            lockAllSteps();
         }
     } catch (e) {
         log('Ошибка подключения: ' + e.message);
         showStatus('Ошибка подключения: ' + e.message, 'error');
         await safeClosePort();
+        lockAllSteps();
     } finally {
         isConnecting = false;
         if (!loader) connectBtn.disabled = false;
@@ -1215,9 +1587,6 @@ connectBtn.onclick = async () => {
 
 log('Web Flasher загружен');
 
-// ---------------------------------------------------------------------
-// выбор варианта
-// ---------------------------------------------------------------------
 variantSelect.onchange = async (e) => {
     const value = e.target.value;
     if (!value) {
@@ -1259,11 +1628,9 @@ variantSelect.onchange = async (e) => {
     await populateDownloadList(zipData);
     flashBtn.disabled = false;
     showStatus('Готово к прошивке: ' + variant.description, 'success');
+    unlockStep(stepEls.flash);
 };
 
-// ---------------------------------------------------------------------
-// прошивка
-// ---------------------------------------------------------------------
 flashBtn.onclick = async () => {
     if (isFlashing || isConnecting) {
         log('Прошивка уже выполняется');
@@ -1340,7 +1707,10 @@ flashBtn.onclick = async () => {
             const binaryString = Array.from(new Uint8Array(arrayBuffer))
                 .map(b => String.fromCharCode(b)).join('');
 
-            fileArray.push({ data: binaryString, address: part.address });
+            fileArray.push({
+                data: binaryString,
+                address: part.address
+            });
             fileNames.push(file.name);
 
             log('  ' + file.name + ' @ 0x' + part.address.toString(16).padStart(8, '0') + ' (' + (arrayBuffer.byteLength / 1024).toFixed(1) + ' KB)');
@@ -1403,12 +1773,14 @@ flashBtn.onclick = async () => {
         const flashModeSelect = document.getElementById('flashMode');
         if (flashModeSelect) flashModeSelect.value = 'all';
         resetDownloadState();
+        lockAllSteps();
 
     } catch (e) {
         log('Ошибка прошивки: ' + e.message);
         showStatus('Ошибка прошивки: ' + e.message, 'error');
         await safeClosePort();
         resetDownloadState();
+        lockAllSteps();
     } finally {
         isFlashing = false;
         flashBtn.disabled = false;
@@ -1416,9 +1788,6 @@ flashBtn.onclick = async () => {
     }
 };
 
-// ---------------------------------------------------------------------
-// скачивание бинарников
-// ---------------------------------------------------------------------
 function resetDownloadState() {
     zipData = null;
     selectedVariant = null;
@@ -1464,7 +1833,6 @@ async function populateDownloadList(zip) {
         const f = zip.files[path];
         const name = path.split('/').pop();
 
-        // FIX: не распаковываем весь файл ради размера — берём из метаданных
         let size = 0;
         if (f._data && typeof f._data.uncompressedSize === 'number' && f._data.uncompressedSize > 0) {
             size = f._data.uncompressedSize;
@@ -1497,6 +1865,100 @@ async function populateDownloadList(zip) {
     document.getElementById('downloadAllBtn').disabled = false;
 }
 
+let deviceConnected = false;
+
+const deviceHintEl = document.getElementById('deviceHint');
+
+function updateConnectButtonState() {
+    if (!('serial' in navigator)) {
+        connectBtn.disabled = true;
+        connectBtn.textContent = 'Web Serial не поддерживается';
+        if (deviceHintEl) deviceHintEl.classList.remove('active');
+        return;
+    }
+
+    if (isConnecting || isFlashing) return;
+
+    if (deviceConnected) {
+        connectBtn.textContent = 'Подключиться к ESP';
+        connectBtn.classList.remove('btn-muted');
+        connectBtn.classList.add('btn-ready');
+        if (deviceHintEl) deviceHintEl.classList.add('active');
+    } else {
+        connectBtn.textContent = 'Подключиться к ESP';
+        connectBtn.classList.remove('btn-ready');
+        connectBtn.classList.add('btn-muted');
+        if (deviceHintEl) deviceHintEl.classList.remove('active');
+    }
+
+    connectBtn.disabled = false;
+}
+
+async function refreshDevicePresence() {
+    if (!('serial' in navigator)) {
+        deviceConnected = false;
+        updateConnectButtonState();
+        return;
+    }
+
+    try {
+        const ports = await navigator.serial.getPorts();
+
+        // Если у браузера нет разрешений — портов не будет
+        if (ports.length === 0) {
+            deviceConnected = false;
+            updateConnectButtonState();
+            return;
+        }
+
+        let found = false;
+
+        for (const p of ports) {
+            if (typeof p.connected === 'boolean') {
+                if (p.connected) {
+                    found = true;
+                    break;
+                }
+                continue;
+            }
+
+            try {
+                await p.open({
+                    baudRate: 115200
+                });
+                await p.close();
+                found = true;
+                break;
+            } catch (e) {
+                console.log('[WebSerial] порт недоступен:', e.message);
+            }
+        }
+
+        deviceConnected = found;
+    } catch (e) {
+        console.error('[WebSerial] ошибка проверки портов:', e);
+        deviceConnected = false;
+    }
+
+    updateConnectButtonState();
+}
+
+(async () => {
+    await refreshDevicePresence();
+})();
+
+navigator.serial.addEventListener('connect', async () => {
+    console.log('[WebSerial] устройство подключено');
+    await refreshDevicePresence();
+});
+
+navigator.serial.addEventListener('disconnect', async () => {
+    console.log('[WebSerial] устройство отключено');
+    await refreshDevicePresence();
+});
+
+updateConnectButtonState();
+
 document.getElementById('downloadOneBtn').onclick = async () => {
     if (!zipData) return;
 
@@ -1516,13 +1978,17 @@ document.getElementById('downloadOneBtn').onclick = async () => {
         const blob = await zipData.files[path].async('blob');
         newZip.file(path.split('/').pop(), blob);
     }
-    const out = await newZip.generateAsync({ type: 'blob' });
+    const out = await newZip.generateAsync({
+        type: 'blob'
+    });
     downloadBlob(out, (selectedVariant || 'firmware') + '_selected.zip');
 };
 
 document.getElementById('downloadAllBtn').onclick = async () => {
     if (!zipData) return;
-    const blob = await zipData.generateAsync({ type: 'blob' });
+    const blob = await zipData.generateAsync({
+        type: 'blob'
+    });
     downloadBlob(blob, (selectedVariant || 'firmware') + '.zip');
 };
 
@@ -1540,9 +2006,6 @@ document.getElementById('dlToggle').addEventListener('change', function() {
     }
 });
 
-// ---------------------------------------------------------------------
-// MISHANYA
-// ---------------------------------------------------------------------
 document.getElementById('mishanyaToggle').addEventListener('change', function() {
     useMishanya = this.checked;
 
