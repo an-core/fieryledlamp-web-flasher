@@ -162,9 +162,12 @@
             <li>
                 <strong>ESP32-S3</strong> - флешер покажет <strong>список из двух вариантов</strong>:
                 <ul>
-                    <li><strong>Вариант 1</strong> - без <code>MULTI_MATRIX</code>: используется <strong>одна</strong> LED-матрица (стандартный вариант).</li>
-                    <li><strong>Вариант 2</strong> - с <code>MULTI_MATRIX</code>: используется поддержка <strong>нескольких</strong> последовательно соединённых матриц (до 8 штук 16×16).</li>
-                </ul>
+                    <li><strong>Вариант 1</strong> - БЕЗ <code>multi_matrix, плеера, дисплеев, радио</code>: используется <strong>одна</strong> LED-матрица (стандартный вариант).</li>
+                    <li><strong>Вариант 2</strong> - БЕЗ <code>плеера, дисплеев, радио</code>: используется поддержка <strong>нескольких</strong> последовательно соединённых матриц.</li>
+                    <li><strong>Вариант 3</strong> - БЕЗ <code>multi_matrix, радио, дисплея ST7789</code>: используется <strong>дисплей tm1637</strong> и <strong> плеер </strong></li>
+                    <li><strong>Вариант 4</strong> - БЕЗ <code>multi_matrix, радио, дисплея TM1637</code>: используется <strong>дисплей st7789</strong> и <strong> плеер </strong></li>
+				    <li><strong>Вариант 5</strong> - БЕЗ <code>multi_matrix, плеера, дисплеев</code>: используется <strong>радио</strong></li>
+				</ul>
             </li>
             <li>
                 <strong>ESP32</strong> - флешер покажет <strong>список из трёх вариантов</strong>. Выберите нужный:
