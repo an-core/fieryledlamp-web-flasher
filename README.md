@@ -22,7 +22,7 @@ Web Flasher для FieryLedLamp (ESP32 / ESP32-S3).
   Chrome 89+, Edge 89+, Opera, Vivaldi, Brave, Cent Browser, Яндекс.Браузер
 - **Firefox и Safari не поддерживают Web Serial API** - прошивка в них невозможна
 - Data-кабель USB (не зарядный)
-- Драйвер USB-UART, если плата не определяется: CH340, CP2102, # [USB-Serial-JTAG peripheral driver](https://zadig.akeo.ie)
+- Драйвер USB-UART, если плата не определяется: CH340, CP2102, [USB-Serial-JTAG peripheral driver](https://zadig.akeo.ie)
 
 ## Использование
 
