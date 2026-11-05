@@ -10,7 +10,7 @@ const FIRMWARE_VARIANTS = {
     'ESP32-S3_V1': {
         zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_for_web-flasher/bin_ESP32-S3_VARIANT_1.zip',
         chipFamily: 'ESP32-S3',
-        description: 'ESP32-S3 - Вариант 1 (без MULTI_MATRIX)',
+        description: 'ESP32-S3 - Вариант 1 (базовый)',
         parts: [{
                 keywords: ['bootloader'],
                 address: 0x00000000,
@@ -41,7 +41,7 @@ const FIRMWARE_VARIANTS = {
     'ESP32-S3_V2': {
         zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_for_web-flasher/bin_ESP32-S3_VARIANT_2.zip',
         chipFamily: 'ESP32-S3',
-        description: 'ESP32-S3 - Вариант 2 (с MULTI_MATRIX)',
+        description: 'ESP32-S3 - Вариант 2 (с плеером и tm1637 + базовые опции)',
         parts: [{
                 keywords: ['bootloader'],
                 address: 0x00000000,
@@ -72,7 +72,7 @@ const FIRMWARE_VARIANTS = {
 	'ESP32-S3_V3': {
         zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_for_web-flasher/bin_ESP32-S3_VARIANT_3.zip',
         chipFamily: 'ESP32-S3',
-        description: 'ESP32-S3 - Вариант 3 (с плеером и tm1637)',
+        description: 'ESP32-S3 - Вариант 3 (с плеером и st7789 + базовые опции)',
         parts: [{
                 keywords: ['bootloader'],
                 address: 0x00000000,
@@ -103,38 +103,7 @@ const FIRMWARE_VARIANTS = {
 	'ESP32-S3_V4': {
         zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_for_web-flasher/bin_ESP32-S3_VARIANT_4.zip',
         chipFamily: 'ESP32-S3',
-        description: 'ESP32-S3 - Вариант 4 (с плеером и st7789)',
-        parts: [{
-                keywords: ['bootloader'],
-                address: 0x00000000,
-                required: true
-            },
-            {
-                keywords: ['partitions'],
-                address: 0x00008000,
-                required: true
-            },
-            {
-                keywords: ['boot_app0'],
-                address: 0x0000E000,
-                required: false
-            },
-            {
-                keywords: ['firmware'],
-                address: 0x00010000,
-                required: true
-            },
-            {
-                keywords: ['littlefs'],
-                address: 0x00C90000,
-                required: true
-            },
-        ],
-    },
-	'ESP32-S3_V5': {
-        zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_for_web-flasher/bin_ESP32-S3_VARIANT_5.zip',
-        chipFamily: 'ESP32-S3',
-        description: 'ESP32-S3 - Вариант 5 (с радио)',
+        description: 'ESP32-S3 - Вариант 4 (с радио + базовые опции)',
         parts: [{
                 keywords: ['bootloader'],
                 address: 0x00000000,
