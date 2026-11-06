@@ -134,7 +134,7 @@ const FIRMWARE_VARIANTS = {
     'ESP32_V1': {
         zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_for_web-flasher/bin_ESP32_VARIANT_1.zip',
         chipFamily: 'ESP32',
-        description: 'ESP32 - Вариант 1 (USE_DAWN, USE_SUNSET, USE_SCHEDULE, USE_WEATHER, USE_MQTT, USE_MULTILAMP, LED_PANEL, BACKUP_CFG_FILES, STATUS_DEVICE, SOFT_INFO)',
+        description: 'ESP32 - Вариант 1 (USE_DAWN, USE_SUNSET, USE_SCHEDULE, USE_WEATHER, LED_PANEL, BACKUP_CFG_FILES, STATUS_DEVICE)',
         parts: [{
                 keywords: ['bootloader'],
                 address: 0x00001000,
@@ -165,38 +165,7 @@ const FIRMWARE_VARIANTS = {
     'ESP32_V2': {
         zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_for_web-flasher/bin_ESP32_VARIANT_2.zip',
         chipFamily: 'ESP32',
-        description: 'ESP32 - Вариант 2 (USE_SD, USE_DAWN, USE_SUNSET, USE_SCHEDULE, USE_WEATHER, USE_MQTT, USE_MULTILAMP, LED_PANEL, BACKUP_CFG_FILES, STATUS_DEVICE, SOFT_INFO)',
-        parts: [{
-                keywords: ['bootloader'],
-                address: 0x00001000,
-                required: true
-            },
-            {
-                keywords: ['partitions'],
-                address: 0x00008000,
-                required: true
-            },
-            {
-                keywords: ['boot_app0'],
-                address: 0x0000E000,
-                required: false
-            },
-            {
-                keywords: ['firmware'],
-                address: 0x00010000,
-                required: true
-            },
-            {
-                keywords: ['littlefs'],
-                address: 0x00210000,
-                required: true
-            },
-        ],
-    },
-    'ESP32_V3': {
-        zipUrl: 'https://raw.githubusercontent.com/an-core/FieryLedLamp_mod/main/update/bin_for_web-flasher/bin_ESP32_VARIANT_3.zip',
-        chipFamily: 'ESP32',
-        description: 'ESP32 - Вариант 3 (USE_SD, MULTI_MATRIX, USE_DAWN, USE_SUNSET, USE_SCHEDULE, USE_WEATHER, LED_PANEL, STATUS_DEVICE, SOFT_INFO)',
+        description: 'ESP32 - Вариант 2 (USE_SD, USE_DAWN, USE_SUNSET, USE_SCHEDULE, USE_WEATHER, LED_PANEL, BACKUP_CFG_FILES, STATUS_DEVICE)',
         parts: [{
                 keywords: ['bootloader'],
                 address: 0x00001000,
